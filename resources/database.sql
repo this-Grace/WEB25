@@ -20,8 +20,7 @@ CREATE TABLE users (
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     user_username VARCHAR(50) NOT NULL,
-    caption TEXT,
-    image_url TEXT NOT NULL,
+    content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_posts_user
         FOREIGN KEY (user_username)
@@ -54,7 +53,7 @@ CREATE TABLE follows (
 -- =========================
 CREATE TABLE likes (
     user_username VARCHAR(50) NOT NULL,
-    post_id INTEGER NOT NULL,
+    post_id BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_username, post_id),
     CONSTRAINT fk_likes_user
@@ -72,7 +71,7 @@ CREATE TABLE likes (
 -- =========================
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
-    post_id INTEGER NOT NULL,
+    post_id BIGINT UNSIGNED NOT NULL,
     user_username VARCHAR(50) NOT NULL,
     text TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -98,7 +97,7 @@ CREATE TABLE conversations (
 -- CONVERSATION PARTICIPANTS
 -- =========================
 CREATE TABLE conversation_participants (
-    conversation_id INTEGER NOT NULL,
+    conversation_id BIGINT UNSIGNED NOT NULL,
     user_username VARCHAR(50) NOT NULL,
     PRIMARY KEY (conversation_id, user_username),
     CONSTRAINT fk_cp_conversation
@@ -116,7 +115,7 @@ CREATE TABLE conversation_participants (
 -- =========================
 CREATE TABLE messages (
     id SERIAL PRIMARY KEY,
-    conversation_id INTEGER NOT NULL,
+    conversation_id BIGINT UNSIGNED NOT NULL,
     sender_username VARCHAR(50) NOT NULL,
     text TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
