@@ -1,0 +1,17 @@
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Visual Studio Code configuration folder
+.vscode/
+
+# Ingore LaTeX file
+*.toc
+*.synctex.gz
+*.synctex.blg
+*.log
+*.out
+*.aux
+*.blg
+*.fdb_latexmk
+*.fls
+*.bbl
