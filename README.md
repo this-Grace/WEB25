@@ -18,7 +18,7 @@ mysql < resources/demo.sql
 
 3. Start built-in PHP server (from project root):
 ```bash
-php -S localhost:8000 -t public
+php -S localhost:8000 -t src/public
 ```
 
 4. Open in browser:
