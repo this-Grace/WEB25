@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMatch | Registrati</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="bg-body d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row align-items-md-center">
+                <a class="navbar-brand mb-0 h1" href="index.html">UniMatch</a>
+                <div class="small text-white opacity-75 mt-1 mt-md-0 ms-md-2">Trova i compagni di progetto perfetti
+                </div>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-md-auto align-items-center">
+                    <li class="nav-item"><a href="login.html" class="nav-link">Login</a></li>
+                    <li class="nav-item"><a href="register.html" class="nav-link active"
+                            aria-current="page">Registrati</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="themeDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="me-2" id="themeIcon">◐</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="auto"><span class="me-2">◐</span> Automatico</button></li>
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="light"><span class="me-2">○</span> Chiaro</button></li>
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="dark"><span class="me-2">●</span> Scuro</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container flex-grow-1 d-flex align-items-center py-4">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+                <div class="card border-0 rounded-5 bg-body-tertiary">
+                    <div class="card-body p-4 p-md-5">
+                        <h1 class="h3 mb-4 text-center">Crea un account</h1>
+
+                        <form action="index.php" method="POST">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control rounded-4 border-0 bg-body" id="username"
+                                    name="username" required autocomplete="username">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control rounded-4 border-0 bg-body" id="email"
+                                    name="email" required autocomplete="email">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome</label>
+                                <input type="text" class="form-control rounded-4 border-0 bg-body" id="nome" name="nome"
+                                    required autocomplete="given-name">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cognome" class="form-label">Cognome</label>
+                                <input type="text" class="form-control rounded-4 border-0 bg-body" id="cognome"
+                                    name="cognome" required autocomplete="family-name">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="corso" class="form-label">Corso di laurea</label>
+                                <input type="text" class="form-control rounded-4 border-0 bg-body" id="corso"
+                                    name="corso" required placeholder="es. Ingegneria Informatica">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control rounded-4 border-0 bg-body" id="password"
+                                    name="password" required autocomplete="new-password" minlength="8">
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="confirm_password" class="form-label">Conferma password</label>
+                                <input type="password" class="form-control rounded-4 border-0 bg-body"
+                                    id="confirm_password" name="confirm_password" required autocomplete="new-password"
+                                    minlength="8">
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                                    <label class="form-check-label" for="terms">
+                                        <small>Accetto i <a href="#" class="text-primary text-decoration-none">termini e
+                                                condizioni</a></small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 rounded-4 py-2 mb-3">
+                                Registrati
+                            </button>
+
+                            <div class="text-center">
+                                <small class="text-body-secondary">
+                                    Hai già un account? <a href="login.html"
+                                        class="text-primary text-decoration-none fw-semibold">Accedi</a>
+                                </small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-body-secondary mt-auto rounded-top-4">
+        <div class="container py-4">
+            <div class="row align-items-center gy-2">
+                <div class="col-12 col-md text-center text-md-start text-body-secondary small">
+                    &copy; 2025 UniMatch — Tutti i diritti riservati
+                </div>
+                <div class="col-12 col-md-auto">
+                    <ul class="nav justify-content-center">
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Privacy</a>
+                        </li>
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Termini</a>
+                        </li>
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Contatti</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="assets/js/index.js"></script>
+</body>
+
+</html>
