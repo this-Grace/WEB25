@@ -4,78 +4,148 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Profilo | UniMatch</title>
-	<link rel="stylesheet" href="assets/css/user-style.css">
+	<title>UniMatch | Profilo</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body>
-	<header>
-		<div>
-			<div>
-				<h1>UniMatch</h1>
-				<p>Trova i compagni di progetto perfetti</p>
+<body class="bg-body d-flex flex-column min-vh-100">
+	<nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
+		<div class="container">
+			<div class="d-flex flex-column flex-md-row align-items-md-center">
+				<a class="navbar-brand mb-0 h1" href="index.html">UniMatch</a>
+				<div class="small text-white opacity-75 mt-1 mt-md-0 ms-md-2">Trova i compagni di progetto perfetti
+				</div>
 			</div>
-			<nav>
-				<a href="index.html">Home</a>
-				<a href="create-post.html">Crea</a>
-				<a href="chat.html">Chat</a>
-				<a href="profile.html" class="active">Profilo</a>
-			</nav>
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+				aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="mainNav">
+				<ul class="navbar-nav ms-md-auto align-items-center">
+					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+					<li class="nav-item"><a href="create-post.html" class="nav-link">Crea</a></li>
+					<li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+					<li class="nav-item"><a href="profile.html" class="nav-link active" aria-current="page">Profilo</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="themeDropdown"
+							role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<span class="me-2" id="themeIcon">◐</span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+							<li><button type="button" class="dropdown-item d-flex align-items-center"
+									data-theme-value="auto"><span class="me-2">◐</span> Automatico</button></li>
+							<li><button type="button" class="dropdown-item d-flex align-items-center"
+									data-theme-value="light"><span class="me-2">○</span> Chiaro</button></li>
+							<li><button type="button" class="dropdown-item d-flex align-items-center"
+									data-theme-value="dark"><span class="me-2">●</span> Scuro</button></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
 		</div>
-	</header>
+	</nav>
 
-	<main>
-		<section>
-			<img src="https://ui-avatars.com/api/?name=Mario+Rossi&background=7f037f&color=fff" alt="Avatar utente">
-			<h2>Mario Rossi</h2>
-			<p>Studente di Informatica appassionato di sviluppo web e app mobile</p>
-		</section>
+	<main class="container flex-grow-1 py-4">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-8 col-xl-7">
+				<!-- Intestazione profilo -->
+				<div class="card border-0 rounded-5 bg-body-tertiary mb-4">
+					<div class="card-body p-4 p-md-5 text-center">
+						<img src="https://ui-avatars.com/api/?name=Mario+Rossi&background=7f037f&color=fff&size=120"
+							alt="Avatar utente" class="rounded-4 mb-3" width="120" height="120">
+						<h1 class="h3 mb-2">Mario Rossi</h1>
+						<p class="text-body-secondary mb-0">Studente di Informatica appassionato di sviluppo web e app
+							mobile</p>
+					</div>
+				</div>
 
-		<section>
-			<h3>I miei progetti</h3>
-			<article>
-				<h4>Gamification per l'apprendimento</h4>
-				<p>App educativa che usa sfide, badge e classifiche per rendere lo studio più coinvolgente.</p>
-				<br>
-				<h5>Hanno messo like:</h5>
-				<ul>
-					<li>
-						<span>Marco Bianchi</span>
-						<a href="chat.html?user=marco">Contatta</a>
-					</li>
-					<li>
-						<span>Chiara Rossi</span>
-						<a href="chat.html?user=chiara">Contatta</a>
-					</li>
-				</ul>
-			</article>
-			<article>
-				<h4>Assistente AI per tesi</h4>
-				<p>Tool basato su AI per supportare la ricerca bibliografica e l'organizzazione del materiale.</p>
-				<br>
-				<h5>Hanno messo like:</h5>
-				<ul>
-					<li>
-						<span>Andrea Conti</span>
-						<a href="chat.html?user=andrea">Contatta</a>
-					</li>
-				</ul>
-			</article>
-		</section>
-	</main>
-	<footer>
-		<div>
-			<div>
-				&copy; 2025 UniMatch - Tutti i diritti riservati
+				<!-- I miei progetti -->
+				<div>
+					<h2 class="h4 mb-3">I miei progetti</h2>
+
+					<div class="card border-0 rounded-5 bg-body-tertiary mb-3">
+						<div class="card-body p-4 p-md-5">
+							<h3 class="h5 mb-2">Gamification per l'apprendimento</h3>
+							<p class="text-body-secondary mb-3">App educativa che usa sfide, badge e classifiche per
+								rendere lo studio più coinvolgente.</p>
+
+							<h6 class="small text-body-secondary mb-2">Hanno messo like:</h6>
+							<div class="list-group list-group-flush">
+								<div class="list-group-item border-0 bg-transparent px-0 py-2">
+									<div class="d-flex justify-content-between align-items-center">
+										<span class="small">Marco Bianchi</span>
+										<a href="chat.html?user=marco"
+											class="btn btn-sm btn-primary rounded-3">Contatta</a>
+									</div>
+								</div>
+								<div class="list-group-item border-0 bg-transparent px-0 py-2">
+									<div class="d-flex justify-content-between align-items-center">
+										<span class="small">Chiara Rossi</span>
+										<a href="chat.html?user=chiara"
+											class="btn btn-sm btn-primary rounded-3">Contatta</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card border-0 rounded-5 bg-body-tertiary mb-3">
+						<div class="card-body p-4 p-md-5">
+							<h3 class="h5 mb-2">Assistente AI per tesi</h3>
+							<p class="text-body-secondary mb-3">Tool basato su AI per supportare la ricerca
+								bibliografica e l'organizzazione del materiale.</p>
+
+							<h6 class="small text-body-secondary mb-2">Hanno messo like:</h6>
+							<div class="list-group list-group-flush">
+								<div class="list-group-item border-0 bg-transparent px-0 py-2">
+									<div class="d-flex justify-content-between align-items-center">
+										<span class="small">Andrea Conti</span>
+										<a href="chat.html?user=andrea"
+											class="btn btn-sm btn-primary rounded-3">Contatta</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div>
-				<a href="#">Privacy Policy</a>
-				<a href="#">Termini</a>
-				<a href="#">Contatti</a>
-				<a href="#">Link Utili</a>
+		</div>
+	</main>
+
+	<footer class="bg-body-secondary mt-auto rounded-top-4">
+		<div class="container py-4">
+			<div class="row align-items-center gy-2">
+				<div class="col-12 col-md text-center text-md-start text-body-secondary small">
+					&copy; 2025 UniMatch — Tutti i diritti riservati
+				</div>
+				<div class="col-12 col-md-auto">
+					<ul class="nav justify-content-center">
+						<li class="nav-item"><a href="#"
+								class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Privacy</a>
+						</li>
+						<li class="nav-item"><a href="#"
+								class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Termini</a>
+						</li>
+						<li class="nav-item"><a href="#"
+								class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Contatti</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+		crossorigin="anonymous"></script>
+	<script src="assets/js/index.js"></script>
 </body>
 
 </html>
