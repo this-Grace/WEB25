@@ -4,83 +4,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crea Post | UniMatch</title>
-    <link rel="stylesheet" href="assets/css/user-style.css">
+    <title>UniMatch | Crea Post</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body>
-    <header>
-        <div>
-            <div>
-                <h1>UniMatch</h1>
-                <p>Trova i compagni di progetto perfetti</p>
+<body class="bg-body d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row align-items-md-center">
+                <a class="navbar-brand mb-0 h1" href="index.html">UniMatch</a>
+                <div class="small text-white opacity-75 mt-1 mt-md-0 ms-md-2">Trova i compagni di progetto perfetti
+                </div>
             </div>
-            <nav>
-                <a href="index.html">Home</a>
-                <a href="create-post.html" class="active">Crea</a>
-                <a href="chat.html">Chat</a>
-                <a href="profile.html">Profilo</a>
-            </nav>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-md-auto align-items-center">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="create-post.html" class="nav-link active" aria-current="page">Crea</a>
+                    </li>
+                    <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+                    <li class="nav-item"><a href="profile.html" class="nav-link">Profilo</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="themeDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="me-2" id="themeIcon">◐</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="auto"><span class="me-2">◐</span> Automatico</button></li>
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="light"><span class="me-2">○</span> Chiaro</button></li>
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="dark"><span class="me-2">●</span> Scuro</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main>
-        <section>
-            <h2>Crea nuovo post</h2>
-            <form action="#" method="post">
-                <div>
-                    <label for="title">Titolo</label>
-                    <input type="text" id="title" name="title" placeholder="Inserisci il titolo del post" required>
-                </div>
+    <main class="container flex-grow-1 d-flex align-items-center py-4">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+                <div class="card border-0 rounded-5 bg-body-tertiary">
+                    <div class="card-body p-4 p-md-5">
+                        <h1 class="h3 mb-4 text-center">Crea nuovo post</h1>
 
-                <div>
-                    <label for="description">Descrizione</label>
-                    <textarea id="description" name="description" placeholder="Descrivi il tuo progetto"
-                        required></textarea>
-                </div>
+                        <form action="#" method="post">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Titolo</label>
+                                <input type="text" class="form-control rounded-4 border-0 bg-body" id="title"
+                                    name="title" placeholder="Inserisci il titolo del post" required>
+                            </div>
 
-                <div>
-                    <div>
-                        <label for="faculty">Facoltà</label>
-                        <select id="faculty" name="faculty" required>
-                            <option value="">Seleziona facoltà</option>
-                            <option value="engineering">Ingegneria</option>
-                            <option value="medicine">Medicina</option>
-                            <option value="law">Giurisprudenza</option>
-                            <option value="economics">Economia</option>
-                        </select>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Descrizione</label>
+                                <textarea class="form-control rounded-4 border-0 bg-body" id="description"
+                                    name="description" rows="5" placeholder="Descrivi il tuo progetto"
+                                    required></textarea>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="faculty" class="form-label">Corso di laurea</label>
+                                    <select class="form-select rounded-4 border-0 bg-body" id="faculty" name="faculty"
+                                        required>
+                                        <option value="">Seleziona corso</option>
+                                        <option value="engineering">Ingegneria Informatica</option>
+                                        <option value="cs">Informatica</option>
+                                        <option value="medicine">Medicina</option>
+                                        <option value="law">Giurisprudenza</option>
+                                        <option value="economics">Economia</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="num-people" class="form-label">Persone necessarie</label>
+                                    <input type="number" class="form-control rounded-4 border-0 bg-body" id="num-people"
+                                        name="num_people" min="1" max="10" value="2" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="skills" class="form-label">Skill richieste <small
+                                        class="text-body-secondary">(opzionale)</small></label>
+                                <textarea class="form-control rounded-4 border-0 bg-body" id="skills" name="skills"
+                                    rows="3" placeholder="Es: HTML, CSS, JavaScript, Python..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 rounded-4 py-2">
+                                Pubblica post
+                            </button>
+                        </form>
                     </div>
-                    <div>
-                        <label for="num-people">Persone necessarie</label>
-                        <input type="number" id="num-people" name="num_people" min="1" value="1" required>
-                    </div>
                 </div>
-
-                <div>
-                    <label for="skills">Skill richieste</label>
-                    <textarea id="skills" name="skills" placeholder="Es: HTML, CSS, JavaScript, Python..."></textarea>
-                </div>
-
-                <div>
-                    <button type="submit">Pubblica post</button>
-                </div>
-            </form>
-        </section>
+            </div>
+        </div>
     </main>
 
-    <footer>
-        <div>
-            <div>
-                &copy; 2025 UniMatch - Tutti i diritti riservati
-            </div>
-            <div>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Termini</a>
-                <a href="#">Contatti</a>
-                <a href="#">Link Utili</a>
+    <footer class="bg-body-secondary mt-auto rounded-top-4">
+        <div class="container py-4">
+            <div class="row align-items-center gy-2">
+                <div class="col-12 col-md text-center text-md-start text-body-secondary small">
+                    &copy; 2025 UniMatch — Tutti i diritti riservati
+                </div>
+                <div class="col-12 col-md-auto">
+                    <ul class="nav justify-content-center">
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Privacy</a>
+                        </li>
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Termini</a>
+                        </li>
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Contatti</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="assets/js/index.js"></script>
 </body>
 
 </html>
