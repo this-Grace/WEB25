@@ -23,7 +23,7 @@
 
         const icon = document.getElementById('themeIcon');
         if (icon) {
-            icon.textContent = theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '🌗';
+            icon.textContent = theme === 'dark' ? '●' : theme === 'light' ? '○' : '◐';
         }
     };
 
