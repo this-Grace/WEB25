@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat | UniMatch</title>
+    <link rel="stylesheet" href="assets/css/user-style.css">
+</head>
+
+<body>
+    <header>
+        <div>
+            <div>
+                <h1>UniMatch</h1>
+                <p>Trova i compagni di progetto perfetti</p>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="create-post.html">Crea</a>
+                <a href="chat.html" class="active">Chat</a>
+                <a href="profile.html">Profilo</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="chat-page">
+        <aside>
+            <h2>Chat</h2>
+            <ul>
+                <li class="active">
+                    <strong>Marco Bianchi</strong>
+                    <span>Interessato al progetto</span>
+                </li>
+                <li>
+                    <strong>Chiara Rossi</strong>
+                    <span>Quando possiamo sentirci?</span>
+                </li>
+            </ul>
+        </aside>
+
+        <section>
+            <header>
+                <h3>Marco Bianchi</h3>
+            </header>
+
+            <div class="messages">
+                <p class="received"><strong>Marco:</strong> Ciao! Ho visto il tuo progetto 👋</p>
+                <p class="sent"><span>Tu:</span> Ciao! Ti va di parlarne?</p>
+            </div>
+
+            <form>
+                <label for="chat-message" class="sr-only">Scrivi</label>
+                <input type="text" id="chat-message" placeholder="Scrivi un messaggio...">
+                <button type="submit">Invia</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <div>&copy; 2025 UniMatch - Tutti i diritti riservati</div>
+            <div>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Termini</a>
+                <a href="#">Contatti</a>
+                <a href="#">Link Utili</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

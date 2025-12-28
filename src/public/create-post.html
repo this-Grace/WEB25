@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea Post | UniMatch</title>
+    <link rel="stylesheet" href="assets/css/user-style.css">
+</head>
+
+<body>
+    <header>
+        <div>
+            <div>
+                <h1>UniMatch</h1>
+                <p>Trova i compagni di progetto perfetti</p>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="create-post.html" class="active">Crea</a>
+                <a href="chat.html">Chat</a>
+                <a href="profile.html">Profilo</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <h2>Crea nuovo post</h2>
+            <form action="#" method="post">
+                <div>
+                    <label for="title">Titolo</label>
+                    <input type="text" id="title" name="title" placeholder="Inserisci il titolo del post" required>
+                </div>
+
+                <div>
+                    <label for="description">Descrizione</label>
+                    <textarea id="description" name="description" placeholder="Descrivi il tuo progetto"
+                        required></textarea>
+                </div>
+
+                <div>
+                    <div>
+                        <label for="faculty">Facoltà</label>
+                        <select id="faculty" name="faculty" required>
+                            <option value="">Seleziona facoltà</option>
+                            <option value="engineering">Ingegneria</option>
+                            <option value="medicine">Medicina</option>
+                            <option value="law">Giurisprudenza</option>
+                            <option value="economics">Economia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="num-people">Persone necessarie</label>
+                        <input type="number" id="num-people" name="num_people" min="1" value="1" required>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="skills">Skill richieste</label>
+                    <textarea id="skills" name="skills" placeholder="Es: HTML, CSS, JavaScript, Python..."></textarea>
+                </div>
+
+                <div>
+                    <button type="submit">Pubblica post</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <div>
+                &copy; 2025 UniMatch - Tutti i diritti riservati
+            </div>
+            <div>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Termini</a>
+                <a href="#">Contatti</a>
+                <a href="#">Link Utili</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
