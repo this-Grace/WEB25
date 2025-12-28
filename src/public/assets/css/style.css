@@ -1,0 +1,15 @@
+/* Bootstrap primary color override */
+:root {
+	/* Set both the color and its RGB for Bootstrap utilities */
+	--bs-primary: purple;
+	--bs-primary-rgb: 128, 0, 128;
+}
+
+/* Fixed circle size for action buttons */
+.actions .btn {
+	width: 80px;
+	height: 80px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
