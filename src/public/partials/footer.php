@@ -1,4 +1,4 @@
-"<footer class="bg-body-secondary mt-auto rounded-top-4">
+<footer class="bg-body-secondary mt-auto rounded-top-4">
     <div class="container py-4">
         <div class="row align-items-center gy-2">
             <div class="col-12 col-md text-center text-md-start text-body-secondary small">
@@ -19,4 +19,4 @@
             </div>
         </div>
     </div>
-</footer>"
+</footer>
