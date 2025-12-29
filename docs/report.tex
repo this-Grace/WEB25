@@ -60,7 +60,46 @@
 
 \chapter{Analisi}
 
-\section{Descrizoione e requisiti}
+\section{Obbiettivo del progetto}
+UniMatch è un'applicazione web progettata per facilitare la connessione tra studenti universitari 
+in cerca di compagni per progetti, studio di gruppo o preparazione agli esami.
+Il progetto nasce dall’esigenza di trovare partner affidabili con interessi e competenze simili, 
+cosa spesso difficile nelle università con numerosi corsi e studenti.
+L’app adotta un approccio simile a un social network: gli studenti creano un account e possono 
+proporre progetti indicando corso di studio, numero di collaboratori e competenze richieste. 
+Gli altri utenti possono interagire con i post, e l’autore può contattare direttamente chi mostra interesse. 
+In questo modo, UniMatch semplifica la ricerca di partner di studio compatibili 
+e favorisce la collaborazione accademica.
+
+\section{Analisi dei requisiti}
+\subsection{Requisiti funzionali}
+
+\subsubsection{Utente Studente}
+\begin{itemize}
+    \item \textbf{Registrazione e login}: possibilità di creare un account personale o accedere con credenziali già registrate.
+    \item \textbf{Creazione e pubblicazione di post}: possibilità di proporre progetti indicando titolo, descrizione, corso di studio, numero di collaboratori richiesti e competenze necessarie.
+    \item \textbf{Visualizzazione dei post}: possibilità di visualizzare i post pubblicati da altri utenti nella home.
+    \item \textbf{Interazione con i post}: possibilità di mettere "mi piace" o "skip" ai post nella home.
+    \item \textbf{Gestione profilo}: visualizzazione e modifica dei dati personali, elenco dei post pubblicati e lista degli utenti che hanno messo "mi piace" ai propri post.
+    \item \textbf{Sistema di messaggistica e chat}: possibilità di inviare e ricevere messaggi privati con altri utenti interessati ai propri post.
+\end{itemize}
+
+\subsubsection{Utente Admin}
+\begin{itemize}
+    \item Accesso a tutte le funzionalità dell'utente studente.
+    \item Monitoraggio dei post pubblicati da tutti gli utenti.
+    \item Gestione degli account utenti (modifica o rimozione).
+    \item Possibilità di gestire contenuti inappropriati o segnalati.
+\end{itemize}
+
+\subsection{Requisiti non funzionali}
+\begin{itemize}
+    \item \textbf{Usabilità}: l'interfaccia deve essere semplice, intuitiva e facilmente navigabile.
+    \item \textbf{Accessibilità}: l'applicazione deve essere accessibile a utenti con disabilità, rispettando le linee guida WCAG.
+    \item \textbf{Prestazioni}: l'applicazione deve garantire tempi di risposta rapidi durante la visualizzazione dei post e l'invio/ricezione dei messaggi.
+    \item \textbf{Compatibilità}: l'applicazione deve essere fruibile su diversi browser web e dispositivi, inclusi desktop, smartphone e tablet.
+    \item \textbf{Manutenibilità}: il codice deve essere chiaro e modulare per facilitare aggiornamenti e miglioramenti futuri.
+\end{itemize}
 
 \chapter{Scenari d'uso e Personas}
 
