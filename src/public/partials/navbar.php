@@ -1,7 +1,16 @@
+<?php
+$currentPage = $activePage ?? 'home';
+$navItems = [
+    'home' => ['url' => 'index.php', 'label' => 'Home'],
+    'create' => ['url' => 'create-post.php', 'label' => 'Crea'],
+    'chat' => ['url' => 'chat.php', 'label' => 'Chat'],
+    'profile' => ['url' => 'profile.php', 'label' => 'Profilo']
+];
+?>
 <nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
     <div class="container">
         <div class="d-flex flex-column flex-md-row align-items-md-center">
-            <a class="navbar-brand mb-0 h1" href="index.html">UniMatch</a>
+            <a class="navbar-brand mb-0 h1" href="index.php">UniMatch</a>
             <div class="small text-white opacity-75 mt-1 mt-md-0 ms-md-2">Trova i compagni di progetto perfetti
             </div>
         </div>
@@ -13,10 +22,15 @@
 
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-md-auto align-items-center">
-                <li class="nav-item"><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="create-post.html" class="nav-link">Crea</a></li>
-                <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
-                <li class="nav-item"><a href="profile.html" class="nav-link">Profilo</a></li>
+                <?php foreach ($navItems as $page => $item): ?>
+                    <li class="nav-item">
+                        <a href="<?= $item['url'] ?>"
+                            class="nav-link <?= $currentPage === $page ? 'active' : '' ?>"
+                            <?= $currentPage === $page ? 'aria-current="page"' : '' ?>>
+                            <?= $item['label'] ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="themeDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
