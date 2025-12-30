@@ -1,23 +1,53 @@
-/* Bootstrap primary color override */
+/* Minimal auth theme */
 :root {
-	/* Set both the color and its RGB for Bootstrap utilities */
-	--bs-primary: purple;
-	--bs-primary-rgb: 128, 0, 128;
+	--bs-primary: #0f172a;
+	--bs-primary-rgb: 15, 23, 42;
+	--surface: #ffffff;
+	--muted: #e5e7eb;
+	--soft: #f8fafc;
 }
 
-/* Fixed circle size for action buttons */
-.actions .btn {
-	width: 80px;
-	height: 80px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+body {
+	font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+	background: radial-gradient(circle at 20% 20%, #f3f4f6 0, #f8fafc 35%, #ffffff 70%);
+	color: #0f172a;
 }
 
-/* Smooth transitions for theme changes */
-body,
-.card,
-.btn,
-footer {
-	transition: background-color 0.3s ease, color 0.3s ease;
+.auth-card {
+	background: var(--surface);
+	border: 1px solid var(--muted);
+	border-radius: 16px;
+	box-shadow: none;
+}
+
+.auth-card .form-label {
+	font-weight: 600;
+}
+
+.auth-card .form-control {
+	border: 1px solid var(--muted);
+	background: var(--soft);
+	border-radius: 12px;
+	padding-top: 0.9rem;
+	padding-bottom: 0.9rem;
+}
+
+.auth-card .form-control:focus {
+	box-shadow: none;
+	border-color: #0f172a;
+}
+
+.auth-card .btn-primary {
+	border-radius: 12px;
+	padding: 0.85rem;
+	font-weight: 600;
+}
+
+.auth-link {
+	color: #0f172a;
+	font-weight: 600;
+}
+
+.auth-link:hover {
+	color: #111827;
 }
