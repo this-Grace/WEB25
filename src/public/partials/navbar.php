@@ -1,13 +1,13 @@
 <?php
-$currentPage = $activePage ?? 'home';
-$navItems = [
-    'home' => ['url' => 'index.php', 'label' => 'Home'],
-    'create' => ['url' => 'create-post.php', 'label' => 'Crea'],
-    'chat' => ['url' => 'chat.php', 'label' => 'Chat'],
-    'profile' => ['url' => 'profile.php', 'label' => 'Profilo']
-];
+// Default values if not set
+if (!isset($navColorClass)) {
+    $navColorClass = 'bg-primary';
+}
+if (!isset($menuItems)) {
+    $menuItems = [];
+}
 ?>
-<nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
+<nav class="navbar navbar-dark <?php echo $navColorClass; ?> navbar-expand-md sticky-top">
     <div class="container">
         <div class="d-flex flex-column flex-md-row align-items-md-center">
             <a class="navbar-brand mb-0 h1" href="index.php">UniMatch</a>
@@ -22,15 +22,16 @@ $navItems = [
 
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-md-auto align-items-center">
-                <?php foreach ($navItems as $page => $item): ?>
+                <?php foreach ($menuItems as $item): ?>
                     <li class="nav-item">
-                        <a href="<?= $item['url'] ?>"
-                            class="nav-link <?= $currentPage === $page ? 'active' : '' ?>"
-                            <?= $currentPage === $page ? 'aria-current="page"' : '' ?>>
-                            <?= $item['label'] ?>
+                        <a href="<?php echo htmlspecialchars($item['link']); ?>" 
+                           class="nav-link <?php echo (isset($item['active']) && $item['active']) ? 'active' : ''; ?>" 
+                           <?php echo (isset($item['active']) && $item['active']) ? 'aria-current="page"' : ''; ?>>
+                            <?php echo htmlspecialchars($item['label']); ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
+                
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="themeDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
