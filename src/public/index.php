@@ -1,21 +1,21 @@
 <?php
-$pageTitle = "Home";
-$navColorClass = "bg-primary";
-
-$menuItems = [
-    ['label' => 'Home', 'link' => 'index.php', 'active' => true],
-    ['label' => 'Crea', 'link' => 'create-post.html'],
-    ['label' => 'Chat', 'link' => 'chat.html'],
-    ['label' => 'Profilo', 'link' => 'profile.html'],
-];
-
 ob_start();
+$pageTitle = "Home";
 ?>
+
 <main class="container flex-grow-1 d-flex align-items-center">
     <div class="row justify-content-center w-100">
         <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-            <article class="card border-0 rounded-5 mb-4 bg-body-tertiary">
+            <article class="card border-0 rounded-5 mb-4 bg-body-tertiary position-relative">
                 <div class="card-body p-4">
+                    <div class="dropdown position-absolute top-0 end-0 m-3">
+                        <button class="btn btn-sm btn-link text-secondary text-decoration-none p-1 lh-1" type="button" data-bs-toggle="dropdown" aria-label="Opzioni post">
+                            <span class="fs-4">⋮</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Segnala post</a></li>
+                        </ul>
+                    </div>
                     <h1 class="visually-hidden">UniMatch</h1>
                     <h2 class="card-title h5">App per la gestione dello studio</h2>
                     <div class="text-primary fw-semibold small">@mrossi</div>
@@ -46,7 +46,8 @@ ob_start();
         </div>
     </div>
 </main>
+
 <?php
 $content = ob_get_clean();
-require 'template/base.php';
+require 'template/user.php';
 ?>

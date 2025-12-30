@@ -1,13 +1,5 @@
 <?php
 $pageTitle = "Admin Dashboard";
-$navColorClass = "bg-danger"; // Red for admin
-
-$menuItems = [
-    ['label' => 'Dashboard', 'link' => 'admin.php', 'active' => true],
-    ['label' => 'Utenti', 'link' => 'admin-users.html'],
-    ['label' => 'Post', 'link' => 'admin-posts.html'],
-    ['label' => 'Segnalazioni', 'link' => 'admin-reports.html'],
-];
 
 ob_start();
 ?>
@@ -169,5 +161,5 @@ ob_start();
 </main>
 <?php
 $content = ob_get_clean();
-require 'template/base.php';
+require 'template/admin.php';
 ?>
