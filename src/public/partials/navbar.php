@@ -50,3 +50,5 @@ if (!isset($menuItems)) {
         </div>
     </div>
 </nav>
+
+<script src="assets/js/theme.js"></script>
