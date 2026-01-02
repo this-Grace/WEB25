@@ -12,6 +12,7 @@
 
 <body class="bg-body d-flex flex-column min-vh-100">
 
+    <!-- Navbar -->
     <nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top shadow-sm">
         <div class="container">
             <div class="d-flex flex-column flex-md-row align-items-md-center">
@@ -49,24 +50,37 @@
         </div>
     </nav>
 
+    <!-- Main -->
     <main class="container flex-grow-1 py-5">
         <div class="row g-4 align-items-start">
-            
-            <div class="col-12 col-lg-4 mb-4 mb-lg-0">
-                <div class="sticky-lg-top" style="top: 6rem; z-index: 10;">
+
+            <!-- Sidebar -->
+            <div class="col-12 col-lg-4">
+                <div class="sticky-lg-top" style="top: 6rem;">
                     <div class="card border-0 rounded-5 bg-body-tertiary shadow-sm">
                         <div class="card-body p-4 text-center">
                             <img src="https://ui-avatars.com/api/?name=Mario+Rossi&background=7f037f&color=fff&size=120"
-                                alt="Avatar utente" class="rounded-4 mb-3 shadow-sm" width="120" height="120">
-                            
+                                alt="Avatar"
+                                class="rounded-4 mb-3 shadow-sm"
+                                width="120" height="120">
                             <h1 class="h3 mb-2">Mario Rossi</h1>
-                            <p class="text-body-secondary mb-4 small">Studente di Informatica appassionato di sviluppo web e app mobile</p>
-                            
+                            <p class="text-body-secondary small mb-4">
+                                Studente di Informatica appassionato di sviluppo web e app mobile
+                            </p>
+
                             <div class="d-grid gap-2">
-                                <a href="edit-profile.html" class="btn btn-primary rounded-pill">Modifica profilo</a>
-                                <button type="button" class="btn btn-link btn-sm text-decoration-none text-danger" 
-                                        data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                <a href="edit-profile.html" class="btn btn-primary rounded-pill">
+                                    Modifica profilo
+                                </a>
+                                <button class="btn btn-link btn-sm text-decoration-none text-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#logoutModal">
                                     Logout
+                                </button>
+                                <button class="btn btn-link btn-sm text-decoration-none text-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal">
+                                    Elimina account
                                 </button>
                             </div>
                         </div>
@@ -74,33 +88,46 @@
                 </div>
             </div>
 
+            <!-- Contenuto -->
             <div class="col-12 col-lg-8">
                 
                 <section class="mb-5">
-                    <h2 class="h5 mb-3 fw-bold">Attività</h2>
+                    <h2 class="h5 fw-bold mb-3">Attività</h2>
                     <div class="card border-0 rounded-4 bg-body-tertiary shadow-sm">
                         <div class="card-body p-4 d-flex justify-content-between align-items-center">
                             <div>
-                                <h3 class="h6 mb-1 text-body">Interazioni</h3>
-                                <p class="small text-body-secondary mb-0">Post a cui hai messo like o skip</p>
+                                <h3 class="h6 mb-1">Interazioni</h3>
+                                <p class="small text-body-secondary mb-0">
+                                    Post a cui hai messo like o skip
+                                </p>
                             </div>
-                            <a href="my-interactions.html" class="btn btn-outline-primary rounded-pill px-4">Visualizza</a>
+                            <a href="my-interactions.html"
+                                class="btn btn-outline-primary rounded-pill px-4">
+                                Visualizza
+                            </a>
                         </div>
                     </div>
                 </section>
 
                 <section>
-                    <h2 class="h5 mb-3 fw-bold">I miei post</h2>
-                    
+                    <h2 class="h5 fw-bold mb-3">I miei post</h2>
+
                     <article class="card border-0 rounded-4 bg-body-tertiary shadow-sm mb-3">
                         <div class="card-body p-4">
                             <div class="row align-items-center">
-                                <div class="col-md-8 mb-3 mb-md-0">
-                                    <h3 class="h5 mb-1 text-body">Gamification per l'apprendimento</h3>
-                                    <p class="text-body-secondary mb-0 small">App educativa che rende lo studio più coinvolgente.</p>
+                                <div class="col-md-8">
+                                    <h3 class="h5 mb-1">
+                                        Gamification per l'apprendimento
+                                    </h3>
+                                    <p class="small text-body-secondary mb-0">
+                                        App educativa che rende lo studio più coinvolgente.
+                                    </p>
                                 </div>
                                 <div class="col-md-4 text-md-end">
-                                    <a href="post-interactions.html?post=1" class="btn btn-outline-primary rounded-pill px-4">Vedi interazioni</a>
+                                    <a href="post-interactions.html?post=1"
+                                        class="btn btn-outline-primary rounded-pill px-4">
+                                        Vedi interazioni
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -111,22 +138,87 @@
         </div>
     </main>
 
-    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <!-- Modal Logout -->
+    <div class="modal fade" id="logoutModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content border-0 rounded-5 shadow-lg">
+            <div class="modal-content border-0 rounded-5">
                 <div class="modal-body text-center p-4">
                     <h2 class="h5 fw-bold mb-2" id="logoutModalLabel">Vuoi uscire?</h2>
-                    <p class="text-body-secondary small mb-4">La tua sessione verrà terminata, ma i tuoi post e i tuoi match rimarranno salvati.</p>
+                    <p class="text-body-secondary small mb-4">La tua sessione verrà terminata, ma i tuoi post e le tue interazioni rimarranno salvati.</p>
                     
                     <div class="d-grid gap-2">
-                        <a href="login.html" class="btn btn-danger rounded-pill py-2 fw-semibold shadow-sm">
+                        <a href="login.html"
+                            class="btn btn-danger rounded-pill fw-semibold">
                             Conferma Logout
                         </a>
-                        
-                        <button type="button" class="btn btn-light rounded-pill py-2 text-secondary small border-0" data-bs-dismiss="modal">
+                        <button class="btn btn-light rounded-pill"
+                            data-bs-dismiss="modal">
                             Annulla
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 1: conferma eliminazione -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 rounded-5">
+                <div class="modal-body text-center p-4">
+                    <h2 class="h5 fw-bold text-danger mb-2">
+                        Eliminare l’account?
+                    </h2>
+                    <p class="small text-body-secondary mb-4">
+                        Sei sicuro di voler procedere?
+                    </p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-danger rounded-pill fw-semibold"
+                            data-bs-dismiss="modal"
+                            data-bs-toggle="modal"
+                            data-bs-target="#passwordDeleteModal">
+                            Continua
+                        </button>
+                        <button class="btn btn-light rounded-pill"
+                            data-bs-dismiss="modal">
+                            Annulla
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: password -->
+    <div class="modal fade" id="passwordDeleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 rounded-5">
+                <div class="modal-body p-4">
+                    <h2 class="h5 fw-bold text-danger text-center mb-2">
+                        Conferma eliminazione
+                    </h2>
+                    <p class="small text-body-secondary text-center mb-4">
+                        Inserisci la password per continuare.
+                    </p>
+                    <form action="delete-account.php" method="post">
+                        <div class="mb-3">
+                            <label for="deletePassword" class="form-label visually-hidden">Password</label>
+                            <input type="password" id="deletePassword" name="password"
+                                class="form-control rounded-pill" placeholder="Password"
+                                required title="Inserisci la tua password per confermare l'eliminazione dell'account">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit"
+                                class="btn btn-danger rounded-pill fw-semibold">
+                                Elimina definitivamente
+                            </button>
+                            <button type="button"
+                                class="btn btn-light rounded-pill"
+                                data-bs-dismiss="modal">
+                                Annulla
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -140,9 +232,15 @@
                 </div>
                 <div class="col-12 col-md-auto">
                     <ul class="nav justify-content-center">
-                        <li class="nav-item"><a href="#" class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover small">Privacy</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover small">Termini</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover small">Contatti</a></li>
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Privacy</a>
+                        </li>
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Termini</a>
+                        </li>
+                        <li class="nav-item"><a href="#"
+                                class="nav-link px-2 link-body-emphasis link-opacity-75 link-opacity-100-hover">Contatti</a>
+                        </li>
                     </ul>
                 </div>
             </div>
