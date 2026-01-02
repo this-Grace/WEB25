@@ -3,10 +3,10 @@ $pageTitle = "Home";
 $navColorClass = "bg-primary";
 
 $menuItems = [
-    ['label' => 'Home', 'link' => 'index.php', 'active' => true],
-    ['label' => 'Crea', 'link' => 'create-post.html'],
-    ['label' => 'Chat', 'link' => 'chat.html'],
-    ['label' => 'Profilo', 'link' => 'profile.html'],
+    ['label' => 'Home', 'link' => 'index.php'],
+    ['label' => 'Crea', 'link' => 'create-post.php'],
+    ['label' => 'Chat', 'link' => 'chat.php'],
+    ['label' => 'Profilo', 'link' => 'profile.php'],
 ];
 
 ob_start();
@@ -58,5 +58,5 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-require 'template/base.php';
+require __DIR__ . '/template/base.php';
 ?>
