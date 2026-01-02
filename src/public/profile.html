@@ -13,6 +13,7 @@
 </head>
 
 <body class="bg-body d-flex flex-column min-vh-100">
+    
     <nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
         <div class="container">
             <div class="d-flex flex-column flex-md-row align-items-md-center">
@@ -52,23 +53,20 @@
     </nav>
 
     <main class="container flex-grow-1 py-5">
-        <div class="row g-4">
-            
-            <div class="col-12 col-lg-4">
-                <div class="card border-0 rounded-5 bg-body-tertiary shadow-sm sticky-lg-top" style="top: 5rem;">
-                    <div class="card-body p-4 text-center">
-                        <img src="https://ui-avatars.com/api/?name=Mario+Rossi&background=7f037f&color=fff&size=120"
-                            alt="Avatar utente" class="rounded-4 mb-3 shadow-sm" width="120" height="120">
-                        <h1 class="h3 mb-2">Mario Rossi</h1>
-                        <p class="text-body-secondary mb-4">Studente di Informatica appassionato di sviluppo web e app mobile</p>
-                        
-                        <div class="d-grid gap-2">
-                            <a href="edit-profile.html" class="btn btn-primary rounded-pill">
-                                Modifica profilo
-                            </a>
-                            <a href="logout.html" class="btn btn-link btn-sm text-decoration-none text-danger">
-                                Logout
-                            </a>
+        <div class="row g-4 align-items-start"> <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+                <div class="sticky-lg-top" style="top: 6rem; z-index: 10;">
+                    <div class="card border-0 rounded-5 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-4 text-center">
+                            <img src="https://ui-avatars.com/api/?name=Mario+Rossi&background=7f037f&color=fff&size=120"
+                                alt="Avatar utente" class="rounded-4 mb-3 shadow-sm" width="120" height="120">
+                            
+                            <h1 class="h3 mb-2">Mario Rossi</h1>
+                            <p class="text-body-secondary mb-4 small">Studente di Informatica appassionato di sviluppo web e app mobile</p>
+                            
+                            <div class="d-grid gap-2">
+                                <a href="edit-profile.html" class="btn btn-primary rounded-pill">Modifica profilo</a>
+                                <a href="logout.html" class="btn btn-link btn-sm text-decoration-none text-danger">Logout</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -76,7 +74,7 @@
 
             <div class="col-12 col-lg-8">
                 
-                <section class="mb-5">
+                <div class="mb-5">
                     <h2 class="h5 mb-3 fw-bold">Attività</h2>
                     <div class="card border-0 rounded-4 bg-body-tertiary shadow-sm">
                         <div class="card-body p-4 d-flex justify-content-between align-items-center">
@@ -84,36 +82,28 @@
                                 <h3 class="h6 mb-1">Interazioni</h3>
                                 <p class="small text-body-secondary mb-0">Post a cui hai messo like o skip</p>
                             </div>
-                            <a href="my-interactions.html" class="btn btn-outline-primary rounded-pill px-4">
-                                Visualizza
-                            </a>
+                            <a href="my-interactions.html" class="btn btn-outline-primary rounded-pill px-4">Visualizza</a>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <section>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h2 class="h5 mb-0 fw-bold">I miei post</h2>
-                    </div>
+                <div>
+                    <h2 class="h5 mb-3 fw-bold">I miei post</h2>
                     
-                    <div class="card border-0 rounded-4 bg-body-tertiary shadow-sm mb-3">
+                    <article class="card border-0 rounded-4 bg-body-tertiary shadow-sm mb-3">
                         <div class="card-body p-4">
                             <div class="row align-items-center">
                                 <div class="col-md-8 mb-3 mb-md-0">
                                     <h3 class="h5 mb-1">Gamification per l'apprendimento</h3>
-                                    <p class="text-body-secondary mb-0">
-                                        App educativa che rende lo studio più coinvolgente.
-                                    </p>
+                                    <p class="text-body-secondary mb-0 small">App educativa che rende lo studio più coinvolgente.</p>
                                 </div>
                                 <div class="col-md-4 text-md-end">
-                                    <a href="post-interactions.html?post=1" class="btn btn-outline-primary rounded-pill px-4">
-                                        Vedi interazioni
-                                    </a>
+                                    <a href="post-interactions.html?post=1" class="btn btn-outline-primary rounded-pill px-4">Vedi interazioni</a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </article>
+                </div>
                 
             </div>
         </div>
