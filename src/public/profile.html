@@ -13,97 +13,113 @@
 </head>
 
 <body class="bg-body d-flex flex-column min-vh-100">
-	<nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
-		<div class="container">
-			<div class="d-flex flex-column flex-md-row align-items-md-center">
-				<a class="navbar-brand mb-0 h1" href="index.html">UniMatch</a>
-				<div class="small text-white opacity-75 mt-1 mt-md-0 ms-md-2">Trova i compagni di progetto perfetti
-				</div>
-			</div>
+    <nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row align-items-md-center">
+                <a class="navbar-brand mb-0 h1" href="index.html">UniMatch</a>
+                <div class="small text-white opacity-75 mt-1 mt-md-0 ms-md-2">Trova i compagni di progetto perfetti
+                </div>
+            </div>
 
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-				aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-			<div class="collapse navbar-collapse" id="mainNav">
-				<ul class="navbar-nav ms-md-auto align-items-center">
-					<li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-					<li class="nav-item"><a href="create-post.html" class="nav-link">Crea</a></li>
-					<li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
-					<li class="nav-item"><a href="profile.html" class="nav-link active" aria-current="page">Profilo</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="themeDropdown"
-							role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<span class="me-2" id="themeIcon">◐</span>
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
-							<li><button type="button" class="dropdown-item d-flex align-items-center"
-									data-theme-value="auto"><span class="me-2">◐</span> Automatico</button></li>
-							<li><button type="button" class="dropdown-item d-flex align-items-center"
-									data-theme-value="light"><span class="me-2">○</span> Chiaro</button></li>
-							<li><button type="button" class="dropdown-item d-flex align-items-center"
-									data-theme-value="dark"><span class="me-2">●</span> Scuro</button></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-md-auto align-items-center">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="create-post.html" class="nav-link">Crea</a></li>
+                    <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+                    <li class="nav-item"><a href="profile.html" class="nav-link">Profilo</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="themeDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="me-2" id="themeIcon">◐</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="themeDropdown">
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="auto"><span class="me-2">◐</span> Automatico</button></li>
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="light"><span class="me-2">○</span> Chiaro</button></li>
+                            <li><button type="button" class="dropdown-item d-flex align-items-center"
+                                    data-theme-value="dark"><span class="me-2">●</span> Scuro</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>  
+        </div>
+    </nav>
 
-	<main class="container flex-grow-1 py-4">
-		<div class="row justify-content-center">
-			<div class="col-12 col-lg-8 col-xl-7">
-				<!-- Intestazione profilo -->
-				<div class="card border-0 rounded-5 bg-body-tertiary mb-4">
-					<div class="card-body p-4 p-md-5 text-center">
-						<img src="https://ui-avatars.com/api/?name=Mario+Rossi&background=7f037f&color=fff&size=120"
-							alt="Avatar utente" class="rounded-4 mb-3" width="120" height="120">
-						<h1 class="h3 mb-2">Mario Rossi</h1>
-						<p class="text-body-secondary mb-0">Studente di Informatica appassionato di sviluppo web e app
-							mobile</p>
-						<a href="edit-profile.html" class="btn btn-outline-primary rounded-pill px-4 mt-4">
-							Modifica profilo
-						</a>
-					</div>
-				</div>
+    <main class="container flex-grow-1 py-5">
+        <div class="row g-4">
+            
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 rounded-5 bg-body-tertiary shadow-sm sticky-lg-top" style="top: 5rem;">
+                    <div class="card-body p-4 text-center">
+                        <img src="https://ui-avatars.com/api/?name=Mario+Rossi&background=7f037f&color=fff&size=120"
+                            alt="Avatar utente" class="rounded-4 mb-3 shadow-sm" width="120" height="120">
+                        <h1 class="h3 mb-2">Mario Rossi</h1>
+                        <p class="text-body-secondary mb-4">Studente di Informatica appassionato di sviluppo web e app mobile</p>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="edit-profile.html" class="btn btn-primary rounded-pill">
+                                Modifica profilo
+                            </a>
+                            <a href="logout.html" class="btn btn-link btn-sm text-decoration-none text-danger">
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-				<!-- Le mie interazioni -->
-				<h2 class="h4 mb-3">Le mie interazioni</h2>
-				<div class="card border-0 rounded-5 bg-body-tertiary mb-5">
-					<div class="card-body p-4 d-flex justify-content-between align-items-center">
-						<div>
-							<p class="small text-body-secondary mb-0">
-								Post a cui hai messo like o skip
-							</p>
-						</div>
-						<a href="my-interactions.html" class="btn btn-outline-primary rounded-pill px-4">
-							Visualizza
-						</a>
-					</div>
-				</div>
+            <div class="col-12 col-lg-8">
+                
+                <section class="mb-5">
+                    <h2 class="h5 mb-3 fw-bold">Attività</h2>
+                    <div class="card border-0 rounded-4 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="h6 mb-1">Interazioni</h3>
+                                <p class="small text-body-secondary mb-0">Post a cui hai messo like o skip</p>
+                            </div>
+                            <a href="my-interactions.html" class="btn btn-outline-primary rounded-pill px-4">
+                                Visualizza
+                            </a>
+                        </div>
+                    </div>
+                </section>
 
-				<!-- I miei post -->
-				<h2 class="h4 mb-3">I miei post</h2>
-				<div class="card border-0 rounded-5 bg-body-tertiary mb-3">
-					<div class="card-body p-4 d-flex justify-content-between align-items-center">
-						<div>
-							<h3 class="h5 mb-1">Gamification per l'apprendimento</h3>
-							<p class="text-body-secondary mb-0">
-								App educativa che rende lo studio più coinvolgente.
-							</p>
-						</div>
-						<a href="post-interactions.html?post=1" class="btn btn-outline-primary rounded-pill px-4">
-							Vedi interazioni
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</main>
+                <section>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h5 mb-0 fw-bold">I miei post</h2>
+                    </div>
+                    
+                    <div class="card border-0 rounded-4 bg-body-tertiary shadow-sm mb-3">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-8 mb-3 mb-md-0">
+                                    <h3 class="h5 mb-1">Gamification per l'apprendimento</h3>
+                                    <p class="text-body-secondary mb-0">
+                                        App educativa che rende lo studio più coinvolgente.
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <a href="post-interactions.html?post=1" class="btn btn-outline-primary rounded-pill px-4">
+                                        Vedi interazioni
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+            </div>
+        </div>
+    </main>
 
-	<footer class="bg-body-secondary mt-auto rounded-top-4">
+    <footer class="bg-body-secondary mt-auto rounded-top-4">
 		<div class="container py-4">
 			<div class="row align-items-center gy-2">
 				<div class="col-12 col-md text-center text-md-start text-body-secondary small">
@@ -126,10 +142,7 @@
 		</div>
 	</footer>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-		crossorigin="anonymous"></script>
-	<script src="#"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
