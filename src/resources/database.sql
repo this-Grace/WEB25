@@ -13,7 +13,7 @@ CREATE TABLE users (
     surname VARCHAR(50),
     bio TEXT,
     avatar_url TEXT,
-    degree_course VARCHAR(100),
+    role ENUM('student', 'admin') DEFAULT 'student',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -26,11 +26,11 @@ CREATE TABLE posts (
     user_username VARCHAR(50) NOT NULL,
     title VARCHAR(255),
     content TEXT NOT NULL,
+    degree_course VARCHAR(100),
+    num_collaborators INT DEFAULT 1,
+    skills_required TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_posts_user
-        FOREIGN KEY (user_username)
-        REFERENCES users(username)
-        ON DELETE CASCADE
+    CONSTRAINT fk_posts_user FOREIGN KEY (user_username) REFERENCES users(username) ON DELETE CASCADE
 );
 
 -- =========================

@@ -40,6 +40,21 @@ Note:
 INSERT INTO reactions (user_username, post_id, reaction_type)
 VALUES (:username, :post_id, :reaction_type);
 
+/*
+QUERY: Creazione di un nuovo post di progetto
+Include tutti i campi richiesti dall'analisi: corso, numero collaboratori e competenze
+*/
+INSERT INTO posts (user_username, title, content, degree_course, num_collaborators, skills_required)
+VALUES (:username, :title, :content, :degree_course, :num_collaborators, :skills_required);
+
+/*
+QUERY: Recupera i post pubblicati dall'utente loggato
+Serve per la sezione "I miei post" del profilo
+*/
+SELECT * FROM posts 
+WHERE user_username = :username 
+ORDER BY created_at DESC;
+
 
 /*
 ========================================
@@ -155,6 +170,38 @@ INSERT INTO conversation_participants (conversation_id, user_username)
 VALUES
 (:conversation_id, :userA),
 (:conversation_id, :userB);
+
+/*
+QUERY: Recupera la lista delle chat attive con l'anteprima dell'ultimo messaggio
+*/
+SELECT 
+    c.id AS conversation_id,
+    cp_other.user_username AS chat_partner,
+    u.avatar_url,
+    m.text AS last_message,
+    m.created_at AS last_message_time,
+    m.is_read
+FROM conversation_participants cp_me
+JOIN conversation_participants cp_other 
+    ON cp_me.conversation_id = cp_other.conversation_id AND cp_other.user_username != :me
+JOIN users u ON cp_other.user_username = u.username
+JOIN conversations c ON c.id = cp_me.conversation_id
+LEFT JOIN messages m ON m.id = (
+    SELECT id FROM messages 
+    WHERE conversation_id = c.id 
+    ORDER BY created_at DESC LIMIT 1
+)
+WHERE cp_me.user_username = :me
+ORDER BY m.created_at DESC;
+
+/*
+QUERY: Segna i messaggi come letti
+Da eseguire quando l'utente apre la finestra di chat
+*/
+UPDATE messages 
+SET is_read = TRUE 
+WHERE conversation_id = :conversation_id 
+AND sender_username != :me;
 
 
 /*
