@@ -35,7 +35,13 @@ class User
     {
         $query = "SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at FROM users";
         $result = $this->db->query($query);
-        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        
+        if (!$result) return [];
+
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $result->free();
+        
+        return $data;
     }
 
     /**
@@ -49,8 +55,14 @@ class User
         $stmt = $this->db->prepare("SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at FROM users WHERE username = ? LIMIT 1");
         $stmt->bind_param('s', $username);
         $stmt->execute();
+        
         $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        $data = $result->fetch_assoc();
+        
+        $result->free();
+        $stmt->close();
+        
+        return $data;
     }
 
     /**
@@ -66,16 +78,22 @@ class User
         $stmt = $this->db->prepare("SELECT username, password_hash, role FROM users WHERE username = ? LIMIT 1");
         $stmt->bind_param('s', $username);
         $stmt->execute();
-        $user = $stmt->get_result()->fetch_assoc();
-
+        
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        
+        $authenticated = false;
         if ($user && password_verify($password, $user['password_hash'])) {
-            // Return user data (excluding password_hash for security)
-            return [
+            $authenticated = [
                 'username' => $user['username'],
                 'role' => $user['role']
             ];
         }
-        return false;
+
+        $result->free();
+        $stmt->close();
+        
+        return $authenticated;
     }
 
     /**
@@ -94,7 +112,11 @@ class User
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->db->prepare("INSERT INTO users (username, email, password_hash, first_name, surname, degree_course) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param('ssssss', $username, $email, $hash, $first_name, $surname, $course);
-        return $stmt->execute();
+        
+        $success = $stmt->execute();
+        $stmt->close();
+        
+        return $success;
     }
 
     /**
@@ -112,7 +134,11 @@ class User
     {
         $stmt = $this->db->prepare("UPDATE users SET first_name = ?, surname = ?, bio = ?, degree_course = ?, avatar_url = ? WHERE username = ?");
         $stmt->bind_param('ssssss', $first_name, $surname, $bio, $course, $avatar, $username);
-        return $stmt->execute();
+        
+        $success = $stmt->execute();
+        $stmt->close();
+        
+        return $success;
     }
 
     /**
@@ -125,6 +151,10 @@ class User
     {
         $stmt = $this->db->prepare("DELETE FROM users WHERE username = ?");
         $stmt->bind_param('s', $username);
-        return $stmt->execute();
+        
+        $success = $stmt->execute();
+        $stmt->close();
+        
+        return $success;
     }
 }
