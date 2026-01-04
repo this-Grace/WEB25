@@ -3,21 +3,20 @@ if (!isset($menuItems)) {
     $menuItems = [];
 }
 ?>
-<nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
+<nav class="navbar navbar-dark bg-primary navbar-expand-md">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row align-items-md-center">
-            <a class="navbar-brand mb-0 h1" href="index.php">UniMatch</a>
-            <div class="small text-white opacity-75 mt-1 mt-md-0 ms-md-2">Trova i compagni di progetto perfetti
-            </div>
+        <div class="d-flex flex-column">
+            <a class="navbar-brand fw-bold mb-0" href="index.php">UniMatch</a>
+            <span class="small text-white opacity-75 d-none d-md-block">Trova i compagni di progetto perfetti</span>
         </div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+        <button class="navbar-toggler border-0 p-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
             aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon-custom"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav ms-md-auto align-items-center">
+            <ul class="navbar-nav ms-auto">
                 <?php foreach ($menuItems as $item): ?>
                     <li class="nav-item">
                         <a href="<?php echo htmlspecialchars($item['link']); ?>"
@@ -28,8 +27,8 @@ if (!isset($menuItems)) {
                     </li>
                 <?php endforeach; ?>
                 <?php if (!isset($_SESSION['user_id'])): ?>
-                    <li class="nav-item ms-md-2 mt-2 mt-md-0">
-                        <a href="login.php" class="btn btn-outline-light btn-sm">Login</a>
+                    <li class="nav-item">
+                        <a href="login.php" class="nav-link fw-semibold">Login</a>
                     </li>
                 <?php endif; ?>
             </ul>
