@@ -16,84 +16,74 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <main class="container flex-grow-1 d-flex align-items-center py-5">
-        <div class="row justify-content-center w-100">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-                <div class="card auth-card">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="text-center mb-4">
-                            <h1 class="h3 mb-2">Crea un account</h1>
-                            <p class="text-secondary mb-0">Registrati con pochi dati essenziali.</p>
+    <main class="auth-page d-flex align-items-center justify-content-center flex-grow-1" role="main">
+        <div class="container">
+            <div class="row auth-grid align-items-center justify-content-center g-5">
+                <div class="col-lg-6 d-none d-lg-flex justify-content-center">
+                    <img src="assets/img/banner.png" alt="Illustrazione collaborativa per UniMatch"
+                        class="img-fluid auth-hero">
+                </div>
+
+                <div class="col-lg-4 col-md-6" aria-label="Area di registrazione">
+                    <div class="auth-panel" role="form" aria-labelledby="registerTitle">
+                        <h1 id="registerTitle" class="auth-title text-center mb-4">Crea account</h1>
+                        <form action="register.php" method="POST" novalidate>
+                            <div class="mb-3">
+                                <label class="form-label" for="regName">Nome</label>
+                                <input type="text" class="form-control" id="regName" name="name" required
+                                    autocomplete="name" placeholder="Il tuo nome">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="regEmail">Email</label>
+                                <input type="email" class="form-control" id="regEmail" name="email" required
+                                    autocomplete="email" placeholder="nome@esempio.it">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="regPassword">Password</label>
+                                <input type="password" class="form-control" id="regPassword" name="password" required
+                                    autocomplete="new-password" placeholder="••••••••">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="regConfirm">Conferma password</label>
+                                <input type="password" class="form-control" id="regConfirm" name="password_confirm"
+                                    required autocomplete="new-password" placeholder="••••••••">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 mb-3"
+                                aria-label="Registrati su UniMatch">Registrati</button>
+
+                            <div class="text-center mb-3">
+                                <a href="login.html" class="auth-link" aria-label="Torna al login">Hai già un account?
+                                    Accedi</a>
+                            </div>
+                        </form>
+
+                        <div class="text-center border-top pt-3" aria-label="Vai al login">
+                            <span class="text-muted">Oppure</span>
+                            <a href="login.html" class="auth-link fw-semibold ms-1">Accedi</a>
                         </div>
-
-                        <form action="index.php" method="POST">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required
-                                    autocomplete="username">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" required
-                                    autocomplete="email">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="nome" class="form-label">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" required
-                                    autocomplete="given-name">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="cognome" class="form-label">Cognome</label>
-                                <input type="text" class="form-control" id="cognome" name="cognome" required
-                                    autocomplete="family-name">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="corso" class="form-label">Corso di laurea</label>
-                                <input type="text" class="form-control" id="corso" name="corso" required
-                                    placeholder="es. Ingegneria Informatica">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required
-                                    autocomplete="new-password" minlength="8">
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="confirm_password" class="form-label">Conferma password</label>
-                                <input type="password" class="form-control" id="confirm_password"
-                                    name="confirm_password" required autocomplete="new-password" minlength="8">
-                            </div>
-
-                            <div class="mb-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
-                                    <label class="form-check-label" for="terms">
-                                        <small>Accetto i <a href="#" class="text-primary text-decoration-none">termini e
-                                                condizioni</a></small>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100 
-                                Registrati
-                            </button>
-
-                            <div class=" text-center">
-                                <small class="text-body-secondary">
-                                    Hai già un account? <a href="login.html" class="auth-link">Accedi</a>
-                                </small>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
-        </div>
     </main>
+
+    <footer class="mt-auto py-4">
+        <div class="container">
+            <div class="row align-items-center gy-2">
+                <div class="col-12 col-md text-center text-md-start text-body-secondary small">
+                    &copy; 2025 UniMatch — Tutti i diritti riservati
+                </div>
+                <div class="col-12 col-md-auto">
+                    <ul class="nav justify-content-center">
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Privacy</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Termini</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Contatti</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
