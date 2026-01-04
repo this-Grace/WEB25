@@ -78,4 +78,4 @@ $content = <<<'HTML'
 </div>
 HTML;
 
-include 'template/info.php';
+include 'template/base.php';
