@@ -1,53 +1,29 @@
-/* Minimal auth theme */
-:root {
-	--bs-primary: #0f172a;
-	--bs-primary-rgb: 15, 23, 42;
-	--surface: #ffffff;
-	--muted: #e5e7eb;
-	--soft: #f8fafc;
-}
-
 body {
 	font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
-	background: radial-gradient(circle at 20% 20%, #f3f4f6 0, #f8fafc 35%, #ffffff 70%);
-	color: #0f172a;
 }
 
-.auth-card {
-	background: var(--surface);
-	border: 1px solid var(--muted);
-	border-radius: 16px;
-	box-shadow: none;
+.auth-page {
+	padding: 1.5rem;
 }
 
-.auth-card .form-label {
-	font-weight: 600;
+.auth-page>.container>.auth-grid {
+	max-width: 1140px;
+	margin: 0 auto;
 }
 
-.auth-card .form-control {
-	border: 1px solid var(--muted);
-	background: var(--soft);
-	border-radius: 12px;
-	padding-top: 0.9rem;
-	padding-bottom: 0.9rem;
+.auth-page>.container>.auth-grid>.col-lg-6>.auth-hero {
+	max-width: 360px;
+	width: 100%;
+	border-radius: 14px;
+	transform: rotate(-2deg);
+	box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35);
 }
 
-.auth-card .form-control:focus {
-	box-shadow: none;
-	border-color: #0f172a;
+.auth-page>.container>.auth-grid>.col-lg-4 .auth-panel {
+	max-width: 420px;
+	margin: 0 auto;
 }
 
-.auth-card .btn-primary {
-	border-radius: 12px;
-	padding: 0.85rem;
-	font-weight: 600;
-}
-
-.auth-link {
-	color: #0f172a;
-	font-weight: 600;
-}
-
-.auth-link:hover {
-	color: #111827;
+.auth-page>.container>.auth-grid>.col-lg-4 .auth-panel>.auth-title {
+	font-weight: 700;
 }
