@@ -16,6 +16,9 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+
+    <?php include 'partials/navbar.php'; ?>
+
     <main class="flex-grow-1 d-flex align-items-center py-5" role="main">
         <div class="container">
             <div class="row justify-content-center">
