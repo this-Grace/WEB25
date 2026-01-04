@@ -1,5 +1,5 @@
 <?php
-$pageTitle = ' Contatti';
+$pageTitle = 'Contatti';
 
 $contacts = [
     ['name' => 'Alessandro Rebosio', 'role' => 'Developer', 'email' => 'email.com'],

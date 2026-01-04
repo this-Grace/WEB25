@@ -1,5 +1,5 @@
 <?php
-$pageTitle = ' Privacy Policy';
+$pageTitle = 'Privacy Policy';
 
 $content = <<<'HTML'
 <div class="mb-5">

@@ -1,5 +1,5 @@
 <?php
-$pageTitle = ' Termini e Condizioni';
+$pageTitle = 'Termini e Condizioni';
 
 $content = <<<'HTML'
 <div class="mb-5">

@@ -17,16 +17,17 @@ if (!isset($menuItems)) {
 
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto">
-                <?php foreach ($menuItems as $item): ?>
-                    <li class="nav-item">
-                        <a href="<?php echo htmlspecialchars($item['link']); ?>"
-                            class="nav-link <?php echo (isset($item['active']) && $item['active']) ? 'active' : ''; ?>"
-                            <?php echo (isset($item['active']) && $item['active']) ? 'aria-current="page"' : ''; ?>>
-                            <?php echo htmlspecialchars($item['label']); ?>
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-                <?php if (!isset($_SESSION['user_id'])): ?>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <?php foreach ($menuItems as $item): ?>
+                        <li class="nav-item">
+                            <a href="<?php echo htmlspecialchars($item['link']); ?>"
+                                class="nav-link <?php echo (isset($item['active']) && $item['active']) ? 'active' : ''; ?>"
+                                <?php echo (isset($item['active']) && $item['active']) ? 'aria-current="page"' : ''; ?>>
+                                <?php echo htmlspecialchars($item['label']); ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <li class="nav-item">
                         <a href="login.php" class="nav-link fw-semibold">Login</a>
                     </li>
