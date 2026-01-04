@@ -1,39 +1,38 @@
-<!DOCTYPE html>
-<html lang="it">
+<?php
+if (!isset($pageTitle) || !isset($sections)) {
+    die('Errore: variabili mancanti');
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniMatch <?php echo isset($pageTitle) ? '|' . $pageTitle : ''; ?></title>
+ob_start();
+?>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<div class="mb-5">
+    <h1 class="display-5 fw-bold mb-3"><?= htmlspecialchars($pageTitle) ?></h1>
+    <p class="text-muted">Ultimo aggiornamento: 4 Gennaio 2026</p>
+</div>
 
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<div class="content">
+    <?php foreach ($sections as $section): ?>
+        <section class="mb-5">
+            <h2 class="h4 mb-3"><?= htmlspecialchars($section['title']) ?></h2>
+            <p>
+                <?= htmlspecialchars($section['text']) ?>
+                <?php if (isset($section['email'])): ?>
+                    <a href="mailto:<?= htmlspecialchars($section['email']) ?>"><?= htmlspecialchars($section['email']) ?></a>
+                <?php endif; ?>
+            </p>
+            <?php if (isset($section['list'])): ?>
+                <ul>
+                    <?php foreach ($section['list'] as $item): ?>
+                        <li><?= htmlspecialchars($item) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </section>
+    <?php endforeach; ?>
+</div>
 
-<body class="d-flex flex-column min-vh-100">
-
-    <?php include 'partials/navbar.php'; ?>
-
-    <main class="flex-grow-1 d-flex align-items-center py-5" role="main">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-9 col-xl-8">
-                    <?php echo $content; ?>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <?php include 'partials/footer.php'; ?>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="assets/js/theme.js"></script>
-</body>
-
-</html>
+<?php
+$content = ob_get_clean();
+include 'base.php';
+?>
