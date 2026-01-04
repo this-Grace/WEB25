@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>UniMatch | Home</title>
+	<title>UniMatch | Segnalazione Post</title>
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -13,7 +13,6 @@
 </head>
 
 <body class="bg-body d-flex flex-column min-vh-100">
-	<!-- Navbar principale con navigazione e selezione tema -->
 	<nav class="navbar navbar-dark bg-primary navbar-expand-md sticky-top">
 		<div class="container">
 			<div class="d-flex flex-column flex-md-row align-items-md-center">
@@ -52,65 +51,51 @@
 		</div>
 	</nav>
 
-	<!-- Area principale: visualizzazione post singolo con azioni -->
-	<main class="container flex-grow-1 d-flex align-items-center">
-		<div class="row justify-content-center w-100">
-			<div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-				<!-- Card del post-->
-				<article class="card border-0 rounded-5 mb-4 bg-body-tertiary">
-					<div class="card-body p-4 position-relative">
-						<!-- Menu segnalazione post -->
-						<div class="dropdown position-absolute top-0 end-0 m-3">
-							<button class="btn btn-sm btn-link text-body-secondary text-decoration-none"
-								type="button"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
-								aria-label="Azioni post">
-								⋮
-							</button>
-							<ul class="dropdown-menu dropdown-menu-end rounded-4">
-								<li>
-									<a class="dropdown-item text-danger" href="report-post.html?post=1">
-										Segnala post
-									</a>
-								</li>
-							</ul>
-						</div>
+    <main class="container flex-grow-1 py-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card border-0 rounded-5 bg-body-tertiary">
+                    <div class="card-body p-4 p-md-5">
+                        <h1 class="h4 mb-3">Segnala contenuto</h1>
+                        <p class="text-body-secondary small mb-4">
+                            La tua segnalazione verrà esaminata dal team UniMatch.
+                        </p>
 
-						<h1 class="visually-hidden">UniMatch</h1>
-						<!-- Informazioni principali del post -->
-						<h2 class="card-title h5">App per la gestione dello studio</h2>
-						<div class="text-primary fw-semibold small">@mrossi</div>
-						<p class="mt-2">
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad, error assumenda quos est
-							maiores dicta impedit tempora omnis dolorem ducimus? Nesciunt laudantium natus hic
-							asperiores magni accusamus. Modi, voluptates sint.
-						</p>
-						<ul class="list-unstyled mt-3 pt-3 border-top">
-							<li class="py-1">
-								<strong>Corso:</strong> Ingegneria Informatica
-							</li>
-							<li class="py-1">
-								<strong>Team richiesto:</strong> 2 persone
-							</li>
-						</ul>
-					</div>
-				</article>
-				<!-- Azioni utente: like o skip del post -->
-				<div class="actions d-flex justify-content-center gap-3 my-4">
-					<button aria-label="Skip" title="Skip"
-						class="btn btn-outline-danger btn-lg rounded-circle border-0 fs-3"><span
-							aria-hidden="true">×</span></button>
-					<button aria-label="Like" title="Like"
-						class="btn btn-outline-success btn-lg rounded-circle border-0 fs-3"><span
-							aria-hidden="true">♥</span></button>
-				</div>
-			</div>
-		</div>
-	</main>
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label small">Motivo della segnalazione</label>
+                                <select class="form-select rounded-4">
+                                    <option selected disabled>Seleziona un motivo</option>
+                                    <option>Comportamento inappropriato</option>
+                                    <option>Contenuto offensivo</option>
+                                    <option>Spam</option>
+                                    <option>Frode</option>
+                                </select>
+                            </div>
 
-	<!-- Footer informativo -->
-	<footer class="bg-body-secondary mt-auto rounded-top-4">
+                            <div class="mb-4">
+                                <label class="form-label small">Descrizione (opzionale)</label>
+                                <textarea class="form-control rounded-4" rows="4"
+                                    placeholder="Aggiungi ulteriori dettagli..."></textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="index.html" class="btn btn-outline-secondary rounded-pill">
+                                    Annulla
+                                </a>
+                                <button type="submit" class="btn btn-danger rounded-pill px-4">
+                                    Invia segnalazione
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-body-secondary mt-auto rounded-top-4">
 		<div class="container py-4">
 			<div class="row align-items-center gy-2">
 				<div class="col-12 col-md text-center text-md-start text-body-secondary small">

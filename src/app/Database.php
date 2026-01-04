@@ -1,10 +1,31 @@
 <?php
 
+/**
+ * Database connection handler using Singleton pattern.
+ * 
+ * This class provides a single database connection instance throughout the application.
+ * It uses MySQLi for database operations and follows the Singleton design pattern
+ * to ensure only one database connection exists.
+ */
 class Database
 {
+    /**
+     * @var Database|null The single instance of the Database class.
+     */
     private static $instance = null;
+
+    /**
+     * @var mysqli The database connection object.
+     */
     private $conn;
 
+    /**
+     * Private constructor to prevent direct instantiation.
+     * 
+     * Reads database configuration and establishes a MySQLi connection.
+     * 
+     * @throws Exception If database connection fails.
+     */
     private function __construct()
     {
         $config = require __DIR__ . '/../config/database.php';
@@ -28,6 +49,11 @@ class Database
         }
     }
 
+    /**
+     * Get the single instance of the Database class.
+     * 
+     * @return mysqli The MySQLi database connection object.
+     */
     public static function getInstance()
     {
         if (self::$instance === null) {

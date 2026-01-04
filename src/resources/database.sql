@@ -9,9 +9,13 @@ CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
+    first_name VARCHAR(50),
+    surname VARCHAR(50),
     bio TEXT,
     avatar_url TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    role ENUM('student', 'admin') DEFAULT 'student',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- =========================
@@ -20,68 +24,31 @@ CREATE TABLE users (
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     user_username VARCHAR(50) NOT NULL,
+    title VARCHAR(255),
     content TEXT NOT NULL,
+    degree_course VARCHAR(100),
+    num_collaborators INT DEFAULT 1,
+    skills_required TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_posts_user
-        FOREIGN KEY (user_username)
-        REFERENCES users(username)
-        ON DELETE CASCADE
+    CONSTRAINT fk_posts_user FOREIGN KEY (user_username) REFERENCES users(username) ON DELETE CASCADE
 );
 
 -- =========================
--- FOLLOWS (user -> user)
+-- REACTIONS (LIKES/SKIPS)
 -- =========================
-CREATE TABLE follows (
-    follower_username VARCHAR(50) NOT NULL,
-    following_username VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (follower_username, following_username),
-    CONSTRAINT fk_follower
-        FOREIGN KEY (follower_username)
-        REFERENCES users(username)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_following
-        FOREIGN KEY (following_username)
-        REFERENCES users(username)
-        ON DELETE CASCADE,
-    CONSTRAINT no_self_follow
-        CHECK (follower_username <> following_username)
-);
-
--- =========================
--- LIKES
--- =========================
-CREATE TABLE likes (
+CREATE TABLE reactions (
     user_username VARCHAR(50) NOT NULL,
     post_id BIGINT UNSIGNED NOT NULL,
+    reaction_type ENUM('like', 'skip') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_username, post_id),
-    CONSTRAINT fk_likes_user
+    CONSTRAINT fk_reactions_user
         FOREIGN KEY (user_username)
         REFERENCES users(username)
         ON DELETE CASCADE,
-    CONSTRAINT fk_likes_post
+    CONSTRAINT fk_reactions_post
         FOREIGN KEY (post_id)
         REFERENCES posts(id)
-        ON DELETE CASCADE
-);
-
--- =========================
--- COMMENTS
--- =========================
-CREATE TABLE comments (
-    id SERIAL PRIMARY KEY,
-    post_id BIGINT UNSIGNED NOT NULL,
-    user_username VARCHAR(50) NOT NULL,
-    text TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_comments_post
-        FOREIGN KEY (post_id)
-        REFERENCES posts(id)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_comments_user
-        FOREIGN KEY (user_username)
-        REFERENCES users(username)
         ON DELETE CASCADE
 );
 
@@ -128,4 +95,31 @@ CREATE TABLE messages (
         FOREIGN KEY (sender_username)
         REFERENCES users(username)
         ON DELETE CASCADE
+);
+
+-- =========================
+-- REPORTS (Segnalazioni)
+-- =========================
+CREATE TABLE reports (
+    id SERIAL PRIMARY KEY,
+    reporter_username VARCHAR(50) NOT NULL,
+    reported_post_id BIGINT UNSIGNED NULL, 
+    reported_username VARCHAR(50) NULL,    
+    reason ENUM(
+        'Comportamento inappropriato', 
+        'Contenuto offensivo', 
+        'Spam', 
+        'Frode', 
+        'Altro'
+    ) NOT NULL,
+    description TEXT,
+    status ENUM('Pendenti', 'In revisione', 'Risolte', 'Rigettate', 'Bloccato') DEFAULT 'Pendenti',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_reports_reporter 
+        FOREIGN KEY (reporter_username) REFERENCES users(username) ON DELETE CASCADE,
+    CONSTRAINT fk_reports_post 
+        FOREIGN KEY (reported_post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    CONSTRAINT fk_reports_user 
+        FOREIGN KEY (reported_username) REFERENCES users(username) ON DELETE CASCADE
 );

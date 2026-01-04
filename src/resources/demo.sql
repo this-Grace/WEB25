@@ -3,61 +3,47 @@ USE web25;
 -- =========================
 -- USERS
 -- =========================
-INSERT INTO users (username, email, password_hash, bio, avatar_url) VALUES
-('alice','alice@example.com','$2b$hash1','Hi, sono Alice','/avatars/alice.png'),
-('bob','bob@example.com','$2b$hash2','Ciao, Bob qui','/avatars/bob.png'),
-('carlo','carlo@example.com','$2b$hash3',NULL,NULL),
-('dana','dana@example.com','$2b$hash4','Appassionata di fotografia',NULL);
+INSERT INTO users (username, email, password_hash, first_name, surname, bio, avatar_url, degree_course, role) VALUES
+('alice','alice@example.com','$2b$hash1','Alice','Rossi','Cerco partner per progetto AI','/avatars/alice.png', 'Informatica', 'student'),
+('bob','bob@example.com','$2b$hash2','Bob','Verdi','Studente di ingegneria civile','/avatars/bob.png', 'Ingegneria', 'student'),
+('admin_luca','admin@unimatch.it','$2b$hash_admin','Luca','Admin','Amministratore di sistema',NULL, NULL, 'admin'),
+('dana','dana@example.com','$2b$hash4','Dana','Bianchi','Appassionata di UX Design',NULL, 'Arte', 'student');
 
 -- =========================
 -- POSTS
 -- =========================
-INSERT INTO posts (id, user_username, content) VALUES
-(1,'alice','Buongiorno a tutti!'),
-(2,'bob','Ho appena finito il progetto.'),
-(3,'dana','Racconto del mio ultimo viaggio.'),
-(4,'alice','Un piccolo aggiornamento sul lavoro.');
+INSERT INTO posts (id, user_username, title, content, degree_course, num_collaborators, skills_required) VALUES
+(1,'alice','Progetto App Mobile','Cerco compagni per app React Native','Informatica', 3, 'JavaScript, React, Firebase'),
+(2,'bob','Studio Gruppo Meccanica','Preparazione esame Meccanica Razionale','Ingegneria', 2, 'Fisica, Calcolo'),
+(3,'dana','Restyling Sito Web','Progetto grafico per esame di Web Design','Arte', 1, 'Figma, CSS, Photoshop'),
+(4,'alice','Ricerca Collaboratori AI','Algoritmi di Machine Learning','Informatica', 2, 'Python, Scikit-learn');
 
 -- =========================
--- FOLLOWS
+-- REACTIONS (like / skip)
 -- =========================
-INSERT INTO follows (follower_username, following_username) VALUES
-('bob','alice'),
-('carlo','alice'),
-('alice','dana');
-
--- =========================
--- LIKES
--- =========================
-INSERT INTO likes (user_username, post_id) VALUES
-('bob',1),
-('carlo',1),
-('alice',2),
-('dana',4);
-
--- =========================
--- COMMENTS
--- =========================
-INSERT INTO comments (post_id, user_username, text) VALUES
-(1,'bob','Bellissimo!'),
-(1,'carlo','Complimenti!'),
-(2,'alice','Ottimo lavoro'),
-(3,'alice','Che belle foto!');
+INSERT INTO reactions (user_username, post_id, reaction_type) VALUES
+('bob', 1, 'like'),
+('dana', 1, 'like'),
+('bob', 4, 'skip'),
+('alice', 2, 'like');
 
 -- =========================
 -- CONVERSATIONS & PARTICIPANTS
 -- =========================
-INSERT INTO conversations (id) VALUES (1),(2);
+INSERT INTO conversations (id) VALUES (1);
 
 INSERT INTO conversation_participants (conversation_id, user_username) VALUES
-(1,'alice'),(1,'bob'),
-(2,'dana'),(2,'carlo');
+(1,'alice'), (1,'bob');
 
 -- =========================
 -- MESSAGES
 -- =========================
-INSERT INTO messages (id, conversation_id, sender_username, text, is_read) VALUES
-(1,1,'alice','Ciao Bob, come va?',TRUE),
-(2,1,'bob','Tutto bene, grazie! E tu?',FALSE),
-(3,2,'dana','Sei pronto per domani?',FALSE),
-(4,2,'carlo','Sì, tutto confermato.',FALSE);
+INSERT INTO messages (conversation_id, sender_username, text, is_read) VALUES
+(1,'alice','Ciao Bob, ho visto che ti interessa il mio progetto app!', TRUE),
+(1,'bob','Ciao! Sì, conosco bene React, quando ci sentiamo?', FALSE);
+
+-- =========================
+-- REPORTS
+-- =========================
+INSERT INTO reports (reporter_username, reported_post_id, reported_username, reason, status) VALUES
+('bob', 3, 'dana', 'Contenuto offensivo', 'Pendenti');
