@@ -2,7 +2,6 @@
 session_start();
 
 $pageTitle  = 'Crea Post';
-$activePage = 'create';
 
 ob_start();
 ?>

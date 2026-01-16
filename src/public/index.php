@@ -2,7 +2,6 @@
 session_start();
 
 $pageTitle = "Home";
-$activePage = 'home';
 
 // Dati mock utente
 $user = [

@@ -4,7 +4,20 @@ if (!isset($menuItems)) {
 }
 ?>
 <?php
-    $activePage = $activePage ?? '';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$currentFile = basename($_SERVER['PHP_SELF']);
+
+$pages = [
+    'index.php'       => 'home',
+    'create-post.php' => 'create',
+    'chat.php'        => 'chat',
+    'profile.php'     => 'profile',
+];
+
+$activePage = $pages[$currentFile] ?? '';
 ?>
 
 <nav class="navbar navbar-dark bg-primary navbar-expand-md">
