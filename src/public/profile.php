@@ -31,6 +31,7 @@ $following = [
 ];
 
 $pageTitle = $user['name'];
+$activePage = 'profile';
 $menuItems = [
     ['label' => 'Home', 'link' => 'index.php'],
     ['label' => 'Profilo', 'link' => 'profile.php', 'active' => true]

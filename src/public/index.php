@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+$pageTitle = "Home";
+$activePage = 'home';
+
 // Dati mock utente
 $user = [
     'id' => 1,
@@ -22,8 +25,6 @@ $posts = [
         'author_username' => $user['username']
     ]
 ];
-
-$pageTitle = "UniMatch | Home";
 
 $menuItems = [
     ['label' => 'Home', 'link' => 'index.php', 'active' => true],
