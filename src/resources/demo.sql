@@ -30,7 +30,7 @@ INSERT INTO reactions (user_username, post_id, reaction_type) VALUES
 -- =========================
 -- INSERT CONVERSATIONS & PARTICIPANTS
 -- =========================
-INSERT INTO conversations DEFAULT VALUES; -- id = 1
+INSERT INTO conversations () VALUES ();
 
 INSERT INTO conversation_participants (conversation_id, user_username) VALUES
 (1,'alice'),(1,'bob');
