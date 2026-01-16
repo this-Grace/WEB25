@@ -8,16 +8,15 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$currentFile = basename($_SERVER['PHP_SELF']);
-
 $pages = [
-    'index.php'       => 'home',
-    'create-post.php' => 'create',
-    'chat.php'        => 'chat',
-    'profile.php'     => 'profile',
+    'index.php'       => ['label' => 'Home', 'key' => 'home'],
+    'create-post.php' => ['label' => 'Crea', 'key' => 'create'],
+    'chat.php'        => ['label' => 'Chat', 'key' => 'chat'],
+    'profile.php'     => ['label' => 'Profilo', 'key' => 'profile'],
 ];
 
-$activePage = $pages[$currentFile] ?? '';
+$currentFile = basename($_SERVER['PHP_SELF']);
+$activePageKey = $pages[$currentFile]['key'] ?? '';
 ?>
 
 <nav class="navbar navbar-dark bg-primary navbar-expand-md">
@@ -33,37 +32,17 @@ $activePage = $pages[$currentFile] ?? '';
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto align-items-center gap-2">
 
-                <li class="nav-item">
-                    <a href="index.php"
-                       class="nav-link <?= $activePage === 'home' ? 'active' : '' ?>"
-                       <?= $activePage === 'home' ? 'aria-current="page"' : '' ?>>
-                        Home
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="create-post.php"
-                       class="nav-link <?= $activePage === 'create' ? 'active' : '' ?>"
-                       <?= $activePage === 'create' ? 'aria-current="page"' : '' ?>>
-                        Crea
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="chat.php"
-                       class="nav-link <?= $activePage === 'chat' ? 'active' : '' ?>"
-                       <?= $activePage === 'chat' ? 'aria-current="page"' : '' ?>>
-                        Chat
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="profile.php"
-                       class="nav-link <?= $activePage === 'profile' ? 'active' : '' ?>"
-                       <?= $activePage === 'profile' ? 'aria-current="page"' : '' ?>>
-                        Profilo
-                    </a>
-                </li>
+                <?php foreach ($pages as $file => $info): 
+                    $isActive = $activePageKey === $info['key'];
+                ?>
+                    <li class="nav-item">
+                        <a href="<?= $file ?>"
+                           class="nav-link <?= $isActive ? 'active' : '' ?>"
+                           <?= $isActive ? 'aria-current="page"' : '' ?>>
+                            <?= htmlspecialchars($info['label']) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
 
                 <!-- THEME SWITCHER -->
                 <li class="nav-item dropdown">
