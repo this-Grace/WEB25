@@ -31,7 +31,6 @@ CREATE TABLE posts (
     num_collaborators INT DEFAULT 1,
     skills_required TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    -- status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending', ??
     CONSTRAINT fk_posts_user
         FOREIGN KEY (user_username)
         REFERENCES users(username)
@@ -39,7 +38,7 @@ CREATE TABLE posts (
 );
 
 -- =========================
--- REACTIONS (LIKES/SKIPS)
+-- REACTIONS
 -- =========================
 CREATE TABLE reactions (
     user_username VARCHAR(50) NOT NULL,
@@ -103,32 +102,34 @@ CREATE TABLE messages (
 );
 
 -- =========================
--- REPORTS (Segnalazioni)
+-- REPORTS
 -- =========================
 CREATE TABLE reports (
     id SERIAL PRIMARY KEY,
     reporter_username VARCHAR(50) NOT NULL,
-    reported_post_id BIGINT UNSIGNED NOT NULL, 
+    reported_post_id BIGINT UNSIGNED NOT NULL,
     reported_username VARCHAR(50) NOT NULL,
     reason ENUM(
-        'Comportamento inappropriato', 
-        'Contenuto offensivo', 
-        'Spam', 
-        'Frode', 
+        'Comportamento inappropriato',
+        'Contenuto offensivo',
+        'Spam',
+        'Frode',
         'Altro'
     ) NOT NULL,
     description TEXT,
     status ENUM('Pendenti', 'In revisione', 'Risolte', 'Rigettate', 'Bloccato') DEFAULT 'Pendenti',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_reports_reporter 
-        FOREIGN KEY (reporter_username) REFERENCES users(username) ON DELETE CASCADE,
-    CONSTRAINT fk_reports_post 
-        FOREIGN KEY (reported_post_id) REFERENCES posts(id) ON DELETE CASCADE,
-    CONSTRAINT fk_reports_user 
-        FOREIGN KEY (reported_username) REFERENCES users(username) ON DELETE CASCADE,
-
-    CONSTRAINT chk_report_author
-        CHECK (reported_username = (SELECT user_username FROM posts WHERE id = reported_post_id))
+    CONSTRAINT fk_reports_reporter
+        FOREIGN KEY (reporter_username)
+        REFERENCES users(username)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_reports_post
+        FOREIGN KEY (reported_post_id)
+        REFERENCES posts(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_reports_user
+        FOREIGN KEY (reported_username)
+        REFERENCES users(username)
+        ON DELETE CASCADE
 );
