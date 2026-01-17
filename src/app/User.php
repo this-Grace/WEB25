@@ -66,6 +66,48 @@ class User
     }
 
     /**
+     * Check if an email is already registered.
+     * 
+     * @param string $email The email address to check.
+     * @return bool True if email exists, false otherwise.
+     */
+    public function emailExists($email)
+    {
+        $stmt = $this->db->prepare(
+            "SELECT 1 FROM users WHERE email = ? LIMIT 1"
+        );
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        $exists = $stmt->num_rows > 0;
+        $stmt->close();
+
+        return $exists;
+    }
+
+    /**
+     * Check if a username is already taken.
+     * 
+     * @param string $username The username to check.
+     * @return bool True if username exists, false otherwise.
+     */
+    public function usernameExists($username)
+    {
+        $stmt = $this->db->prepare(
+            "SELECT 1 FROM users WHERE username = ? LIMIT 1"
+        );
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $stmt->store_result();
+
+        $exists = $stmt->num_rows > 0;
+        $stmt->close();
+
+        return $exists;
+    }
+
+    /**
      * Authenticate user credentials.
      * 
      * @param string $username The username to authenticate.
