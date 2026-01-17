@@ -14,29 +14,26 @@ ob_start();
                 <form method="post" novalidate>
                     <!-- Titolo -->
                     <div class="mb-3">
-                        <label for="title" class="form-label fw-semibold">Titolo</label>
                         <input type="text"
-                            class="form-control rounded-4 border-0 bg-body"
+                            class="form-control"
                             id="title"
                             name="title"
-                            placeholder="Inserisci il titolo del post"
+                            placeholder="Titolo"
                             required>
                     </div>
                     <!-- Descrizione -->
                     <div class="mb-3">
-                        <label for="description" class="form-label fw-semibold">Descrizione</label>
-                        <textarea class="form-control rounded-4 border-0 bg-body" id="description"
+                        <textarea class="form-control" id="description"
                             name="description" rows="5"
-                            placeholder="Descrivi il tuo progetto"
+                            placeholder="Descrizione del progetto"
                             required></textarea>
                     </div>
                     <!-- Corso di studi-->
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label for="faculty" class="form-label fw-semibold">Corso di laurea</label>
-                            <select class="form-select rounded-4 border-0 bg-body" id="faculty"
+                            <select class="form-select" id="faculty"
                                 name="faculty" required>
-                                <option value="">Seleziona corso</option>
+                                <option value="">Corso di laurea</option>
                                 <option value="engineering">Ingegneria Informatica</option>
                                 <option value="cs">Informatica</option>
                                 <option value="medicine">Medicina</option>
@@ -46,31 +43,27 @@ ob_start();
                         </div>
                         <!-- Numero persone richieste -->
                         <div class="col-md-6">
-                            <label for="num-people" class="form-label fw-semibold">Persone necessarie</label>
                             <input type="number"
-                                class="form-control rounded-4 border-0 bg-body"
+                                class="form-control"
                                 id="num-people"
                                 name="num_people"
                                 min="1"
                                 max="10"
+                                placeholder="Persone necessarie"
                                 value="2"
                                 required>
                         </div>
                     </div>
                     <!-- Skill -->
-                    <div class="mb-4">
-                        <label for="skills" class="form-label fw-semibold">
-                            Skill richieste
-                            <small class="text-body-secondary">(opzionale)</small>
-                        </label>
-                        <textarea class="form-control rounded-4 border-0 bg-body"
+                    <div class="mb-3">
+                        <textarea class="form-control"
                             id="skills"
                             name="skills"
                             rows="3"
-                            placeholder="Es: HTML, CSS, JavaScript, Python..."></textarea>
+                            placeholder="Skill richieste (opzionale)"></textarea>
                     </div>
                     <button type="submit"
-                        class="btn btn-primary w-100 rounded-4 py-2">
+                        class="btn btn-primary w-100 mb-3">
                         Pubblica post
                     </button>
                 </form>
