@@ -93,10 +93,10 @@ ob_start();
                 <form method="post" action="send-message.php" class="d-flex gap-2">
                     <input type="text"
                         name="message"
-                        class="form-control rounded-4 border-0 bg-body"
+                        class="form-control"
                         placeholder="Scrivi un messaggio..."
                         required>
-                    <button type="submit" class="btn btn-primary rounded-4">
+                    <button type="submit" class="btn btn-primary">
                         Invia
                     </button>
                 </form>

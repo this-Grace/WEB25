@@ -23,9 +23,8 @@ ob_start();
                 <!-- Form segnalazione -->
                 <form method="post" action="">
                     <div class="mb-3">
-                        <label class="form-label small">Motivo della segnalazione</label>
-                        <select class="form-select rounded-4" name="reason" required>
-                            <option value="" selected disabled>Seleziona un motivo</option>
+                        <select class="form-select" name="reason" required>
+                            <option value="" selected disabled>Motivo della segnalazione</option>
                             <option value="comportamento">Comportamento inappropriato</option>
                             <option value="contenuto">Contenuto offensivo</option>
                             <option value="spam">Spam</option>
@@ -33,18 +32,18 @@ ob_start();
                         </select>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label small">Descrizione</label>
-                        <textarea class="form-control rounded-4" name="description" rows="4" placeholder="Aggiungi ulteriori dettagli..." required></textarea>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="description" rows="4" placeholder="Descrizione (opzionale)" required></textarea>
                     </div>
 
-                    <div class="d-flex justify-content-end gap-2">
-                        <a href="index.php" class="btn btn-outline-secondary rounded-pill">
+                    <button type="submit" class="btn btn-danger w-100 mb-3">
+                        Invia segnalazione
+                    </button>
+
+                    <div class="text-center">
+                        <a href="index.php" class="auth-link">
                             Annulla
                         </a>
-                        <button type="submit" class="btn btn-danger rounded-pill px-4">
-                            Invia segnalazione
-                        </button>
                     </div>
                 </form>
 
