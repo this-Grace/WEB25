@@ -72,12 +72,32 @@ class User
     }
 
     /**
+     * Authenticate user credentials.
+     * 
+     * @param string $login The username or email to authenticate.
+     * @param string $password The plain text password to verify.
+     *  @return array|null User data if valid, null otherwise
+     */
+    public function checkLogin($login, $password): ?array
+    {
+        $user = $this->find($login);
+        if (!$user) return null;
+
+        if (!password_verify($password, $user['password_hash'])) {
+            return null; // password errata
+        }
+
+        unset($user['password_hash']);
+        return $user;
+    }
+
+    /**
      * Check if an email is already registered.
      * 
      * @param string $email The email address to check.
      * @return bool True if email exists, false otherwise.
      */
-    public function emailExists($email)
+    public function emailExists($email): bool
     {
         $stmt = $this->db->prepare(
             "SELECT 1 FROM users WHERE email = ? LIMIT 1"
@@ -98,7 +118,7 @@ class User
      * @param string $username The username to check.
      * @return bool True if username exists, false otherwise.
      */
-    public function usernameExists($username)
+    public function usernameExists($username): bool
     {
         $stmt = $this->db->prepare(
             "SELECT 1 FROM users WHERE username = ? LIMIT 1"
@@ -114,37 +134,6 @@ class User
     }
 
     /**
-     * Authenticate user credentials.
-     * 
-     * @param string $username The username to authenticate.
-     * @param string $password The plain text password to verify.
-     * @return array|bool Returns user data (with username and role) if authentication successful,
-     *                    false otherwise.
-     */
-    public function checkLogin($username, $password)
-    {
-        $stmt = $this->db->prepare("SELECT username, password_hash, role FROM users WHERE username = ? LIMIT 1");
-        $stmt->bind_param('s', $username);
-        $stmt->execute();
-
-        $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
-
-        $authenticated = false;
-        if ($user && password_verify($password, $user['password_hash'])) {
-            $authenticated = [
-                'username' => $user['username'],
-                'role' => $user['role']
-            ];
-        }
-
-        $result->free();
-        $stmt->close();
-
-        return $authenticated;
-    }
-
-    /**
      * Create a new user record.
      * 
      * @param string $username Desired username.
@@ -155,7 +144,7 @@ class User
      * @param string $course User's degree course.
      * @return bool True if creation successful, false otherwise.
      */
-    public function create($username, $email, $password, $first_name, $surname, $course)
+    public function create($username, $email, $password, $first_name, $surname, $course): bool
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->db->prepare("INSERT INTO users (username, email, password_hash, first_name, surname, degree_course) VALUES (?, ?, ?, ?, ?, ?)");
@@ -178,7 +167,7 @@ class User
      * @param string $avatar Updated avatar URL or path.
      * @return bool True if update successful, false otherwise.
      */
-    public function update($username, $first_name, $surname, $bio, $course, $avatar)
+    public function update($username, $first_name, $surname, $bio, $course, $avatar): bool
     {
         $stmt = $this->db->prepare("UPDATE users SET first_name = ?, surname = ?, bio = ?, degree_course = ?, avatar_url = ? WHERE username = ?");
         $stmt->bind_param('ssssss', $first_name, $surname, $bio, $course, $avatar, $username);
@@ -195,7 +184,7 @@ class User
      * @param string $username Username of the user to delete.
      * @return bool True if deletion successful, false otherwise.
      */
-    public function delete($username)
+    public function delete($username): bool
     {
         $stmt = $this->db->prepare("DELETE FROM users WHERE username = ?");
         $stmt->bind_param('s', $username);
