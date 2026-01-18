@@ -59,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Login success: store user info in session
     unset($_SESSION['csrf_token'], $_SESSION['old']);
 
-    $_SESSION['user_id']  = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['role']     = $user['role'];
 
