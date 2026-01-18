@@ -1,36 +1,123 @@
 <?php
+
+/**
+ * User Registration Controller
+ *
+ * Handles user registration process including validation,
+ * CSRF protection, and user creation in database.
+ */
+
+session_start();
+
+require_once __DIR__ . '/../app/User.php';
+require_once __DIR__ . '/../app/functions.php';
+
 $pageTitle = 'Registrati';
 $ariaLabel = 'Area di registrazione';
 
-$content = <<<'HTML'
-<h1 id="pageTitle" class="auth-title text-center mb-4">Crea account</h1>
-<form action="register.php" method="POST" novalidate>
-    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
-    <div class="mb-3">
-        <input type="text" class="form-control" id="regName" name="name" required
-            autocomplete="name" placeholder="Nome">
-    </div>
-    <div class="mb-3">
-        <input type="email" class="form-control" id="regEmail" name="email" required
-            autocomplete="email" placeholder="Email">
-    </div>
-    <div class="mb-3">
-        <input type="password" class="form-control" id="regPassword" name="password" required
-            autocomplete="new-password" placeholder="Password">
-    </div>
-    <div class="mb-3">
-        <input type="password" class="form-control" id="regConfirm" name="password_confirm"
-            required autocomplete="new-password" placeholder="Conferma password">
-    </div>
+// Generate CSRF token
+$csrfToken = generateCsrfToken();
 
-    <button type="submit" class="btn btn-primary w-100 mb-3"
-        aria-label="Registrati su UniMatch">Registrati</button>
-</form>
+// Get old form values from session
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['old']);
 
-<div class="text-center border-top pt-3" aria-label="Vai al login">
-    <span class="text-muted">Hai già un account?</span>
-    <a href="login.php" class="auth-link fw-semibold ms-1">Accedi</a>
-</div>
-HTML;
+// Check if registration was successful
+$registrationSuccess = false;
+if (!empty($_SESSION['registration_success'])) {
+    $registrationSuccess = true;
+    unset($_SESSION['registration_success']);
+}
 
+// Process POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Get and sanitize form data
+    $username = trim($_POST['username'] ?? '');
+    $email    = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm  = $_POST['password_confirm'] ?? '';
+
+    // Store values for form repopulation
+    $_SESSION['old'] = [
+        'username' => $username,
+        'email'    => $email
+    ];
+
+    // Validate CSRF token
+    if (!isValidCsrf($_POST['csrf_token'] ?? null)) {
+        setFlashMessage('error', 'Richiesta non valida');
+        redirect('register.php');
+    }
+
+    $errors = [];
+
+    // Validate required fields
+    if (empty($username) || empty($email) || empty($password)) {
+        $errors[] = 'Tutti i campi sono obbligatori';
+    }
+
+    // Validate email format
+    if (!isValidEmail($email)) {
+        $errors[] = 'Formato email non valido';
+    }
+
+    // Validate password strength
+    if (!isValidPassword($password)) {
+        $errors[] = 'La password deve essere di almeno 8 caratteri';
+    }
+
+    // Confirm password match
+    if ($password !== $confirm) {
+        $errors[] = 'Le password non coincidono';
+    }
+
+    // Validate username format
+    if (!empty($username) && !isValidUsernameFormat($username)) {
+        $errors[] = 'Username può contenere solo lettere, numeri e underscore';
+    }
+
+    // Validate username length
+    if (!empty($username) && strlen($username) < 3) {
+        $errors[] = 'Username deve essere di almeno 3 caratteri';
+    }
+
+    // Check database if basic validation passes
+    if (empty($errors)) {
+        $user = new User();
+
+        // Check if username exists
+        if ($user->usernameExists($username)) {
+            $errors[] = 'Username già in uso';
+        }
+
+        // Check if email exists
+        if ($user->emailExists($email)) {
+            $errors[] = 'Email già registrata';
+        }
+
+        // Attempt to create user
+        if (empty($errors) && !$user->create($username, $email, $password, '', '', '')) {
+            $errors[] = 'Errore durante la registrazione. Riprova.';
+        }
+    }
+
+    // Handle validation results
+    if (!empty($errors)) {
+        // Store errors and redirect (PRG pattern)
+        setFlashMessage('error', formatErrors($errors));
+        redirect('register.php');
+    } else {
+        // Clear session data and flag success
+        unset($_SESSION['csrf_token']);
+        unset($_SESSION['old']);
+        $_SESSION['registration_success'] = true;
+        redirect('register.php');
+    }
+}
+
+// Render template
+ob_start();
+include 'template/register.php';
+$content = ob_get_clean();
 include 'template/auth.php';

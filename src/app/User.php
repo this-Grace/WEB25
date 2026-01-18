@@ -31,69 +31,106 @@ class User
      * @return array Array of user records, each as an associative array.
      *               Returns empty array if no users found or query fails.
      */
-    public function all()
+    public function all(): array
     {
         $query = "SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at FROM users";
         $result = $this->db->query($query);
-        
+
         if (!$result) return [];
 
         $data = $result->fetch_all(MYSQLI_ASSOC);
         $result->free();
-        
+
         return $data;
     }
 
     /**
-     * Find a user by username.
-     * 
-     * @param string $username The username to search for.
-     * @return array|null Associative array containing user data if found, null otherwise.
+     * Find user by username or email (for login)
+     *
+     * @param string $value Username or email
+     * @return array|null User data including password hash
      */
-    public function find($username)
+    public function find(string $value): ?array
     {
-        $stmt = $this->db->prepare("SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at FROM users WHERE username = ? LIMIT 1");
-        $stmt->bind_param('s', $username);
+        $stmt = $this->db->prepare(
+            "SELECT username, email, password_hash, role
+            FROM users
+            WHERE username = ? OR email = ?
+            LIMIT 1"
+        );
+
+        $stmt->bind_param('ss', $value, $value);
         $stmt->execute();
-        
+
         $result = $stmt->get_result();
-        $data = $result->fetch_assoc();
-        
+        $user = $result->fetch_assoc();
+
         $result->free();
         $stmt->close();
-        
-        return $data;
+
+        return $user ?: null;
     }
 
     /**
      * Authenticate user credentials.
      * 
-     * @param string $username The username to authenticate.
+     * @param string $login The username or email to authenticate.
      * @param string $password The plain text password to verify.
-     * @return array|bool Returns user data (with username and role) if authentication successful,
-     *                    false otherwise.
+     *  @return array|null User data if valid, null otherwise
      */
-    public function checkLogin($username, $password)
+    public function checkLogin($login, $password): ?array
     {
-        $stmt = $this->db->prepare("SELECT username, password_hash, role FROM users WHERE username = ? LIMIT 1");
-        $stmt->bind_param('s', $username);
-        $stmt->execute();
-        
-        $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
-        
-        $authenticated = false;
-        if ($user && password_verify($password, $user['password_hash'])) {
-            $authenticated = [
-                'username' => $user['username'],
-                'role' => $user['role']
-            ];
+        $user = $this->find($login);
+        if (!$user) return null;
+
+        if (!password_verify($password, $user['password_hash'])) {
+            return null; // password errata
         }
 
-        $result->free();
+        unset($user['password_hash']);
+        return $user;
+    }
+
+    /**
+     * Check if an email is already registered.
+     * 
+     * @param string $email The email address to check.
+     * @return bool True if email exists, false otherwise.
+     */
+    public function emailExists($email): bool
+    {
+        $stmt = $this->db->prepare(
+            "SELECT 1 FROM users WHERE email = ? LIMIT 1"
+        );
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        $exists = $stmt->num_rows > 0;
         $stmt->close();
-        
-        return $authenticated;
+
+        return $exists;
+    }
+
+    /**
+     * Check if a username is already taken.
+     * 
+     * @param string $username The username to check.
+     * @return bool True if username exists, false otherwise.
+     */
+    public function usernameExists($username): bool
+    {
+        $stmt = $this->db->prepare(
+            "SELECT 1 FROM users WHERE username = ? LIMIT 1"
+        );
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $stmt->store_result();
+
+        $exists = $stmt->num_rows > 0;
+        $stmt->close();
+
+        return $exists;
     }
 
     /**
@@ -107,15 +144,15 @@ class User
      * @param string $course User's degree course.
      * @return bool True if creation successful, false otherwise.
      */
-    public function create($username, $email, $password, $first_name, $surname, $course)
+    public function create($username, $email, $password, $first_name, $surname, $course): bool
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->db->prepare("INSERT INTO users (username, email, password_hash, first_name, surname, degree_course) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param('ssssss', $username, $email, $hash, $first_name, $surname, $course);
-        
+
         $success = $stmt->execute();
         $stmt->close();
-        
+
         return $success;
     }
 
@@ -130,14 +167,14 @@ class User
      * @param string $avatar Updated avatar URL or path.
      * @return bool True if update successful, false otherwise.
      */
-    public function update($username, $first_name, $surname, $bio, $course, $avatar)
+    public function update($username, $first_name, $surname, $bio, $course, $avatar): bool
     {
         $stmt = $this->db->prepare("UPDATE users SET first_name = ?, surname = ?, bio = ?, degree_course = ?, avatar_url = ? WHERE username = ?");
         $stmt->bind_param('ssssss', $first_name, $surname, $bio, $course, $avatar, $username);
-        
+
         $success = $stmt->execute();
         $stmt->close();
-        
+
         return $success;
     }
 
@@ -147,14 +184,14 @@ class User
      * @param string $username Username of the user to delete.
      * @return bool True if deletion successful, false otherwise.
      */
-    public function delete($username)
+    public function delete($username): bool
     {
         $stmt = $this->db->prepare("DELETE FROM users WHERE username = ?");
         $stmt->bind_param('s', $username);
-        
+
         $success = $stmt->execute();
         $stmt->close();
-        
+
         return $success;
     }
 }

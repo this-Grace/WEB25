@@ -6,35 +6,36 @@ $user = [
     'id' => 1,
     'username' => 'alessandrorebosio',
     'name' => 'Alessandro Rebosio',
-    'bio' => 'Engineering and Computer Science 🎓
+    'bio' => '🎓 Engineering and Computer Science
 📍 San Marino | 21 yo
 💻 Full Stack Developer',
     'avatar' => 'assets/img/avatar.jpg',
     'posts_count' => 12,
-    'followers_count' => 302,
-    'following_count' => 149
+    'total_likes' => 87,
+    'total_skips' => 24,
 ];
 
-// Mock posts
-$posts = array_fill(0, 12, ['image' => 'https://picsum.photos/400/400?random=' . rand(1, 100)]);
-$liked_posts = array_fill(0, 8, ['image' => 'https://picsum.photos/400/400?random=' . rand(200, 300)]);
+// Mock posts con immagine fissa
+$fixedImage = 'https://picsum.photos/400/400?random=42';
+$posts = [];
+for ($i = 1; $i <= 12; $i++) {
+    $posts[] = [
+        'id' => $i,
+        'image' => $fixedImage,
+        'likes' => rand(5, 30),
+        'skips' => rand(0, 10),
+        'liked_by' => [
+            ['id' => 2, 'username' => 'maria_rossi', 'name' => 'Maria Rossi', 'avatar' => 'https://i.pravatar.cc/150?img=1'],
+            ['id' => 3, 'username' => 'luca_verdi', 'name' => 'Luca Verdi', 'avatar' => 'https://i.pravatar.cc/150?img=2']
+        ]
+    ];
+}
 
-// Mock followers/following
-$followers = [
-    ['username' => 'mario_rossi', 'name' => 'Mario Rossi', 'avatar' => 'https://ui-avatars.com/api/?name=Mario+Rossi'],
-    ['username' => 'giulia_bianchi', 'name' => 'Giulia Bianchi', 'avatar' => 'https://ui-avatars.com/api/?name=Giulia+Bianchi'],
-    ['username' => 'luca_verdi', 'name' => 'Luca Verdi', 'avatar' => 'https://ui-avatars.com/api/?name=Luca+Verdi']
-];
-$following = [
-    ['username' => 'sara_neri', 'name' => 'Sara Neri', 'avatar' => 'https://ui-avatars.com/api/?name=Sara+Neri'],
-    ['username' => 'paolo_gialli', 'name' => 'Paolo Gialli', 'avatar' => 'https://ui-avatars.com/api/?name=Paolo+Gialli']
-];
+// Mock liked posts
+$liked_posts = array_fill(0, 8, ['image' => $fixedImage]);
 
 $pageTitle = $user['name'];
-$menuItems = [
-    ['label' => 'Home', 'link' => 'index.php'],
-    ['label' => 'Profilo', 'link' => 'profile.php', 'active' => true]
-];
+$ariaLabel = 'Profilo';
 
 ob_start();
 ?>
@@ -63,18 +64,9 @@ ob_start();
                 </div>
 
                 <div class="d-flex gap-4 mb-4">
-                    <div>
-                        <span class="fw-semibold"><?= $user['posts_count'] ?></span>
-                        <span class="text-muted"> post</span>
-                    </div>
-                    <button class="btn btn-link p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#followersModal">
-                        <span class="fw-semibold"><?= $user['followers_count'] ?></span>
-                        <span class="text-muted"> follower</span>
-                    </button>
-                    <button class="btn btn-link p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#followingModal">
-                        <span class="fw-semibold"><?= $user['following_count'] ?></span>
-                        <span class="text-muted"> seguiti</span>
-                    </button>
+                    <div><span class="fw-semibold"><?= $user['posts_count'] ?></span> post</div>
+                    <div><span class="fw-semibold"><?= $user['total_likes'] ?></span> like totali</div>
+                    <div><span class="fw-semibold"><?= $user['total_skips'] ?></span> skip totali</div>
                 </div>
 
                 <div class="profile-bio">
@@ -113,7 +105,7 @@ ob_start();
         <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
             <div class="posts-grid">
                 <?php foreach ($posts as $post): ?>
-                    <a href="#" class="post-item">
+                    <a href="#" class="post-item" data-bs-toggle="modal" data-bs-target="#postStatsModal" data-post-id="<?= $post['id'] ?>">
                         <img src="<?= htmlspecialchars($post['image']) ?>" alt="Post" class="img-fluid">
                     </a>
                 <?php endforeach; ?>
@@ -128,6 +120,60 @@ ob_start();
                         <img src="<?= htmlspecialchars($post['image']) ?>" alt="Post piaciuto" class="img-fluid">
                     </a>
                 <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Statistiche Post -->
+<div class="modal fade" id="postStatsModal" tabindex="-1" aria-labelledby="postStatsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-semibold" id="postStatsModalLabel">Statistiche del post</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Statistiche principali -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="stat-card text-center p-4 rounded-3">
+                            <div class="text-success mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                                </svg>
+                            </div>
+                            <div class="h2 fw-bold text-success mb-1">0</div>
+                            <div class="text-muted small text-uppercase">Like</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card text-center p-4 rounded-3">
+                            <div class="text-danger mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                </svg>
+                            </div>
+                            <div class="h2 fw-bold text-danger mb-1">0</div>
+                            <div class="text-muted small text-uppercase">Skip</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Utenti che hanno messo like -->
+                <div class="mb-3">
+                    <h6 class="fw-semibold mb-3">
+                        Utenti che hanno messo like:
+                    </h6>
+                    <div class="list-group list-group-flush">
+                        <div class="text-center py-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-people text-muted mb-3" viewBox="0 0 16 16">
+                                <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+                            </svg>
+                            <p class="text-muted mb-0">Molti utenti...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -192,64 +238,6 @@ ob_start();
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
                 <button type="button" class="btn btn-danger">Elimina account</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Followers -->
-<div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title w-100 text-center" id="followersModalLabel">Follower</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-2">
-                <?php if (empty($followers)): ?>
-                    <p class="text-center text-muted py-4">Nessun follower</p>
-                <?php else: ?>
-                    <?php foreach ($followers as $follower): ?>
-                        <div class="d-flex align-items-center gap-3 p-3 border-bottom">
-                            <img src="<?= htmlspecialchars($follower['avatar']) ?>" alt="<?= htmlspecialchars($follower['name']) ?>"
-                                class="rounded-circle" width="44" height="44" style="object-fit: cover;">
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold"><?= htmlspecialchars($follower['username']) ?></div>
-                                <div class="text-muted small"><?= htmlspecialchars($follower['name']) ?></div>
-                            </div>
-                            <button class="btn btn-sm btn-primary">Segui</button>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Following -->
-<div class="modal fade" id="followingModal" tabindex="-1" aria-labelledby="followingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title w-100 text-center" id="followingModalLabel">Seguiti</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-2">
-                <?php if (empty($following)): ?>
-                    <p class="text-center text-muted py-4">Non segui nessuno</p>
-                <?php else: ?>
-                    <?php foreach ($following as $user_followed): ?>
-                        <div class="d-flex align-items-center gap-3 p-3 border-bottom">
-                            <img src="<?= htmlspecialchars($user_followed['avatar']) ?>" alt="<?= htmlspecialchars($user_followed['name']) ?>"
-                                class="rounded-circle" width="44" height="44" style="object-fit: cover;">
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold"><?= htmlspecialchars($user_followed['username']) ?></div>
-                                <div class="text-muted small"><?= htmlspecialchars($user_followed['name']) ?></div>
-                            </div>
-                            <button class="btn btn-sm btn-outline-secondary">Smetti di seguire</button>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
             </div>
         </div>
     </div>

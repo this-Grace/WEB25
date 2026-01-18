@@ -21,10 +21,11 @@ Regole:
 SELECT p.*
 FROM posts p
 WHERE p.user_username != :username
-AND p.id NOT IN (
-    SELECT r.post_id
+AND NOT EXISTS (
+    SELECT 1
     FROM reactions r
-    WHERE r.user_username = :username
+    WHERE r.post_id = p.id
+      AND r.user_username = :username
 )
 ORDER BY p.created_at
 LIMIT 1;

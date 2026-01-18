@@ -1,34 +1,72 @@
 <?php
+
+/**
+ * Login Controller
+ * 
+ * Handles user authentication process.
+ * Verifies credentials, manages CSRF tokens, and redirects
+ * user after successful login.
+ */
+
+session_start();
+
+require_once __DIR__ . '/../app/User.php';
+require_once __DIR__ . '/../app/functions.php';
+
 $pageTitle = 'Login';
 $ariaLabel = 'Area di accesso';
 
-$content = <<<'HTML'
-<h1 id="pageTitle" class="auth-title text-center mb-4">UniMatch</h1>
-<form action="index.php" method="POST" novalidate>
-    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'] ?? ''); ?>">
-    <div class="mb-3">
-        <input type="email" class="form-control" id="email" name="email" required
-            autocomplete="email" placeholder="Email">
-    </div>
+$csrfToken = generateCsrfToken();
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['old']);
 
-    <div class="mb-3">
-        <input type="password" class="form-control" id="password" name="password" required
-            autocomplete="current-password" placeholder="Password">
-    </div>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    <button type="submit" class="btn btn-primary w-100 mb-3"
-        aria-label="Accedi a UniMatch">Accedi</button>
+    $login    = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-    <div class="text-center mb-3">
-        <a href="forgot.php" class="auth-link" aria-label="Recupera la password">Password
-            dimenticata?</a>
-    </div>
-</form>
+    $_SESSION['old'] = ['email' => $login];
 
-<div class="text-center border-top pt-3" aria-label="Registrazione">
-    <span class="text-muted">Non hai un account?</span>
-    <a href="register.php" class="auth-link fw-semibold ms-1">Registrati</a>
-</div>
-HTML;
+    // CSRF check
+    if (!isValidCsrf($_POST['csrf_token'] ?? null)) {
+        setFlashMessage('error', 'Richiesta non valida');
+        redirect('login.php');
+    }
 
+    $errors = [];
+
+    // Required fields
+    if (empty($login) || empty($password)) {
+        $errors[] = 'Tutti i campi sono obbligatori';
+    }
+
+    if (empty($errors)) {
+        $userModel = new User();
+
+        $user = $userModel->checkLogin($login, $password);
+
+        if (!$user) {
+            $errors[] = 'Credenziali non valide';
+        }
+    }
+
+    // Handle errors
+    if (!empty($errors)) {
+        setFlashMessage('error', formatErrors($errors));
+        redirect('login.php');
+    }
+
+    // Login success: store user info in session
+    unset($_SESSION['csrf_token'], $_SESSION['old']);
+
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['role']     = $user['role'];
+
+    redirect('index.php');
+}
+
+// Render view
+ob_start();
+include 'template/login.php';
+$content = ob_get_clean();
 include 'template/auth.php';
