@@ -1,6 +1,9 @@
 <?php
+
+require_once __DIR__ . '/../app/functions.php';
+
 session_start();
 session_unset();
 session_destroy();
-header('Location: login.php');
+redirect('login.php');
 exit;

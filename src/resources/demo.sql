@@ -6,6 +6,7 @@ USE web25;
 INSERT INTO users (username, email, password_hash, first_name, surname, bio, avatar_url, degree_course, role) VALUES
 ('alice','alice@example.com','$2y$10$hash1','Alice','Rossi','Cerco partner per progetto AI','/avatars/alice.png','Informatica','student'),
 ('bob','bob@example.com','$2y$10$hash2','Bob','Verdi','Studente di ingegneria civile','/avatars/bob.png','Ingegneria','student'),
+('MarioRossi','mariorossi@gmail.com','$2y$12$C2FBQoX9yGH18351KZSsbekGdLR1ek6jvHq9rMrviBGs3vbQzbTp2','Mario','Rossi','Studente di ingegneria','/avatars/mario.png','Ingegneria','student'),
 ('admin_luca','admin@unimatch.it','$2y$10$hash_admin','Luca','Admin','Amministratore di sistema',NULL,NULL,'admin'),
 ('dana','dana@example.com','$2y$10$hash4','Dana','Bianchi','Appassionata di UX Design',NULL,'Arte','student');
 
@@ -30,7 +31,7 @@ INSERT INTO reactions (user_username, post_id, reaction_type) VALUES
 -- =========================
 -- INSERT CONVERSATIONS & PARTICIPANTS
 -- =========================
-INSERT INTO conversations () VALUES ();
+INSERT INTO conversations () VALUES (); -- id = 1
 
 INSERT INTO conversation_participants (conversation_id, user_username) VALUES
 (1,'alice'),(1,'bob');
