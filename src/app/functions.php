@@ -11,7 +11,7 @@
 function requireLogin(): void
 {
     if (empty($_SESSION['username'])) {
-        setFlashMessage('error', 'Devi essere loggato per accedere a questa pagina.');
+        // setFlashMessage('error', 'Devi essere loggato per accedere a questa pagina.');
         redirect('login.php');
     }
 }

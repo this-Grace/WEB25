@@ -16,12 +16,10 @@ require_once __DIR__ . '/../app/Post.php';
 requireLogin();
 
 // Get current user information
-$userModel = new User();
-$user = $userModel->find($_SESSION['username']);
+$user = new User()->find($_SESSION['username']);
 
 // Get next recommended post for the user
-$postModel = new Post();
-$post = $postModel->nextPost($user['username']);
+$post = new Post()->nextPost($user['username']);
 
 // Page metadata
 $pageTitle = "Home";
@@ -29,6 +27,6 @@ $ariaLabel = "Home page";
 
 // Render view
 ob_start();
-include 'template/index.php';
+include 'partials/post.php';
 $content = ob_get_clean();
 include 'template/base.php';
