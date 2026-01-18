@@ -4,6 +4,19 @@
  */
 
 /**
+ * Requires user to be logged in
+ * 
+ * Redirects to login page if user is not authenticated.
+ */
+function requireLogin(): void
+{
+    if (empty($_SESSION['username'])) {
+        setFlashMessage('error', 'Devi essere loggato per accedere a questa pagina.');
+        redirect('login.php');
+    }
+}
+
+/**
  * Generates and returns a CSRF token
  * 
  * Creates a cryptographically secure token if one doesn't exist,
@@ -94,17 +107,17 @@ function formatErrors(array $errors): string
     if (empty($errors)) {
         return '';
     }
-    
+
     if (count($errors) === 1) {
         return htmlspecialchars($errors[0]);
     }
-    
+
     $html = '<ul class="mb-0">';
     foreach ($errors as $error) {
         $html .= '<li>' . htmlspecialchars($error) . '</li>';
     }
     $html .= '</ul>';
-    
+
     return $html;
 }
 
