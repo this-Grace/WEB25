@@ -31,7 +31,7 @@ class User
      * @return array Array of user records, each as an associative array.
      *               Returns empty array if no users found or query fails.
      */
-    public function all()
+    public function all(): array
     {
         $query = "SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at FROM users";
         $result = $this->db->query($query);
