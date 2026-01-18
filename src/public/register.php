@@ -10,7 +10,7 @@
 session_start();
 
 require_once __DIR__ . '/../app/User.php';
-require_once __DIR__ . '/../app/helpers.php';
+require_once __DIR__ . '/../app/functions.php';
 
 $pageTitle = 'Registrati';
 $ariaLabel = 'Area di registrazione';
