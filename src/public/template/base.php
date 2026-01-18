@@ -16,8 +16,16 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+    <?php
+    $pages = $pages ?? [
+        'index.php'       => ['label' => 'Home', 'key' => 'home'],
+        'create-post.php' => ['label' => 'Crea', 'key' => 'create'],
+        'chat.php'        => ['label' => 'Chat', 'key' => 'chat'],
+        'profile.php'     => ['label' => 'Profilo', 'key' => 'profile'],
+    ];
 
-    <?php include 'partials/navbar.php'; ?>
+    include 'partials/navbar.php';
+    ?>
 
     <main class="flex-grow-1 d-flex align-items-center py-5" role="main">
         <div class="container">
