@@ -8,7 +8,7 @@
 
 <form action="login.php" method="POST" novalidate>
     <input type="hidden" name="csrf_token"
-        value="<?= htmlspecialchars($csrf_token) ?>">
+        value="<?= htmlspecialchars($csrfToken) ?>">
 
     <div class="mb-3">
         <input type="email"
