@@ -3,6 +3,28 @@ CREATE DATABASE web25;
 USE web25;
 
 -- =========================
+-- UNIVERSITIES AND COURSES
+-- =========================
+CREATE TABLE universities (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    city VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE courses (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    degree_level ENUM('Triennale','Magistrale','Dottorato') DEFAULT 'Triennale',
+    university_id BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_courses_university
+        FOREIGN KEY (university_id)
+        REFERENCES universities(id)
+        ON DELETE CASCADE
+);
+
+-- =========================
 -- USERS
 -- =========================
 CREATE TABLE users (
@@ -13,10 +35,26 @@ CREATE TABLE users (
     surname VARCHAR(50),
     bio TEXT,
     avatar_url TEXT,
-    degree_course VARCHAR(100),
-    role ENUM('student', 'admin') DEFAULT 'student',
+    course_id BIGINT UNSIGNED NULL, 
+    blocked_until TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_users_course
+        FOREIGN KEY (course_id)
+        REFERENCES courses(id)
+        ON DELETE SET NULL  
+);
+
+-- =========================
+-- ADMINS
+-- =========================
+CREATE TABLE admins (
+    username VARCHAR(50) PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_admins_user
+        FOREIGN KEY (username)
+        REFERENCES users(username)
+        ON DELETE CASCADE
 );
 
 -- =========================
@@ -27,7 +65,7 @@ CREATE TABLE posts (
     user_username VARCHAR(50) NOT NULL,
     title VARCHAR(255),
     content TEXT NOT NULL,
-    degree_course VARCHAR(100) NOT NULL,
+    status ENUM('Pendente', 'Approvato', 'Rifiutato') DEFAULT 'Pendente',
     num_collaborators INT DEFAULT 1,
     skills_required TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -117,7 +155,7 @@ CREATE TABLE reports (
         'Altro'
     ) NOT NULL,
     description TEXT,
-    status ENUM('Pendenti', 'In revisione', 'Risolte', 'Rigettate', 'Bloccato') DEFAULT 'Pendenti',
+    status ENUM('Pendente', 'In revisione', 'Risolte', 'Rigettate', 'Bloccato') DEFAULT 'Pendente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_reports_reporter
