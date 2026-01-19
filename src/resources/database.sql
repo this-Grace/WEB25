@@ -3,7 +3,7 @@ CREATE DATABASE web25;
 USE web25;
 
 -- =========================
--- UNIVERSITIES AND COURSES
+-- UNIVERSITIES AND FACULTIES
 -- =========================
 CREATE TABLE universities (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -12,13 +12,13 @@ CREATE TABLE universities (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE courses (
+CREATE TABLE faculties (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     degree_level ENUM('Triennale','Magistrale','Dottorato') DEFAULT 'Triennale',
     university_id BIGINT UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_courses_university
+    CONSTRAINT fk_faculties_university
         FOREIGN KEY (university_id)
         REFERENCES universities(id)
         ON DELETE CASCADE
@@ -35,13 +35,13 @@ CREATE TABLE users (
     surname VARCHAR(50),
     bio TEXT,
     avatar_url TEXT,
-    course_id BIGINT UNSIGNED NULL, 
+    faculty_id BIGINT UNSIGNED NULL,
     blocked_until TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_users_course
-        FOREIGN KEY (course_id)
-        REFERENCES courses(id)
+        FOREIGN KEY (faculty_id)
+        REFERENCES faculties(id)
         ON DELETE SET NULL  
 );
 
