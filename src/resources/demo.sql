@@ -18,11 +18,11 @@ INSERT INTO faculties (name, degree_level, university_id) VALUES
 -- =========================
 -- INSERT USERS
 -- =========================
-INSERT INTO users (username, email, password_hash, first_name, surname, bio, avatar_url, course_id) VALUES
+INSERT INTO users (username, email, password_hash, first_name, surname, bio, avatar_url, faculty_id) VALUES
 ('alice','alice@example.com','$2y$10$hash1','Alice','Rossi','Cerco partner per progetto AI','/avatars/alice.png',1),
 ('bob','bob@example.com','$2y$10$hash2','Bob','Verdi','Studente di ingegneria civile','/avatars/bob.png',2),
 ('MarioRossi','mariorossi@gmail.com','$2y$12$C2FBQoX9yGH18351KZSsbekGdLR1ek6jvHq9rMrviBGs3vbQzbTp2','Mario','Rossi','Studente di ingegneria','/avatars/mario.png',2),
-('admin_luca','admin@unimatch.it','$2y$10$hash_admin','Luca','Admin','Amministratore di sistema',NULL),
+('admin_luca','admin@unimatch.it','$2y$10$hash_admin','Luca','Admin','Amministratore di sistema',NULL,NULL),
 ('dana','dana@example.com','$2y$10$hash4','Dana','Bianchi','Appassionata di UX Design',NULL,3);
 
 -- =========================
