@@ -1,16 +1,6 @@
 <?php
-if (!isset($menuItems)) {
-    $menuItems = [];
-}
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$pages = $pages ?? [];
-
-$currentFile = basename($_SERVER['PHP_SELF']);
-$activePageKey = $pages[$currentFile]['key'] ?? '';
+session_status() === PHP_SESSION_NONE && session_start();
+$menuItems = $menuItems ?? [];
 ?>
 
 <nav class="navbar navbar-dark bg-primary navbar-expand-md">
@@ -25,32 +15,20 @@ $activePageKey = $pages[$currentFile]['key'] ?? '';
 
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto align-items-center gap-2">
-
-                <?php foreach ($pages as $file => $info):
-                    $isActive = $activePageKey === $info['key'];
-                ?>
+                <?php if (!empty($_SESSION['username'])): ?>
+                    <?php foreach ($menuItems as $item): ?>
+                        <li class="nav-item">
+                            <a href="<?= htmlspecialchars($item['url']) ?>" class="nav-link"><?= htmlspecialchars($item['label']) ?></a>
+                        </li>
+                    <?php endforeach; ?>
                     <li class="nav-item">
-                        <a href="<?= $file ?>"
-                            class="nav-link <?= $isActive ? 'active' : '' ?>"
-                            <?= $isActive ? 'aria-current="page"' : '' ?>>
-                            <?= htmlspecialchars($info['label']) ?>
-                        </a>
+                        <a href="logout.php" class="nav-link">Esci</a>
                     </li>
-                <?php endforeach; ?>
-
-                <!-- THEME SWITCHER
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center"
-                       href="#" id="themeDropdown"
-                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="me-2" id="themeIcon">◐</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><button class="dropdown-item" data-theme-value="auto">◐ Automatico</button></li>
-                        <li><button class="dropdown-item" data-theme-value="light">○ Chiaro</button></li>
-                        <li><button class="dropdown-item" data-theme-value="dark">● Scuro</button></li>
-                    </ul>
-                </li> -->
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a href="login.php" class="btn btn-outline-light">Accedi</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>
