@@ -2,36 +2,23 @@
 $pageTitle = 'Admin - Utenti';
 require_once __DIR__ . '/../app/User.php';
 
-$message = '';
 $userModel = new User();
-
-// Gestione azioni
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-    $username = $_POST['username'] ?? '';
-
-    try {
-        if ($action === 'suspend' && !empty($username)) {
-            if ($userModel->suspend($username)) {
-                $message = '<div class="alert alert-success rounded-4">Utente sospeso con successo</div>';
-            } else {
-                $message = '<div class="alert alert-danger rounded-4">Errore durante la sospensione</div>';
-            }
-        } elseif ($action === 'activate' && !empty($username)) {
-            if ($userModel->activate($username)) {
-                $message = '<div class="alert alert-success rounded-4">Utente riattivato con successo</div>';
-            } else {
-                $message = '<div class="alert alert-danger rounded-4">Errore durante la riattivazione</div>';
-            }
-        }
-    } catch (Exception $e) {
-        error_log('Admin Action Error: ' . $e->getMessage());
-        $message = '<div class="alert alert-danger rounded-4">Errore durante l\'operazione</div>';
-    }
-}
+$searchQuery = '';
 
 try {
     $users = $userModel->all();
+
+    // Filtro di ricerca
+    if (!empty($_POST['search'])) {
+        $searchQuery = strtolower(trim($_POST['search']));
+        $users = array_filter($users, function ($user) use ($searchQuery) {
+            return strpos(strtolower($user['username']), $searchQuery) !== false ||
+                strpos(strtolower($user['email']), $searchQuery) !== false ||
+                strpos(strtolower($user['first_name']), $searchQuery) !== false ||
+                strpos(strtolower($user['surname']), $searchQuery) !== false;
+        });
+    }
+
     $total_users = count($users);
 } catch (Exception $e) {
     error_log('Admin Users Error: ' . $e->getMessage());
@@ -56,20 +43,15 @@ foreach ($users as $user) {
         ? '<span class="badge bg-success rounded-3">Attivo</span>'
         : '<span class="badge bg-warning text-dark rounded-3">Sospeso</span>';
 
-    $actionBtn = $status === 'active'
-        ? '<form method="POST" style="display:inline"><input type="hidden" name="action" value="suspend"><input type="hidden" name="username" value="' . htmlspecialchars($user['username']) . '"><button type="submit" class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm(\'Sei sicuro di voler sospendere questo utente?\')">Sospendi</button></form>'
-        : '<form method="POST" style="display:inline"><input type="hidden" name="action" value="activate"><input type="hidden" name="username" value="' . htmlspecialchars($user['username']) . '"><button type="submit" class="btn btn-sm btn-outline-success rounded-3" onclick="return confirm(\'Sei sicuro di voler riattivare questo utente?\')">Riattiva</button></form>';
-
     $tableRows .= <<<ROW
     <tr>
         <td><strong>{$user['username']}</strong></td>
         <td>{$user['email']}</td>
-        <td>{$user['degree_course']}</td>
+        <td>{$user['first_name']} {$user['surname']}</td>
         <td>{$user['created_at']}</td>
         <td>$statusBadge</td>
         <td class="text-end">
             <a href="profile.php?user={$user['username']}" class="btn btn-sm btn-primary rounded-3">Visualizza</a>
-            $actionBtn
         </td>
     </tr>
 ROW;
@@ -80,7 +62,6 @@ if (empty($tableRows)) {
 }
 
 $adminContent = <<<HTML
-$message
 <div class="mb-4 d-flex justify-content-between align-items-center">
     <div>
         <h1 class="h3">Gestione Utenti</h1>
@@ -91,33 +72,20 @@ $message
 <!-- Filtri -->
 <div class="card border-0 rounded-5 bg-body-tertiary mb-4">
     <div class="card-body p-4">
-        <div class="row g-3">
-            <div class="col-12 col-md-4">
-                <input type="text" class="form-control rounded-4 border-0 bg-body" placeholder="Cerca per username...">
+        <form method="POST" class="d-flex gap-3 align-items-end flex-wrap">
+            <div class="flex-grow-1" style="min-width: 250px;">
+                <input type="text" name="search" class="form-control rounded-4 border-0 bg-body" placeholder="Cerca per username, email, nome..." value="$searchQuery">
             </div>
-            <div class="col-12 col-md-4">
-                <select class="form-select rounded-4 border-0 bg-body">
-                    <option>Tutti gli stati</option>
-                    <option>Attivi</option>
-                    <option>Sospesi</option>
-                </select>
-            </div>
-            <div class="col-12 col-md-4">
-                <select class="form-select rounded-4 border-0 bg-body">
-                    <option>Tutti i corsi</option>
-                    <option>Ing. Informatica</option>
-                    <option>Informatica</option>
-                    <option>Medicina</option>
-                </select>
-            </div>
-        </div>
+            <button type="submit" class="btn btn-primary rounded-3">Cerca</button>
+            <a href="admin-users.php" class="btn btn-secondary rounded-3">Resetta</a>
+        </form>
     </div>
 </div>
 
 <!-- Tabella utenti -->
 <div class="card border-0 rounded-5 bg-body-tertiary">
     <div class="card-header border-0 rounded-top-5 bg-transparent p-4 border-bottom">
-        <h5 class="mb-0">$total_users utenti totali</h5>
+        <h5 class="mb-0">$total_users utenti trovati</h5>
     </div>
     <div class="card-body p-4">
         <div class="table-responsive">
@@ -126,7 +94,7 @@ $message
                     <tr>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Corso</th>
+                        <th>Nome</th>
                         <th>Data iscrizione</th>
                         <th>Stato</th>
                         <th class="text-end">Azioni</th>
