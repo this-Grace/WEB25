@@ -1,6 +1,7 @@
 <?php
 
 $menuItems = $menuItems ?? [
+    ['label' => 'Home', 'url' => 'index.php'],
     ['label' => 'Crea', 'url' => 'create-post.php'],
     ['label' => 'Chat', 'url' => 'chat.php'],
     ['label' => 'Profilo', 'url' => 'profile.php'],
