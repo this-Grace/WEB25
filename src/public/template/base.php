@@ -1,3 +1,13 @@
+<?php
+if (!empty($requireLogin)) {
+    session_status() === PHP_SESSION_NONE && session_start();
+    if (!function_exists('requireLogin')) {
+        require_once __DIR__ . '/../app/functions.php';
+    }
+    requireLogin();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="it">
 
@@ -16,26 +26,11 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <?php
-    $pages = $pages ?? [
-        'index.php'       => ['label' => 'Home', 'key' => 'home'],
-        'create-post.php' => ['label' => 'Crea', 'key' => 'create'],
-        'chat.php'        => ['label' => 'Chat', 'key' => 'chat'],
-        'profile.php'     => ['label' => 'Profilo', 'key' => 'profile'],
-    ];
+    <?php if (!isset($hideNavbar) || !$hideNavbar): ?>
+        <?php include 'partials/navbar.php'; ?>
+    <?php endif; ?>
 
-    include 'partials/navbar.php';
-    ?>
-
-    <main class="flex-grow-1 d-flex align-items-center py-5" role="main">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="<?php echo $pageWide ?? false ? 'col-12' : 'col-lg-9 col-xl-8'; ?>">
-                    <?php echo $content; ?>
-                </div>
-            </div>
-        </div>
-    </main>
+    <?php echo $content; ?>
 
     <?php include 'partials/footer.php'; ?>
 
