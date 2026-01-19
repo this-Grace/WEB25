@@ -1,6 +1,7 @@
 <?php
 $menuItems = $menuItems ?? [
     ['label' => 'Home', 'url' => 'index.php'],
+    ['label' => 'Esci', 'url' => 'logout.php'],
 ];
 $navbarColor = 'danger';
 $requireLogin = $requireLogin ?? true;

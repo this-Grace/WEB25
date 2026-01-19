@@ -22,9 +22,6 @@ $navbarColor = $navbarColor ?? 'primary';
                             <a href="<?= htmlspecialchars($item['url']) ?>" class="nav-link"><?= htmlspecialchars($item['label']) ?></a>
                         </li>
                     <?php endforeach; ?>
-                    <li class="nav-item">
-                        <a href="logout.php" class="nav-link">Esci</a>
-                    </li>
                 <?php else: ?>
                     <li class="nav-item">
                         <a href="login.php" class="btn btn-outline-light">Accedi</a>
