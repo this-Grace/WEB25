@@ -1,9 +1,12 @@
 <?php
 $menuItems = $menuItems ?? [
-    ['label' => 'Home', 'url' => 'index.php'],
+    ['label' => 'Utenti', 'url' => 'admin-users.php'],
+    ['label' => 'Post', 'url' => 'admin-posts.php'],
+    ['label' => 'Segnalazioni', 'url' => 'admin-reports.php'],
     ['label' => 'Esci', 'url' => 'logout.php'],
 ];
 $navbarColor = 'danger';
+$brandUrl = "admin-dashboard.php";
 $requireLogin = $requireLogin ?? true;
 
 $adminContent = $content;
