@@ -26,7 +26,7 @@ ob_start();
             <div class="text-primary fw-semibold small">@<?= htmlspecialchars($post['user_username']) ?></div>
             <p class="mt-2"><?= nl2br(htmlspecialchars($post['content'])) ?></p>
             <ul class="list-unstyled mt-3 pt-3 border-top">
-                <li class="py-1"><strong>Corso:</strong> <?= htmlspecialchars($post['degree_course']) ?></li>
+                <li class="py-1"><strong>Corso:</strong> <?= htmlspecialchars($post['degree_course'] ?? 'Non specificato') ?></li>
                 <li class="py-1"><strong>Team richiesto:</strong> <?= intval($post['num_collaborators']) ?> persone</li>
             </ul>
         </div>

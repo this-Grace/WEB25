@@ -238,7 +238,15 @@ class Post
     public function nextPost($username): ?array
     {
         $stmt = $this->db->prepare(
-            "SELECT p.* FROM posts p LEFT JOIN reactions r ON p.id = r.post_id AND r.user_username = ? WHERE p.user_username != ? AND r.post_id IS NULL ORDER BY p.created_at DESC LIMIT 1"
+            "SELECT p.id, p.user_username, p.title, p.content, p.num_collaborators, p.skills_required, p.created_at,
+                f.name AS degree_course
+            FROM posts p
+            INNER JOIN users u ON p.user_username = u.username
+            LEFT JOIN faculties f ON u.faculty_id = f.id
+            LEFT JOIN reactions r ON p.id = r.post_id AND r.user_username = ?
+            WHERE p.user_username != ? AND r.post_id IS NULL
+            ORDER BY p.created_at DESC
+            LIMIT 1"
         );
         $stmt->bind_param('ss', $username, $username);
         $stmt->execute();
