@@ -31,15 +31,32 @@ class Conversation
     public function getUserConversations(string $username): array
     {
         $stmt = $this->db->prepare(
-            "SELECT c.id, c.created_at,
-                    (SELECT text FROM messages WHERE conversation_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message,
-                    (SELECT created_at FROM messages WHERE conversation_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message_at,
-                    (SELECT COUNT(*) FROM messages WHERE conversation_id = c.id AND is_read = FALSE AND sender_username != ?) as unread_count
-             FROM conversations c
-             JOIN conversation_participants cp ON c.id = cp.conversation_id
-             WHERE cp.user_username = ?
-             ORDER BY last_message_at DESC"
+            "SELECT 
+                c.id,
+                c.created_at,
+                lm.text AS last_message,
+                lm.created_at AS last_message_at,
+                COALESCE(SUM(CASE WHEN m.is_read = FALSE AND m.sender_username != ? THEN 1 ELSE 0 END), 0) AS unread_count
+            FROM conversations c
+            JOIN conversation_participants cp 
+                ON c.id = cp.conversation_id
+            LEFT JOIN messages lm 
+                ON lm.id = (
+                    SELECT id 
+                    FROM messages 
+                    WHERE conversation_id = c.id 
+                    ORDER BY created_at DESC 
+                    LIMIT 1
+                )
+            LEFT JOIN messages m 
+                ON m.conversation_id = c.id
+            WHERE cp.user_username = ?
+            GROUP BY c.id, c.created_at, lm.text, lm.created_at
+            ORDER BY 
+                (lm.created_at IS NULL) ASC,
+                lm.created_at DESC"
         );
+
         $stmt->bind_param('ss', $username, $username);
         $stmt->execute();
 
@@ -109,12 +126,15 @@ class Conversation
     public function findBetweenUsers(string $user1, string $user2): ?int
     {
         $stmt = $this->db->prepare(
-            "SELECT cp1.conversation_id 
+            "SELECT cp1.conversation_id
              FROM conversation_participants cp1
              JOIN conversation_participants cp2 ON cp1.conversation_id = cp2.conversation_id
              WHERE cp1.user_username = ? AND cp2.user_username = ?
+             GROUP BY cp1.conversation_id
+             HAVING COUNT(*) = 2
              LIMIT 1"
         );
+
         $stmt->bind_param('ss', $user1, $user2);
         $stmt->execute();
 
@@ -137,6 +157,9 @@ class Conversation
     {
         $this->db->begin_transaction();
 
+        $existing = $this->findBetweenUsers($participants[0], $participants[1]);
+        if ($existing) return $existing;
+
         try {
             $stmt = $this->db->prepare("INSERT INTO conversations () VALUES ()");
             $stmt->execute();
@@ -156,24 +179,6 @@ class Conversation
             $this->db->rollback();
             return false;
         }
-    }
-
-    /**
-     * Add a participant to a conversation.
-     * 
-     * @param int $conversationId Conversation ID.
-     * @param string $username Username to add.
-     * @return bool True if successful, false otherwise.
-     */
-    public function addParticipant(int $conversationId, string $username): bool
-    {
-        $stmt = $this->db->prepare("INSERT INTO conversation_participants (conversation_id, user_username) VALUES (?, ?)");
-        $stmt->bind_param('is', $conversationId, $username);
-
-        $success = $stmt->execute();
-        $stmt->close();
-
-        return $success;
     }
 
     /**
