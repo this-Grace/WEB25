@@ -245,6 +245,7 @@ class Post
 
     /**
      * Get the next post for a user that they haven't reacted to yet.
+     * Only returns posts with 'Approvato' status.
      * 
      * @param string $username Username of the user.
      * @return array|null The next post data or null if none available.
@@ -258,7 +259,7 @@ class Post
             INNER JOIN users u ON p.user_username = u.username
             LEFT JOIN faculties f ON u.faculty_id = f.id
             LEFT JOIN reactions r ON p.id = r.post_id AND r.user_username = ?
-            WHERE p.user_username != ? AND r.post_id IS NULL
+            WHERE p.user_username != ? AND r.post_id IS NULL AND p.status = 'Approvato'
             ORDER BY p.created_at DESC
             LIMIT 1"
         );
