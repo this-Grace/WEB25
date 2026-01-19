@@ -8,9 +8,9 @@ INSERT INTO universities (name, city) VALUES
 ('Politecnico di Milano', 'Milano');
 
 -- =========================
--- INSERT COURSES
+-- INSERT FACULTIES
 -- =========================
-INSERT INTO courses (name, degree_level, university_id) VALUES
+INSERT INTO faculties (name, degree_level, university_id) VALUES
 ('Ingegneria e scienze Informatiche', 'Triennale', 1),
 ('Economia', 'Triennale', 2),
 ('Architettura', 'Magistrale', 1);
