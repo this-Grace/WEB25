@@ -33,7 +33,11 @@ class User
      */
     public function all(): array
     {
-        $query = "SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at, blocked_until FROM users";
+        $query = "SELECT u.username, u.email, u.first_name, u.surname, u.bio, u.avatar_url,
+                         u.faculty_id, u.blocked_until, u.created_at, u.updated_at,
+                         CASE WHEN a.username IS NOT NULL THEN 'admin' ELSE 'user' END AS role
+                  FROM users u
+                  LEFT JOIN admins a ON u.username = a.username";
         $result = $this->db->query($query);
 
         if (!$result) return [];
@@ -69,10 +73,13 @@ class User
     public function find(string $value): ?array
     {
         $stmt = $this->db->prepare(
-            "SELECT username, email, password_hash, role
-            FROM users
-            WHERE username = ? OR email = ?
-            LIMIT 1"
+            "SELECT u.username, u.email, u.password_hash, u.first_name, u.surname,
+                    u.bio, u.avatar_url, u.faculty_id, u.blocked_until,
+                    CASE WHEN a.username IS NOT NULL THEN 'admin' ELSE 'user' END AS role
+             FROM users u
+             LEFT JOIN admins a ON u.username = a.username
+             WHERE u.username = ? OR u.email = ?
+             LIMIT 1"
         );
 
         $stmt->bind_param('ss', $value, $value);
@@ -100,7 +107,7 @@ class User
         if (!$user) return null;
 
         if (!password_verify($password, $user['password_hash'])) {
-            return null; // password errata
+            return null;
         }
 
         unset($user['password_hash']);
@@ -115,9 +122,7 @@ class User
      */
     public function emailExists($email): bool
     {
-        $stmt = $this->db->prepare(
-            "SELECT 1 FROM users WHERE email = ? LIMIT 1"
-        );
+        $stmt = $this->db->prepare("SELECT 1 FROM users WHERE email = ? LIMIT 1");
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $stmt->store_result();
@@ -136,9 +141,7 @@ class User
      */
     public function usernameExists($username): bool
     {
-        $stmt = $this->db->prepare(
-            "SELECT 1 FROM users WHERE username = ? LIMIT 1"
-        );
+        $stmt = $this->db->prepare("SELECT 1 FROM users WHERE username = ? LIMIT 1");
         $stmt->bind_param('s', $username);
         $stmt->execute();
         $stmt->store_result();
@@ -150,6 +153,23 @@ class User
     }
 
     /**
+     * Block a user until a specified date.
+     * * @param string $username The username of the user to block.
+     * @param string|null $until The date until which the user is blocked (YYYY-MM-DD HH:MM:SS).
+     *                           If null, the user is blocked indefinitely.
+     * @return bool True if successful, false otherwise.
+     */
+    public function block(string $username, ?string $until = null): bool
+    {
+        $stmt = $this->db->prepare("UPDATE users SET blocked_until = ? WHERE username = ?");
+
+        $stmt->bind_param('ss', $until, $username);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    /**
      * Create a new user record.
      * 
      * @param string $username Desired username.
@@ -157,14 +177,19 @@ class User
      * @param string $password Plain text password (will be hashed).
      * @param string $first_name User's first name.
      * @param string $surname User's surname.
-     * @param string $course User's degree course.
+     * @param string $faculty_id ID of the faculty the user belongs to.
      * @return bool True if creation successful, false otherwise.
      */
-    public function create($username, $email, $password, $first_name, $surname, $course): bool
+    public function create($username, $email, $password, $first_name, $surname, $faculty_id): bool
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->db->prepare("INSERT INTO users (username, email, password_hash, first_name, surname, degree_course) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param('ssssss', $username, $email, $hash, $first_name, $surname, $course);
+        $faculty_id = ($faculty_id && is_numeric($faculty_id)) ? (int)$faculty_id : null;
+
+        $stmt = $this->db->prepare(
+            "INSERT INTO users (username, email, password_hash, first_name, surname, faculty_id)
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        $stmt->bind_param('sssssi', $username, $email, $hash, $first_name, $surname, $faculty_id);
 
         $success = $stmt->execute();
         $stmt->close();
@@ -179,14 +204,16 @@ class User
      * @param string $first_name Updated first name.
      * @param string $surname Updated surname.
      * @param string $bio Updated biography.
-     * @param string $course Updated degree course.
+     * @param string $faculty_id Updated faculty ID.
      * @param string $avatar Updated avatar URL or path.
      * @return bool True if update successful, false otherwise.
      */
-    public function update($username, $first_name, $surname, $bio, $course, $avatar): bool
+    public function update($username, $first_name, $surname, $bio, $faculty_id, $avatar): bool
     {
-        $stmt = $this->db->prepare("UPDATE users SET first_name = ?, surname = ?, bio = ?, degree_course = ?, avatar_url = ? WHERE username = ?");
-        $stmt->bind_param('ssssss', $first_name, $surname, $bio, $course, $avatar, $username);
+        $stmt = $this->db->prepare(
+            "UPDATE users SET first_name = ?, surname = ?, bio = ?, faculty_id = ?, avatar_url = ? WHERE username = ?"
+        );
+        $stmt->bind_param('ssisss', $first_name, $surname, $bio, $faculty_id, $avatar, $username);
 
         $success = $stmt->execute();
         $stmt->close();
