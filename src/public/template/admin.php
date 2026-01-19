@@ -1,4 +1,20 @@
 <?php
+session_start();
+
+// Controlla se l'utente è loggato
+if (empty($_SESSION['username'])) {
+    header('Location: login.php');
+    exit;
+}
+
+// Controlla se l'utente è admin
+require_once __DIR__ . '/../../app/Admin.php';
+$adminModel = new Admin();
+if (!$adminModel->isAdmin($_SESSION['username'])) {
+    header('Location: index.php');
+    exit;
+}
+
 $menuItems = $menuItems ?? [
     ['label' => 'Utenti', 'url' => 'admin-users.php'],
     ['label' => 'Post', 'url' => 'admin-posts.php'],
