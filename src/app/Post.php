@@ -33,7 +33,7 @@ class Post
      */
     public function all(): array
     {
-        $query = "SELECT id, user_username, title, content, degree_course, num_collaborators, skills_required, created_at FROM posts ORDER BY created_at DESC";
+        $query = "SELECT id, user_username, title, content, num_collaborators, skills_required, created_at, status FROM posts ORDER BY created_at DESC";
         $result = $this->db->query($query);
 
         if (!$result) return [];
@@ -53,10 +53,10 @@ class Post
     {
         $result = $this->db->query("SELECT COUNT(*) as count FROM posts");
         if (!$result) return 0;
-        
+
         $count = $result->fetch_assoc()['count'] ?? 0;
         $result->free();
-        
+
         return (int)$count;
     }
 
@@ -68,7 +68,7 @@ class Post
      */
     public function find($id): ?array
     {
-        $stmt = $this->db->prepare("SELECT id, user_username, title, content, degree_course, num_collaborators, skills_required, created_at FROM posts WHERE id = ? LIMIT 1");
+        $stmt = $this->db->prepare("SELECT id, user_username, title, content, num_collaborators, skills_required, created_at, status FROM posts WHERE id = ? LIMIT 1");
         $stmt->bind_param('i', $id);
         $stmt->execute();
 
@@ -87,15 +87,14 @@ class Post
      * @param string $username Username of the post author.
      * @param string $title Post title.
      * @param string $content Post content/description.
-     * @param string $degreeCourse Degree course associated with the post.
      * @param int $numCollaborators Number of collaborators needed.
      * @param string $skillsRequired Required skills (comma-separated or text).
      * @return int|bool Post ID if creation successful, false otherwise.
      */
-    public function create($username, $title, $content, $degreeCourse, $numCollaborators, $skillsRequired = null): int|false
+    public function create($username, $title, $content, $numCollaborators, $skillsRequired = null): int|false
     {
-        $stmt = $this->db->prepare("INSERT INTO posts (user_username, title, content, degree_course, num_collaborators, skills_required) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param('ssssis', $username, $title, $content, $degreeCourse, $numCollaborators, $skillsRequired);
+        $stmt = $this->db->prepare("INSERT INTO posts (user_username, title, content, num_collaborators, skills_required) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param('ssssi', $username, $title, $content, $numCollaborators, $skillsRequired);
 
         $success = $stmt->execute();
         $postId = $this->db->insert_id;
@@ -110,15 +109,14 @@ class Post
      * @param int $id Post ID to update.
      * @param string $title Updated post title.
      * @param string $content Updated post content.
-     * @param string $degreeCourse Updated degree course.
      * @param int $numCollaborators Updated number of collaborators needed.
      * @param string $skillsRequired Updated required skills.
      * @return bool True if update successful, false otherwise.
      */
-    public function update($id, $title, $content, $degreeCourse, $numCollaborators, $skillsRequired = null): bool
+    public function update($id, $title, $content, $numCollaborators, $skillsRequired = null): bool
     {
-        $stmt = $this->db->prepare("UPDATE posts SET title = ?, content = ?, degree_course = ?, num_collaborators = ?, skills_required = ? WHERE id = ?");
-        $stmt->bind_param('sssisi', $title, $content, $degreeCourse, $numCollaborators, $skillsRequired, $id);
+        $stmt = $this->db->prepare("UPDATE posts SET title = ?, content = ?, num_collaborators = ?, skills_required = ? WHERE id = ?");
+        $stmt->bind_param('ssssi', $title, $content, $numCollaborators, $skillsRequired, $id);
 
         $success = $stmt->execute();
         $stmt->close();
