@@ -1,20 +1,17 @@
 <?php
-
 $menuItems = $menuItems ?? [
-    ['label' => 'Crea', 'url' => 'create-post.php'],
-    ['label' => 'Chat', 'url' => 'chat.php'],
-    ['label' => 'Profilo', 'url' => 'profile.php'],
+    ['label' => 'Home', 'url' => 'index.php'],
 ];
-$navbarColor = 'primary';
+$navbarColor = 'danger';
 $requireLogin = $requireLogin ?? true;
 
-$userContent = $content;
+$adminContent = $content;
 $content = <<<HTML
 <main class="flex-grow-1 d-flex align-items-center py-5" role="main">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-9 col-xl-8">
-                $userContent
+                $adminContent
             </div>
         </div>
     </div>

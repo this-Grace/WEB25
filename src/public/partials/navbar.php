@@ -1,9 +1,10 @@
 <?php
 session_status() === PHP_SESSION_NONE && session_start();
 $menuItems = $menuItems ?? [];
+$navbarColor = $navbarColor ?? 'primary';
 ?>
 
-<nav class="navbar navbar-dark bg-primary navbar-expand-md">
+<nav class="navbar navbar-dark bg-<?= htmlspecialchars($navbarColor) ?> navbar-expand-md">
     <div class="container">
 
         <a class="navbar-brand fw-bold" href="index.php">UniMatch</a>

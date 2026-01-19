@@ -314,5 +314,5 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-include 'template/base.php';
+include 'template/user.php';
 ?>

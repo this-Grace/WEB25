@@ -74,5 +74,5 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-require __DIR__ . '/template/base.php';
+require __DIR__ . '/template/user.php';
 ?>
