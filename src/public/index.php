@@ -11,7 +11,7 @@ require_once __DIR__ . '/../app/Post.php';
 session_start();
 
 $username = $_SESSION['username'] ?? null;
-$user = new User()->find($username);
+$user = $username ? new User()->find($username) : null;
 $post = $user ? new Post()->nextPost($user['username']) : null;
 
 $pageTitle = "Home";
