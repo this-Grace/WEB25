@@ -1,18 +1,62 @@
 <?php
 $pageTitle = 'Admin Dashboard';
+require_once __DIR__ . '/../app/User.php';
+require_once __DIR__ . '/../app/Post.php';
+require_once __DIR__ . '/../app/Report.php';
 
-// Statistiche
-$stats = [
-    'total_users' => 1234,
-    'active_posts' => 456,
-    'pending_reports' => 23,
-    'completed_matches' => 789,
-    'users_growth' => '+12%',
-    'posts_growth' => '+8%',
-    'matches_growth' => '+5%'
-];
+try {
+    $userModel = new User();
+    $postModel = new Post();
+    $reportModel = new Report();
 
-$adminContent = <<<'HTML'
+    $usersGrowth = $userModel->getMonthlyGrowth();
+    $postsGrowth = $postModel->getMonthlyGrowth();
+
+    $statsCards = [
+        [
+            'title' => 'Utenti totali',
+            'value' => $userModel->count(),
+            'growth' => ($usersGrowth >= 0 ? '+' : '-') . $usersGrowth . '% questo mese',
+            'badge_class' => 'text-success'
+        ],
+        [
+            'title' => 'Post attivi',
+            'value' => $postModel->count(),
+            'growth' => ($postsGrowth >= 0 ? '+' : '-') . $postsGrowth . '% questo mese',
+            'badge_class' => 'text-success'
+        ],
+        [
+            'title' => 'Segnalazioni pendenti',
+            'value' => $reportModel->getStats()['pending'] ?? 0,
+            'growth' => 'Richiedono attenzione',
+            'badge_class' => 'text-danger'
+        ]
+    ];
+} catch (Exception $e) {
+    error_log('Admin Dashboard Error: ' . $e->getMessage());
+    $statsCards = [
+        [
+            'title' => 'Utenti totali',
+            'value' => 0,
+            'growth' => 'N/A',
+            'badge_class' => 'text-muted'
+        ],
+        [
+            'title' => 'Post attivi',
+            'value' => 0,
+            'growth' => 'N/A',
+            'badge_class' => 'text-muted'
+        ],
+        [
+            'title' => 'Segnalazioni pendenti',
+            'value' => 0,
+            'growth' => 'N/A',
+            'badge_class' => 'text-muted'
+        ]
+    ];
+}
+
+$adminContent = <<<HTML
 <div class="mb-4">
     <h1 class="h3">Dashboard Admin</h1>
     <p class="text-body-secondary">Panoramica del sistema UniMatch</p>
@@ -20,52 +64,25 @@ $adminContent = <<<'HTML'
 
 <!-- Statistiche -->
 <div class="row g-3 mb-4">
-    <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 rounded-5 bg-body-tertiary">
-            <div class="card-body p-4">
-                <h6 class="text-body-secondary small mb-2">Utenti totali</h6>
-                <h3 class="h2 mb-0">PHP_STAT_USERS</h3>
-                <small class="text-success">PHP_STAT_USERS_GROWTH</small>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 rounded-5 bg-body-tertiary">
-            <div class="card-body p-4">
-                <h6 class="text-body-secondary small mb-2">Post attivi</h6>
-                <h3 class="h2 mb-0">PHP_STAT_POSTS</h3>
-                <small class="text-success">PHP_STAT_POSTS_GROWTH</small>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 rounded-5 bg-body-tertiary">
-            <div class="card-body p-4">
-                <h6 class="text-body-secondary small mb-2">Segnalazioni pendenti</h6>
-                <h3 class="h2 mb-0">PHP_STAT_REPORTS</h3>
-                <small class="text-danger">Richiedono attenzione</small>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-md-6 col-lg-3">
-        <div class="card border-0 rounded-5 bg-body-tertiary">
-            <div class="card-body p-4">
-                <h6 class="text-body-secondary small mb-2">Match completati</h6>
-                <h3 class="h2 mb-0">789</h3>
-                <small class="text-success">PHP_STAT_MATCHES_GROWTH</small>
-            </div>
-        </div>
-    </div>
-</div>
 HTML;
 
-// Sostituire i placeholder con i dati reali
-$adminContent = str_replace('PHP_STAT_USERS', $stats['total_users'], $adminContent);
-$adminContent = str_replace('PHP_STAT_POSTS', $stats['active_posts'], $adminContent);
-$adminContent = str_replace('PHP_STAT_REPORTS', $stats['pending_reports'], $adminContent);
-$adminContent = str_replace('PHP_STAT_USERS_GROWTH', $stats['users_growth'] . ' questo mese', $adminContent);
-$adminContent = str_replace('PHP_STAT_POSTS_GROWTH', $stats['posts_growth'] . ' questo mese', $adminContent);
-$adminContent = str_replace('PHP_STAT_MATCHES_GROWTH', $stats['matches_growth'] . ' questo mese', $adminContent);
+foreach ($statsCards as $card) {
+    $adminContent .= <<<HTML
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card border-0 rounded-5 bg-body-tertiary">
+            <div class="card-body p-4">
+                <h6 class="text-body-secondary small mb-2">{$card['title']}</h6>
+                <h3 class="h2 mb-0">{$card['value']}</h3>
+                <small class="{$card['badge_class']}">{$card['growth']}</small>
+            </div>
+        </div>
+    </div>
+HTML;
+}
+
+$adminContent .= <<<HTML
+</div>
+HTML;
 
 $content = $adminContent;
 

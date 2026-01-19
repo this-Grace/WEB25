@@ -1,20 +1,75 @@
 <?php
 $pageTitle = 'Admin - Segnalazioni';
+require_once __DIR__ . '/../app/Report.php';
 
-$reports = [
-    ['id' => 1, 'reason' => 'Comportamento inappropriato', 'reported_by' => 'mrossi', 'target' => 'lfermi', 'report_date' => '2025-12-28', 'status' => 'pending'],
-    ['id' => 2, 'reason' => 'Contenuto offensivo', 'reported_by' => 'cbianchi', 'target' => 'Post di mrossi', 'report_date' => '2025-12-27', 'status' => 'blocked'],
-    ['id' => 3, 'reason' => 'Spam', 'reported_by' => 'aconti', 'target' => 'Chat', 'report_date' => '2025-12-25', 'status' => 'resolved'],
-    ['id' => 4, 'reason' => 'Frode', 'reported_by' => 'svillani', 'target' => 'Post sospetto', 'report_date' => '2025-12-24', 'status' => 'rejected'],
-];
-$stats = [
-    'pending' => 23,
-    'resolved' => 156,
-    'blocked' => 12,
-    'rejected' => 34
-];
+try {
+    $reportModel = new Report();
+    $reports = $reportModel->all();
+    $stats = $reportModel->getStats();
+} catch (Exception $e) {
+    error_log('Admin Reports Error: ' . $e->getMessage());
+    $reports = [];
+    $stats = ['pending' => 0, 'resolved' => 0, 'blocked' => 0, 'rejected' => 0];
+}
 
-$adminContent = <<<'HTML'
+// Funzione helper per badge stato segnalazione
+function getReportStatusBadge($status)
+{
+    $status = strtolower(str_replace(' ', '_', $status));
+    $map = [
+        'pendente' => ['bg-warning text-dark', 'In revisione'],
+        'bloccato' => ['bg-danger', 'Bloccato'],
+        'risolte' => ['bg-success', 'Risolto'],
+        'rigettate' => ['bg-info', 'Rigettato']
+    ];
+
+    if (isset($map[$status])) {
+        return '<span class="badge ' . $map[$status][0] . ' rounded-3">' . $map[$status][1] . '</span>';
+    }
+    return '<span class="badge bg-secondary rounded-3">' . ucfirst($status) . '</span>';
+}
+
+// Funzione helper per bottone azione
+function getReportActionButton($id, $status)
+{
+    $status = strtolower(str_replace(' ', '_', $status));
+
+    $buttons = [
+        'pendente' => '<button class="btn btn-sm btn-outline-danger rounded-3" onclick="blockReport(' . $id . ')">Blocca</button>',
+        'bloccato' => '<button class="btn btn-sm btn-outline-success rounded-3" onclick="unblockReport(' . $id . ')">Sblocca</button>',
+        'risolte' => '<button class="btn btn-sm btn-outline-secondary rounded-3" onclick="closeReport(' . $id . ')">Chiudi</button>',
+        'rigettate' => '<button class="btn btn-sm btn-outline-secondary rounded-3" onclick="closeReport(' . $id . ')">Chiudi</button>'
+    ];
+
+    return $buttons[$status] ?? '<button class="btn btn-sm btn-outline-secondary rounded-3" disabled>Azione</button>';
+}
+
+// Genera righe tabella
+$tableRows = '';
+foreach ($reports as $report) {
+    $statusBadge = getReportStatusBadge($report['status']);
+    $actionBtn = getReportActionButton($report['id'], $report['status']);
+
+    $tableRows .= <<<ROW
+    <tr>
+        <td>{$report['reason']}</td>
+        <td>{$report['reporter_username']}</td>
+        <td>{$report['reported_username']}</td>
+        <td>{$report['created_at']}</td>
+        <td>$statusBadge</td>
+        <td class="text-end">
+            <a href="#" class="btn btn-sm btn-primary rounded-3">Rivedi</a>
+            $actionBtn
+        </td>
+    </tr>
+ROW;
+}
+
+if (empty($tableRows)) {
+    $tableRows = '<tr><td colspan="6" class="text-center text-body-secondary py-4">Nessuna segnalazione trovata</td></tr>';
+}
+
+$adminContent = <<<HTML
 <div class="mb-4">
     <h1 class="h3">Gestione Segnalazioni</h1>
     <p class="text-body-secondary">Revisione e moderazione delle segnalazioni degli utenti</p>
@@ -26,7 +81,7 @@ $adminContent = <<<'HTML'
         <div class="card border-0 rounded-5 bg-body-tertiary">
             <div class="card-body p-4">
                 <h6 class="text-body-secondary small mb-2">Pendenti</h6>
-                <h3 class="h2 mb-0">PHP_STAT_PENDING</h3>
+                <h3 class="h2 mb-0">{$stats['pending']}</h3>
                 <small class="text-warning">In revisione</small>
             </div>
         </div>
@@ -35,7 +90,7 @@ $adminContent = <<<'HTML'
         <div class="card border-0 rounded-5 bg-body-tertiary">
             <div class="card-body p-4">
                 <h6 class="text-body-secondary small mb-2">Risolte</h6>
-                <h3 class="h2 mb-0">PHP_STAT_RESOLVED</h3>
+                <h3 class="h2 mb-0">{$stats['resolved']}</h3>
                 <small class="text-success">Questo mese</small>
             </div>
         </div>
@@ -44,7 +99,7 @@ $adminContent = <<<'HTML'
         <div class="card border-0 rounded-5 bg-body-tertiary">
             <div class="card-body p-4">
                 <h6 class="text-body-secondary small mb-2">Bloccate</h6>
-                <h3 class="h2 mb-0">PHP_STAT_BLOCKED</h3>
+                <h3 class="h2 mb-0">{$stats['blocked']}</h3>
                 <small class="text-danger">Azioni intraprese</small>
             </div>
         </div>
@@ -53,7 +108,7 @@ $adminContent = <<<'HTML'
         <div class="card border-0 rounded-5 bg-body-tertiary">
             <div class="card-body p-4">
                 <h6 class="text-body-secondary small mb-2">Rigettate</h6>
-                <h3 class="h2 mb-0">PHP_STAT_REJECTED</h3>
+                <h3 class="h2 mb-0">{$stats['rejected']}</h3>
                 <small class="text-info">Non idonee</small>
             </div>
         </div>
@@ -68,9 +123,9 @@ $adminContent = <<<'HTML'
                 <select class="form-select rounded-4 border-0 bg-body">
                     <option>Tutti gli stati</option>
                     <option>Pendenti</option>
-                    <option>In revisione</option>
-                    <option>Risolte</option>
-                    <option>Rigettate</option>
+                    <option>Bloccati</option>
+                    <option>Risolti</option>
+                    <option>Rigettati</option>
                 </select>
             </div>
             <div class="col-12 col-md-4">
@@ -80,6 +135,7 @@ $adminContent = <<<'HTML'
                     <option>Contenuto offensivo</option>
                     <option>Spam</option>
                     <option>Frode</option>
+                    <option>Altro</option>
                 </select>
             </div>
             <div class="col-12 col-md-4">
@@ -101,14 +157,14 @@ $adminContent = <<<'HTML'
                     <tr>
                         <th>Motivo</th>
                         <th>Segnalato da</th>
-                        <th>Bersaglio</th>
+                        <th>Utente segnalato</th>
                         <th>Data</th>
                         <th>Stato</th>
                         <th class="text-end">Azioni</th>
                     </tr>
                 </thead>
                 <tbody class="small">
-                    PHP_REPORTS_ROWS
+                    $tableRows
                 </tbody>
             </table>
         </div>
@@ -116,77 +172,28 @@ $adminContent = <<<'HTML'
 </div>
 HTML;
 
-// Generare le righe della tabella
-$rows = '';
-foreach ($reports as $report) {
-    $status_badge = '';
-    $action_button = '';
-
-    switch ($report['status']) {
-        case 'pending':
-            $status_badge = '<span class="badge bg-warning text-dark rounded-3">In revisione</span>';
-            $action_button = '<button class="btn btn-sm btn-outline-danger rounded-3" onclick="blockReport(' . $report['id'] . ')">Blocca</button>';
-            break;
-        case 'blocked':
-            $status_badge = '<span class="badge bg-danger rounded-3">Bloccato</span>';
-            $action_button = '<button class="btn btn-sm btn-outline-success rounded-3" onclick="unblockReport(' . $report['id'] . ')">Sblocca</button>';
-            break;
-        case 'resolved':
-            $status_badge = '<span class="badge bg-success rounded-3">Risolto</span>';
-            $action_button = '<button class="btn btn-sm btn-outline-secondary rounded-3" onclick="closeReport(' . $report['id'] . ')">Chiudi</button>';
-            break;
-        case 'rejected':
-            $status_badge = '<span class="badge bg-info rounded-3">Rigettato</span>';
-            $action_button = '<button class="btn btn-sm btn-outline-secondary rounded-3" onclick="closeReport(' . $report['id'] . ')">Chiudi</button>';
-            break;
-    }
-
-    $rows .= <<<ROW
-                    <tr>
-                        <td>{$report['reason']}</td>
-                        <td>{$report['reported_by']}</td>
-                        <td>{$report['target']}</td>
-                        <td>{$report['report_date']}</td>
-                        <td>$status_badge</td>
-                        <td class="text-end">
-                            <a href="#" class="btn btn-sm btn-primary rounded-3">Rivedi</a>
-                            $action_button
-                        </td>
-                    </tr>
-ROW;
-}
-
-$adminContent = str_replace('PHP_STAT_PENDING', $stats['pending'], $adminContent);
-$adminContent = str_replace('PHP_STAT_RESOLVED', $stats['resolved'], $adminContent);
-$adminContent = str_replace('PHP_STAT_BLOCKED', $stats['blocked'], $adminContent);
-$adminContent = str_replace('PHP_STAT_REJECTED', $stats['rejected'], $adminContent);
-$adminContent = str_replace('PHP_REPORTS_ROWS', $rows, $adminContent);
-
-$content = <<<HTML
+$content = <<<JS
 $adminContent
 
 <script>
 function blockReport(reportId) {
     if (confirm('Sei sicuro di voler bloccare questo elemento?')) {
-        // Implementare la logica di blocco
         console.log('Blocco segnalazione:', reportId);
     }
 }
 
 function unblockReport(reportId) {
     if (confirm('Sei sicuro di voler sbloccare questo elemento?')) {
-        // Implementare la logica di sblocco
         console.log('Sblocco segnalazione:', reportId);
     }
 }
 
 function closeReport(reportId) {
     if (confirm('Sei sicuro di voler chiudere questa segnalazione?')) {
-        // Implementare la logica di chiusura
         console.log('Chiusura segnalazione:', reportId);
     }
 }
 </script>
-HTML;
+JS;
 
 include 'template/admin.php';

@@ -45,6 +45,22 @@ class Post
     }
 
     /**
+     * Count total number of posts.
+     * 
+     * @return int Total post count.
+     */
+    public function count(): int
+    {
+        $result = $this->db->query("SELECT COUNT(*) as count FROM posts");
+        if (!$result) return 0;
+        
+        $count = $result->fetch_assoc()['count'] ?? 0;
+        $result->free();
+        
+        return (int)$count;
+    }
+
+    /**
      * Find a post by ID.
      * 
      * @param int $id The post ID to search for.
@@ -250,5 +266,32 @@ class Post
         $stmt->close();
 
         return $post ?: null;
+    }
+
+    /**
+     * Calculate monthly growth percentage.
+     * 
+     * @return int Growth percentage compared to last month.
+     */
+    public function getMonthlyGrowth(): int
+    {
+        $now = new DateTime();
+        $thisMonthStart = $now->format('Y-m-01');
+        $lastMonthStart = (new DateTime($now->format('Y-m-01') . ' -1 month'))->format('Y-m-01');
+        $lastMonthEnd = (new DateTime($now->format('Y-m-01') . ' -1 day'))->format('Y-m-d');
+
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM posts WHERE DATE(created_at) >= ?");
+        $stmt->bind_param('s', $thisMonthStart);
+        $stmt->execute();
+        $thisMonthCount = $stmt->get_result()->fetch_assoc()['count'] ?? 0;
+        $stmt->close();
+
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM posts WHERE DATE(created_at) >= ? AND DATE(created_at) <= ?");
+        $stmt->bind_param('ss', $lastMonthStart, $lastMonthEnd);
+        $stmt->execute();
+        $lastMonthCount = $stmt->get_result()->fetch_assoc()['count'] ?? 0;
+        $stmt->close();
+
+        return $lastMonthCount > 0 ? round((($thisMonthCount - $lastMonthCount) / $lastMonthCount) * 100) : 0;
     }
 }
