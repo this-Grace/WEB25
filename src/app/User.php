@@ -137,6 +137,23 @@ class User
     }
 
     /**
+     * Block a user until a specified date.
+     * * @param string $username The username of the user to block.
+     * @param string|null $until The date until which the user is blocked (YYYY-MM-DD HH:MM:SS).
+     *                           If null, the user is blocked indefinitely.
+     * @return bool True if successful, false otherwise.
+     */
+    public function block(string $username, ?string $until = null): bool
+    {
+        $stmt = $this->db->prepare("UPDATE users SET blocked_until = ? WHERE username = ?");
+
+        $stmt->bind_param('ss', $until, $username);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    /**
      * Create a new user record.
      * 
      * @param string $username Desired username.
@@ -150,6 +167,8 @@ class User
     public function create($username, $email, $password, $first_name, $surname, $faculty_id): bool
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
+        $faculty_id = ($faculty_id && is_numeric($faculty_id)) ? (int)$faculty_id : null;
+
         $stmt = $this->db->prepare(
             "INSERT INTO users (username, email, password_hash, first_name, surname, faculty_id)
              VALUES (?, ?, ?, ?, ?, ?)"
