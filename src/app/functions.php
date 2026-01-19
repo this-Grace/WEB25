@@ -148,3 +148,44 @@ function getFlashMessage(string $type): ?string
     }
     return null;
 }
+
+/**
+ * Formats a date for display in chat badges
+ * * @param string $date Date string
+ */
+function formatDateBadge(string $date) {
+    $dateTime = new DateTime($date);
+    $today = new DateTime('today');
+    $yesterday = new DateTime('yesterday');
+
+    if ($dateTime->format('Y-m-d') === $today->format('Y-m-d')) return 'Oggi';
+    if ($dateTime->format('Y-m-d') === $yesterday->format('Y-m-d')) return 'Ieri';
+    return $dateTime->format('d/m/Y');
+}
+
+/**
+ * Renders a message bubble for chat display
+ * 
+ * @param array $msg Message data
+ * @param string $me Current user's username
+ * @return string HTML of the message bubble
+ */
+function renderMessageBubble(array $msg, string $me): string {
+    $isMe = strtolower(trim($msg['sender_username'])) === strtolower(trim($me));
+    $time = (new DateTime($msg['created_at']))->format('H:i');
+    $bubbleClass = $isMe ? 'bg-primary bg-opacity-10 text-primary' : 'bg-body border';
+    $text = nl2br(htmlspecialchars($msg['text']));
+    $readIcon = $isMe ? ($msg['is_read'] ? ' <i class="bi bi-check2-all"></i>' : ' <i class="bi bi-check2"></i>') : '';
+    $alignmentClass = $isMe ? 'text-end' : '';
+
+    return <<<HTML
+            <div class="mb-3 {$alignmentClass}">
+                <div class="{$bubbleClass} rounded-4 p-3 d-inline-block text-start" style="max-width:75%;">
+                    <div>{$text}</div>
+                    <div class="text-end small text-body-secondary mt-1">
+                        {$time}{$readIcon}
+                    </div>
+                </div>
+            </div>
+            HTML;
+}
