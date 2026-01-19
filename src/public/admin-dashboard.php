@@ -26,6 +26,12 @@ try {
             'badge_class' => 'text-success'
         ],
         [
+            'title' => 'Post in attesa',
+            'value' => $postModel->countPending(),
+            'growth' => 'Richiedono approvazione',
+            'badge_class' => 'text-warning'
+        ],
+        [
             'title' => 'Segnalazioni pendenti',
             'value' => $reportModel->getStats()['pending'] ?? 0,
             'growth' => 'Richiedono attenzione',
@@ -43,6 +49,12 @@ try {
         ],
         [
             'title' => 'Post attivi',
+            'value' => 0,
+            'growth' => 'N/A',
+            'badge_class' => 'text-muted'
+        ],
+        [
+            'title' => 'Post in attesa',
             'value' => 0,
             'growth' => 'N/A',
             'badge_class' => 'text-muted'
@@ -68,7 +80,7 @@ HTML;
 
 foreach ($statsCards as $card) {
     $adminContent .= <<<HTML
-    <div class="col-12 col-md-6 col-lg-4">
+    <div class="col-12 col-md-6 col-lg-6">
         <div class="card border-0 rounded-5 bg-body-tertiary">
             <div class="card-body p-4">
                 <h6 class="text-body-secondary small mb-2">{$card['title']}</h6>

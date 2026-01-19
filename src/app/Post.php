@@ -61,7 +61,22 @@ class Post
     }
 
     /**
-     * Find a post by ID.
+     * Count total number of posts pending approval.
+     * 
+     * @return int Total pending posts count.
+     */
+    public function countPending(): int
+    {
+        $result = $this->db->query("SELECT COUNT(*) as count FROM posts WHERE status = 'Pendente'");
+        if (!$result) return 0;
+
+        $count = $result->fetch_assoc()['count'] ?? 0;
+        $result->free();
+
+        return (int)$count;
+    }
+
+    /**
      * 
      * @param int $id The post ID to search for.
      * @return array|null Associative array containing post data if found, null otherwise.

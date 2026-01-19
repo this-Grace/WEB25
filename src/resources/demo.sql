@@ -24,11 +24,11 @@ INSERT INTO faculties (name, degree_level, university_id) VALUES
 -- Password: administrator per admin
 -- =========================
 INSERT INTO users (username, email, password_hash, first_name, surname, bio, avatar_url, faculty_id) VALUES
-('user1','user1@example.com','$2y$10$tZL9VfXNZqGfXqNPyXZ3jO9kK5fN5ZJ5J5J5J5J5J5J5J5J5J5J5a','Marco','Bianchi','Studente appassionato di programmazione','/avatars/user1.png',1),
-('user2','user2@example.com','$2y$10$tZL9VfXNZqGfXqNPyXZ3jO9kK5fN5ZJ5J5J5J5J5J5J5J5J5J5J5a','Laura','Verdi','Amante della matematica e fisica','/avatars/user2.png',4),
-('user3','user3@example.com','$2y$10$tZL9VfXNZqGfXqNPyXZ3jO9kK5fN5ZJ5J5J5J5J5J5J5J5J5J5J5a','Andrea','Rossi','Designer e sviluppatore','/avatars/user3.png',3),
-('user','user@example.com','$2y$10$tZL9VfXNZqGfXqNPyXZ3jO9kK5fN5ZJ5J5J5J5J5J5J5J5J5J5J5a','Utente','Test','Account di test','/avatars/user.png',2),
-('admin','admin@unimatch.it','$2y$10$rZL9VfXNZqGfXqNPyXZ3jO9kK5fN5ZJ5J5J5J5J5J5J5J5J5J5adm','Admin','Sistema','Amministratore della piattaforma','/avatars/admin.png',NULL);
+('user1','user1@example.com','$2y$12$iXRFjleRHnz0es7AEnFYROp/3ZLG7L.91mb.v.W3RhIA79xOHlfny','Marco','Bianchi','Studente appassionato di programmazione','/avatars/user1.png',1),
+('user2','user2@example.com','$2y$12$iXRFjleRHnz0es7AEnFYROp/3ZLG7L.91mb.v.W3RhIA79xOHlfny','Laura','Verdi','Amante della matematica e fisica','/avatars/user2.png',4),
+('user3','user3@example.com','$2y$12$iXRFjleRHnz0es7AEnFYROp/3ZLG7L.91mb.v.W3RhIA79xOHlfny','Andrea','Rossi','Designer e sviluppatore','/avatars/user3.png',3),
+('user','user@example.com','$2y$12$iXRFjleRHnz0es7AEnFYROp/3ZLG7L.91mb.v.W3RhIA79xOHlfny','Utente','Test','Account di test','/avatars/user.png',2),
+('admin','admin@unimatch.it','$2y$12$Tg4kcQmrOFfNvaPdbnDUPOGgVDZsUT31ERop3piceJVnrB04tMvqW','Admin','Sistema','Amministratore della piattaforma','/avatars/admin.png',NULL);
 
 -- =========================
 -- INSERT ADMINS
