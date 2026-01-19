@@ -1,16 +1,71 @@
 <?php
 $pageTitle = 'Admin - Post';
 $requireLogin = true;
+require_once __DIR__ . '/../app/Post.php';
 
-$posts = [
-    ['id' => 1, 'title' => 'App per la gestione dello studio', 'author_id' => 1, 'course' => 'Ing. Informatica', 'publish_date' => '2025-12-28', 'status' => 'published'],
-    ['id' => 2, 'title' => 'Gamification per l\'apprendimento', 'author_id' => 2, 'course' => 'Informatica', 'publish_date' => '2025-12-27', 'status' => 'published'],
-    ['id' => 3, 'title' => 'Assistente AI per tesi', 'author_id' => 3, 'course' => 'Ing. Informatica', 'publish_date' => '2025-12-26', 'status' => 'suspended'],
-    ['id' => 4, 'title' => 'Social network universitario', 'author_id' => 4, 'course' => 'Medicina', 'publish_date' => '2025-12-25', 'status' => 'published'],
-];
-$total_posts = 4;
+try {
+    $postModel = new Post();
+    $posts = $postModel->all();
+    $total_posts = count($posts);
+} catch (Exception $e) {
+    error_log('Admin Posts Error: ' . $e->getMessage());
+    $posts = [];
+    $total_posts = 0;
+}
 
-$adminContent = <<<'HTML'
+// Funzione helper per generare badge di stato
+function getPostStatusBadge($status) {
+    $status = strtolower($status);
+    $map = [
+        'approvato' => ['bg-success', 'Pubblicato'],
+        'pendente' => ['bg-warning text-dark', 'Sospeso'],
+        'rifiutato' => ['bg-secondary', 'Rifiutato']
+    ];
+    
+    if (isset($map[$status])) {
+        return '<span class="badge ' . $map[$status][0] . ' rounded-3">' . $map[$status][1] . '</span>';
+    }
+    return '<span class="badge bg-secondary rounded-3">' . ucfirst($status) . '</span>';
+}
+
+// Funzione helper per generare bottone azione
+function getPostActionButton($id, $status) {
+    $status = strtolower($status);
+    if ($status === 'approvato') {
+        return '<button class="btn btn-sm btn-outline-danger rounded-3" onclick="removePost(' . $id . ')">Rimuovi</button>';
+    } elseif ($status === 'pendente') {
+        return '<button class="btn btn-sm btn-outline-success rounded-3" onclick="publishPost(' . $id . ')">Pubblica</button>';
+    }
+    return '<button class="btn btn-sm btn-outline-secondary rounded-3" disabled>Azione</button>';
+}
+
+// Genera righe tabella
+$tableRows = '';
+foreach ($posts as $post) {
+    $status = $post['status'] ?? 'pendente';
+    $statusBadge = getPostStatusBadge($status);
+    $actionBtn = getPostActionButton($post['id'], $status);
+    
+    $tableRows .= <<<ROW
+    <tr>
+        <td><strong>{$post['title']}</strong></td>
+        <td>{$post['user_username']}</td>
+        <td>{$post['degree_course']}</td>
+        <td>{$post['created_at']}</td>
+        <td>$statusBadge</td>
+        <td class="text-end">
+            <a href="#" class="btn btn-sm btn-primary rounded-3">Visualizza</a>
+            $actionBtn
+        </td>
+    </tr>
+ROW;
+}
+
+if (empty($tableRows)) {
+    $tableRows = '<tr><td colspan="6" class="text-center text-body-secondary py-4">Nessun post trovato</td></tr>';
+}
+
+$adminContent = <<<HTML
 <div class="mb-4 d-flex justify-content-between align-items-center">
     <div>
         <h1 class="h3">Gestione Post</h1>
@@ -30,7 +85,7 @@ $adminContent = <<<'HTML'
                     <option>Tutti gli stati</option>
                     <option>Pubblicati</option>
                     <option>Sospesi</option>
-                    <option>Rimossi</option>
+                    <option>Rifiutati</option>
                 </select>
             </div>
             <div class="col-12 col-md-4">
@@ -48,7 +103,7 @@ $adminContent = <<<'HTML'
 <!-- Tabella post -->
 <div class="card border-0 rounded-5 bg-body-tertiary">
     <div class="card-header border-0 rounded-top-5 bg-transparent p-4 border-bottom">
-        <h5 class="mb-0">PHP_TOTAL_POSTS post attivi</h5>
+        <h5 class="mb-0">$total_posts post attivi</h5>
     </div>
     <div class="card-body p-4">
         <div class="table-responsive">
@@ -64,7 +119,7 @@ $adminContent = <<<'HTML'
                     </tr>
                 </thead>
                 <tbody class="small">
-                    PHP_POSTS_ROWS
+                    $tableRows
                 </tbody>
             </table>
         </div>
@@ -72,59 +127,22 @@ $adminContent = <<<'HTML'
 </div>
 HTML;
 
-// Generare le righe della tabella
-$rows = '';
-foreach ($posts as $post) {
-    $status_badge = '';
-    $action_button = '';
-
-    if ($post['status'] === 'published') {
-        $status_badge = '<span class="badge bg-success rounded-3">Pubblicato</span>';
-        $action_button = '<button class="btn btn-sm btn-outline-danger rounded-3" onclick="removePost(' . $post['id'] . ')">Rimuovi</button>';
-    } elseif ($post['status'] === 'suspended') {
-        $status_badge = '<span class="badge bg-warning text-dark rounded-3">Sospeso</span>';
-        $action_button = '<button class="btn btn-sm btn-outline-success rounded-3" onclick="publishPost(' . $post['id'] . ')">Pubblica</button>';
-    } else {
-        $status_badge = '<span class="badge bg-secondary rounded-3">Rimosso</span>';
-        $action_button = '<button class="btn btn-sm btn-outline-secondary rounded-3" disabled>Rimosso</button>';
-    }
-
-    $rows .= <<<ROW
-                    <tr>
-                        <td><strong>{$post['title']}</strong></td>
-                        <td>mrossi</td>
-                        <td>{$post['course']}</td>
-                        <td>{$post['publish_date']}</td>
-                        <td>$status_badge</td>
-                        <td class="text-end">
-                            <a href="#" class="btn btn-sm btn-primary rounded-3">Visualizza</a>
-                            $action_button
-                        </td>
-                    </tr>
-ROW;
-}
-
-$adminContent = str_replace('PHP_TOTAL_POSTS', $total_posts, $adminContent);
-$adminContent = str_replace('PHP_POSTS_ROWS', $rows, $adminContent);
-
-$content = <<<HTML
+$content = <<<JS
 $adminContent
 
 <script>
 function removePost(postId) {
     if (confirm('Sei sicuro di voler rimuovere questo post?')) {
-        // Implementare la logica di rimozione
         console.log('Rimozione post:', postId);
     }
 }
 
 function publishPost(postId) {
     if (confirm('Sei sicuro di voler pubblicare questo post?')) {
-        // Implementare la logica di pubblicazione
         console.log('Pubblicazione post:', postId);
     }
 }
 </script>
-HTML;
+JS;
 
 include 'template/admin.php';

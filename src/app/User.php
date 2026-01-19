@@ -33,7 +33,7 @@ class User
      */
     public function all(): array
     {
-        $query = "SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at FROM users";
+        $query = "SELECT username, email, first_name, surname, bio, avatar_url, degree_course, role, created_at, blocked_until FROM users";
         $result = $this->db->query($query);
 
         if (!$result) return [];
@@ -42,6 +42,22 @@ class User
         $result->free();
 
         return $data;
+    }
+
+    /**
+     * Count total number of users.
+     * 
+     * @return int Total user count.
+     */
+    public function count(): int
+    {
+        $result = $this->db->query("SELECT COUNT(*) as count FROM users");
+        if (!$result) return 0;
+
+        $count = $result->fetch_assoc()['count'] ?? 0;
+        $result->free();
+
+        return (int)$count;
     }
 
     /**
@@ -193,5 +209,63 @@ class User
         $stmt->close();
 
         return $success;
+    }
+
+    /**
+     * Suspend a user for a specified number of days.
+     * 
+     * @param string $username Username to suspend.
+     * @param int $days Number of days to suspend (default 30).
+     * @return bool True if successful, false otherwise.
+     */
+    public function suspend(string $username, int $days = 30): bool
+    {
+        $stmt = $this->db->prepare("UPDATE users SET blocked_until = DATE_ADD(NOW(), INTERVAL ? DAY) WHERE username = ?");
+        $stmt->bind_param('is', $days, $username);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    /**
+     * Activate (unsuspend) a user.
+     * 
+     * @param string $username Username to activate.
+     * @return bool True if successful, false otherwise.
+     */
+    public function activate(string $username): bool
+    {
+        $stmt = $this->db->prepare("UPDATE users SET blocked_until = NULL WHERE username = ?");
+        $stmt->bind_param('s', $username);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    /**
+     * Calculate monthly growth percentage.
+     * 
+     * @return int Growth percentage compared to last month.
+     */
+    public function getMonthlyGrowth(): int
+    {
+        $now = new DateTime();
+        $thisMonthStart = $now->format('Y-m-01');
+        $lastMonthStart = (new DateTime($now->format('Y-m-01') . ' -1 month'))->format('Y-m-01');
+        $lastMonthEnd = (new DateTime($now->format('Y-m-01') . ' -1 day'))->format('Y-m-d');
+
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM users WHERE DATE(created_at) >= ?");
+        $stmt->bind_param('s', $thisMonthStart);
+        $stmt->execute();
+        $thisMonthCount = $stmt->get_result()->fetch_assoc()['count'] ?? 0;
+        $stmt->close();
+
+        $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM users WHERE DATE(created_at) >= ? AND DATE(created_at) <= ?");
+        $stmt->bind_param('ss', $lastMonthStart, $lastMonthEnd);
+        $stmt->execute();
+        $lastMonthCount = $stmt->get_result()->fetch_assoc()['count'] ?? 0;
+        $stmt->close();
+
+        return $lastMonthCount > 0 ? round((($thisMonthCount - $lastMonthCount) / $lastMonthCount) * 100) : 0;
     }
 }
