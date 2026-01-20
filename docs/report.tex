@@ -61,14 +61,14 @@
 \chapter{Analisi}
 
 \section{Descrizione}
-UniMatch è un'applicazione web progettata per facilitare la connessione tra studenti universitari 
+UniMatch è un'applicazione web progettata per facilitare la connessione tra studenti universitari
 in cerca di compagni per progetti, studio di gruppo o preparazione agli esami.
-Il progetto nasce dall’esigenza di trovare partner affidabili con interessi e competenze simili, 
+Il progetto nasce dall'esigenza di trovare partner affidabili con interessi e competenze simili,
 cosa spesso difficile nelle università con numerosi corsi e studenti.
-L’app adotta un approccio simile a un social network: gli studenti creano un account e possono 
-proporre progetti indicando corso di studio, numero di collaboratori e competenze richieste. 
-Gli altri utenti possono interagire con i post, e l’autore può contattare direttamente chi mostra interesse. 
-In questo modo, UniMatch semplifica la ricerca di partner di studio compatibili 
+L'app adotta un approccio simile a un social network: gli studenti creano un account e possono
+proporre progetti indicando corso di studio, numero di collaboratori e competenze richieste.
+Gli altri utenti possono interagire con i post, e l'autore può contattare direttamente chi mostra interesse.
+In questo modo, UniMatch semplifica la ricerca di partner di studio compatibili
 e favorisce la collaborazione accademica.
 
 \section{Analisi dei requisiti}
@@ -76,89 +76,93 @@ e favorisce la collaborazione accademica.
 
 \subsubsection{Utente Studente}
 \begin{itemize}
-    \item \textbf{Registrazione e login}: possibilità di creare un account personale o accedere con credenziali già registrate.
-    \item \textbf{Creazione e pubblicazione di post}: possibilità di proporre progetti indicando titolo, descrizione, corso di studio, numero di collaboratori richiesti e competenze necessarie.
-    \item \textbf{Visualizzazione dei post}: possibilità di visualizzare i post pubblicati da altri utenti nella home.
-    \item \textbf{Interazione con i post}: possibilità di mettere "mi piace" o "skip" ai post nella home.
-    \item \textbf{Gestione profilo}: visualizzazione e modifica dei dati personali, elenco dei post pubblicati e lista degli utenti che hanno messo "mi piace" ai propri post.
-    \item \textbf{Sistema di messaggistica e chat}: possibilità di inviare e ricevere messaggi privati con altri utenti interessati ai propri post.
+  \item \textbf{Registrazione e login}: possibilità di creare un account personale o accedere con credenziali già registrate.
+  \item \textbf{Creazione e pubblicazione di post}: possibilità di proporre progetti indicando titolo, descrizione, corso di studio, numero di collaboratori richiesti e competenze necessarie.
+  \item \textbf{Visualizzazione dei post}: possibilità di visualizzare i post pubblicati da altri utenti nella home.
+  \item \textbf{Interazione con i post}: possibilità di mettere "mi piace" o "skip" ai post nella home.
+  \item \textbf{Gestione profilo}: visualizzazione e modifica dei dati personali, elenco dei post pubblicati e lista degli utenti che hanno messo "mi piace" ai propri post.
+  \item \textbf{Sistema di messaggistica e chat}: possibilità di inviare e ricevere messaggi privati con altri utenti interessati ai propri post.
 \end{itemize}
 
 \subsubsection{Utente Admin}
 \begin{itemize}
-    \item Accesso a tutte le funzionalità dell'utente studente.
-    \item Monitoraggio dei post pubblicati da tutti gli utenti.
-    \item Gestione degli account utenti (modifica o rimozione).
-    \item Possibilità di gestire contenuti inappropriati o segnalati.
+  \item Accesso a tutte le funzionalità dell'utente studente.
+  \item Monitoraggio dei post pubblicati da tutti gli utenti.
+  \item Possibilità di gestire contenuti inappropriati o segnalati.
 \end{itemize}
 
 \subsection{Requisiti non funzionali}
 \begin{itemize}
-    \item \textbf{Usabilità}: l'interfaccia deve essere semplice, intuitiva e facilmente navigabile.
-    \item \textbf{Accessibilità}: l'applicazione deve essere accessibile a utenti con disabilità, rispettando le linee guida WCAG.
-    \item \textbf{Prestazioni}: l'applicazione deve garantire tempi di risposta rapidi durante la visualizzazione dei post e l'invio/ricezione dei messaggi.
-    \item \textbf{Compatibilità}: l'applicazione deve essere fruibile su diversi browser web e dispositivi, inclusi desktop, smartphone e tablet.
-    \item \textbf{Manutenibilità}: il codice deve essere chiaro e modulare per facilitare aggiornamenti e miglioramenti futuri.
+  \item \textbf{Usabilità}: l'interfaccia deve essere semplice, intuitiva e facilmente navigabile.
+  \item \textbf{Accessibilità}: l'applicazione deve essere accessibile a utenti con disabilità, rispettando le linee guida WCAG.
+  \item \textbf{Prestazioni}: l'applicazione deve garantire tempi di risposta rapidi durante la visualizzazione dei post e l'invio/ricezione dei messaggi.
+  \item \textbf{Compatibilità}: l'applicazione deve essere fruibile su diversi browser web e dispositivi, inclusi desktop, smartphone e tablet.
+  \item \textbf{Manutenibilità}: il codice deve essere chiaro e modulare per facilitare aggiornamenti e miglioramenti futuri.
 \end{itemize}
 
 \chapter{Scenari d'uso e Personas}
-
-\section{Attori e casi d’uso}
+\section{Attori e casi d'uso}
 
 \subsection*{Attori}
 \begin{itemize}
-    \item \textbf{Utente Studente}: utilizza l’applicazione per cercare e proporre progetti,
+  \item \textbf{Utente Studente}: utilizza l'applicazione per cercare e proporre progetti,
     interagire con i post, gestire il proprio profilo e comunicare con altri utenti.
-    
-    \item \textbf{Amministratore}: gestisce la piattaforma, monitora i contenuti pubblicati
+
+  \item \textbf{Amministratore}: gestisce la piattaforma, monitora i contenuti pubblicati
     e amministra gli account degli utenti.
 \end{itemize}
 
-\subsection*{Casi d’uso principali}
+\subsection*{Casi d'uso principali}
 \begin{itemize}
-    \item Registrazione / Login
-    \item Visualizzazione dei post
-    \item Creazione di un post
-    \item Interazione con i post
-    \item Gestione profilo
-    \item Sistema di messaggistica
-    \item Gestione utenti (solo per Admin)
-    \item Monitoraggio contenuti (solo per Admin)
+  \item Registrazione / Login
+  \item Visualizzazione dei post
+  \item Creazione di un post
+  \item Interazione con i post
+  \item Gestione profilo
+  \item Sistema di messaggistica
+  \item Gestione utenti (solo per Admin)
+  \item Monitoraggio contenuti (solo per Admin)
 \end{itemize}
 
-Il diagramma dei casi d’uso riassume le principali funzionalità offerte
-dall’applicazione e le interazioni tra gli attori e il sistema.
-%TODO: aggiungi lucidchart
+Il diagramma dei casi d'uso riassume le principali funzionalità offerte
+dall'applicazione e le interazioni tra gli attori e il sistema.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{./pdf/UseCase.pdf}
+  \caption{Application Use Case diagram.}
+  \label{fig:AppUseCase}
+\end{figure}
 
-\newpage %togli dopo il todo
-
+\newpage
 \section{Personas}
 
 \subsection*{Persona 1: Studente in cerca di collaboratori}
 
 \begin{description}
-    \item[\textbf{Nome}] Marco Rossi
-    \item[\textbf{Età}] 22 anni
-    \item[\textbf{Corso di studio}] Informatica (Triennale)
+  \item[\textbf{Nome}] Marco Rossi
+  \item[\textbf{Età}] 22 anni
+  \item[\textbf{Corso di studio}] Informatica (Triennale)
 \end{description}
 
-Marco è uno studente universitario che fatica a trovare compagni
-con cui svolgere i progetti assegnati durante il percorso universitario.\\
+Marco è uno studente universitario che fatica a trovare compagni affidabili
+con cui svolgere i progetti assegnati durante il percorso universitario.
+Attraverso UniMatch, spera di connetersi con altri studenti che condividono
+i suoi stessi interessi accademici. \\
 
 \textbf{Obiettivi:}
-Trovare gruppi di studio per esami universitari
-e collaborare con studenti del proprio corso.
+Trovare partner per progetti di gruppo e collaborare con studenti
+del proprio corso in un ambiente strutturato e organizzato.
 
 \textbf{Bisogni:}
-Visualizzare facilmente i progetti disponibili
-e contattare rapidamente altri studenti.
+Accedere facilmente ai progetti disponibili, contattare rapidamente
+altri studenti e gestire le comunicazioni all'interno della piattaforma.
 
 \subsection*{Persona 2: Studente organizzatore di progetti}
 
 \begin{description}
-    \item[\textbf{Nome}] Giulia Bianchi
-    \item[\textbf{Età}] 24 anni
-    \item[\textbf{Corso di studio}] Informatica (Magistrale)
+  \item[\textbf{Nome}] Giulia Bianchi
+  \item[\textbf{Età}] 24 anni
+  \item[\textbf{Corso di studio}] Informatica (Magistrale)
 \end{description}
 
 Giulia deve spesso organizzare progetti di gruppo
@@ -173,9 +177,9 @@ e selezionare collaboratori affidabili.
 \subsection*{Persona 3: Amministratore}
 
 \begin{description}
-    \item[\textbf{Nome}] Luca Verdi
-    \item[\textbf{Età}] 35 anni
-    \item[\textbf{Ruolo}] Amministratore della piattaforma
+  \item[\textbf{Nome}] Luca Verdi
+  \item[\textbf{Età}] 35 anni
+  \item[\textbf{Ruolo}] Amministratore della piattaforma
 \end{description}
 
 Luca si occupa della gestione e del corretto funzionamento
@@ -184,19 +188,19 @@ Controlla i contenuti pubblicati e gestisce eventuali segnalazioni
 da parte degli utenti. \\
 
 \textbf{Obiettivi:}
-Garantire un ambiente sicuro e collaborativo, e gestire utenti e 
+Garantire un ambiente sicuro e collaborativo, e gestire utenti e
 contenuti inappropriati. \\
 
-Le personas descritte rappresentano i principali profili di utenti
-dell’applicazione e permettono di comprendere le diverse esigenze
-che hanno guidato la definizione dei casi d’uso e delle funzionalità
+\noindent Le personas descritte rappresentano i principali profili di utenti
+dell'applicazione e permettono di comprendere le diverse esigenze
+che hanno guidato la definizione dei casi d'uso e delle funzionalità
 del sistema.
 
 \chapter{Mockup dell'applicazione}
 
 \chapter{Ambiente di sviluppo}
 
-L’applicazione UniMatch è stata sviluppata come applicazione web
+L'applicazione UniMatch è stata sviluppata come applicazione web
 basata su architettura client-server.
 Per lo sviluppo è stato utilizzato lo stack \textbf{XAMPP},
 che fornisce un ambiente di sviluppo locale completo.
@@ -204,15 +208,15 @@ che fornisce un ambiente di sviluppo locale completo.
 \section{Tecnologie utilizzate}
 
 \begin{itemize}
-    \item \textbf{HTML5} e \textbf{CSS3}: utilizzati per la struttura
-    e la presentazione dell’interfaccia utente.
-    \item \textbf{Bootstrap}: framework CSS utilizzato per
-    semplificare la realizzazione di un’interfaccia responsive.
-    \item \textbf{JavaScript}: utilizzato per la gestione delle interazioni
+  \item \textbf{HTML5} e \textbf{CSS3}: utilizzati per la struttura
+    e la presentazione dell'interfaccia utente.
+  \item \textbf{Bootstrap}: framework CSS utilizzato per
+    semplificare la realizzazione di un'interfaccia responsive.
+  \item \textbf{JavaScript}: utilizzato per la gestione delle interazioni
     lato client.
-    \item \textbf{PHP}: utilizzato per l’implementazione della logica
+  \item \textbf{PHP}: utilizzato per l'implementazione della logica
     applicativa lato server.
-    \item \textbf{MySQL}: utilizzato per la gestione e la persistenza dei dati.
+  \item \textbf{MySQL}: utilizzato per la gestione e la persistenza dei dati.
 \end{itemize}
 
 \section{Stack di sviluppo}
@@ -222,8 +226,62 @@ Lo stack XAMPP include i seguenti componenti principali:
 \textbf{PHP} come linguaggio server-side
 e \textbf{MySQL} come database relazionale.
 
-
 \appendix
 \chapter{Guida Utente}
+
+\section{Requisiti di sistema}
+
+Per eseguire UniMatch in locale, assicurati di avere i seguenti componenti installati:
+\begin{itemize}
+  \item \textbf{PHP 8+} con estensione \texttt{mysqli}
+  \item \textbf{MySQL} o \textbf{MariaDB} server
+  \item Un \textbf{web browser} moderno (Chrome, Firefox, Safari, Edge, ecc.)
+\end{itemize}
+
+\section{Installazione e Setup}
+
+\subsection{Passo 1: Configurare le credenziali del database}
+
+Apri il file \texttt{config/database.php} nella radice del progetto e modifica i seguenti parametri secondo le tue impostazioni locali:
+
+\begin{verbatim}
+<?php
+$host = 'localhost';      // Indirizzo del server MySQL
+$user = 'root';           // Utente MySQL
+$pass = 'password';       // Password MySQL
+$dbname = 'unimatch';     // Nome del database
+$port = 3306;             // Porta (di default 3306)
+\end{verbatim}
+
+\subsection{Passo 2: Importare lo schema e i dati di esempio}
+
+Dalla root del progetto, esegui i seguenti comandi per creare il database e popolare i dati:
+
+\begin{verbatim}
+mysql < resources/database.sql
+mysql < resources/demo.sql
+\end{verbatim}
+
+In alternativa, puoi utilizzare phpMyAdmin o il client MySQL per importare i file \texttt{SQL}.
+
+\subsection{Passo 3: Avviare il server PHP}
+
+Dalla root del progetto, avvia il server web integrato di PHP:
+
+\begin{verbatim}
+php -S localhost:8000 -t src/public
+\end{verbatim}
+
+Questo comando avvierà il server sulla porta 8000, servendo i file della cartella \texttt{src/public}.
+
+\section{Accesso all'applicazione}
+
+Una volta che il server è in esecuzione, apri il tuo browser web e accedi all'indirizzo:
+
+\begin{verbatim}
+http://localhost:8000/
+\end{verbatim}
+
+Verrai reindirizzato alla pagina di login se non hai ancora effettuato l'accesso.
 
 \end{document}
