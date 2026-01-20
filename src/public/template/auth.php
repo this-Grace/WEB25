@@ -1,6 +1,7 @@
 <?php
 $hideNavbar = true;
 $authContent = isset($content) ? $content : '';
+$ariaLabel = $ariaLabel ?? ($pageTitle ?? 'Auth form');
 
 $content = <<<HTML
 <main class="auth-page d-flex align-items-center justify-content-center flex-grow-1" role="main">
