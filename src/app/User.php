@@ -86,7 +86,7 @@ class User
                  LIMIT 1"
             );
 
-            $stmt->bind_param('ss', $value, $value);
+            $stmt->bind_param('si', $value, $value);
             $stmt->execute();
 
             $result = $stmt->get_result();
@@ -274,6 +274,127 @@ class User
             $success = $stmt->execute();
             $stmt->close();
 
+            return $success;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Ottiene utenti con filtri opzionali
+     * 
+     * @param string|null $status Filtro per status ('active', 'suspended', 'deleted')
+     * @param string|null $searchTerm Termine di ricerca per nome, cognome o email
+     * @param int $limit Numero massimo di risultati (default 50)
+     * @return array Array di utenti
+     */
+    public function getFiltered(?string $status = null, ?string $searchTerm = null, int $limit = 50): array
+    {
+        try {
+            $query = "SELECT u.id, CONCAT(u.name, ' ', u.surname) as name, u.email, 
+                      u.university, u.status,
+                      DATE_FORMAT(u.created_at, '%Y-%m-%d') as joined
+                      FROM users u
+                      WHERE 1=1";
+
+            $params = [];
+            $types = '';
+
+            if (!empty($status)) {
+                $query .= " AND u.status = ?";
+                $params[] = $status;
+                $types .= 's';
+            }
+
+            if (!empty($searchTerm)) {
+                $query .= " AND (u.name LIKE ? OR u.surname LIKE ? OR u.email LIKE ?)";
+                $searchPattern = "%{$searchTerm}%";
+                $params[] = $searchPattern;
+                $params[] = $searchPattern;
+                $params[] = $searchPattern;
+                $types .= 'sss';
+            }
+
+            $query .= " ORDER BY u.created_at DESC LIMIT ?";
+            $params[] = $limit;
+            $types .= 'i';
+
+            $stmt = $this->db->prepare($query);
+            
+            if (!empty($params)) {
+                $refs = [];
+                $refs[] = $types;
+                foreach ($params as $key => $value) {
+                    $refs[] = &$params[$key];
+                }
+                call_user_func_array([$stmt, 'bind_param'], $refs);
+            }
+
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $users = $result->fetch_all(MYSQLI_ASSOC);
+
+            $result->free();
+            $stmt->close();
+
+            return $users;
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Sospende un utente
+     * 
+     * @param int $id ID dell'utente da sospendere
+     * @return bool True se sospensione riuscita, false altrimenti
+     */
+    public function suspend(int $id): bool
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE users SET status = 'suspended', updated_at = NOW() WHERE id = ?");
+            $stmt->bind_param('i', $id);
+            $success = $stmt->execute();
+            $stmt->close();
+            return $success;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Ripristina un utente sospeso
+     * 
+     * @param int $id ID dell'utente da ripristinare
+     * @return bool True se ripristino riuscito, false altrimenti
+     */
+    public function restore(int $id): bool
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE users SET status = 'active', updated_at = NOW() WHERE id = ?");
+            $stmt->bind_param('i', $id);
+            $success = $stmt->execute();
+            $stmt->close();
+            return $success;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Marca un utente come eliminato
+     * 
+     * @param int $id ID dell'utente da eliminare
+     * @return bool True se operazione riuscita, false altrimenti
+     */
+    public function markAsDeleted(int $id): bool
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE users SET status = 'deleted', updated_at = NOW() WHERE id = ?");
+            $stmt->bind_param('i', $id);
+            $success = $stmt->execute();
+            $stmt->close();
             return $success;
         } catch (Exception $e) {
             return false;

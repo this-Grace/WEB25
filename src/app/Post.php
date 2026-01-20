@@ -44,20 +44,49 @@ class Post
                       JOIN users u ON p.user_id = u.id
                       WHERE 1=1";
 
+            $params = [];
+            $types = '';
+
             if (!empty($status)) {
-                $query .= " AND p.status = '" . $this->db->real_escape_string($status) . "'";
+                $query .= " AND p.status = ?";
+                $params[] = $status;
+                $types .= 's';
             }
 
             if (!empty($searchTerm)) {
-                $escaped = $this->db->real_escape_string($searchTerm);
-                $query .= " AND (p.title LIKE '%{$escaped}%' OR p.description LIKE '%{$escaped}%')";
+                $query .= " AND (p.title LIKE ? OR p.description LIKE ?)";
+                $searchPattern = "%{$searchTerm}%";
+                $params[] = $searchPattern;
+                $params[] = $searchPattern;
+                $types .= 'ss';
             }
 
-            $query .= " ORDER BY p.created_at DESC LIMIT " . (int)$limit;
+            $query .= " ORDER BY p.created_at DESC LIMIT ?";
+            $params[] = $limit;
+            $types .= 'i';
 
-            $result = $this->db->query($query);
-            return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+            $stmt = $this->db->prepare($query);
+
+            if (!empty($params)) {
+                $refs = [];
+                $refs[] = $types;
+                foreach ($params as $key => $value) {
+                    $refs[] = &$params[$key];
+                }
+                call_user_func_array([$stmt, 'bind_param'], $refs);
+            }
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $posts = $result->fetch_all(MYSQLI_ASSOC);
+
+            $result->free();
+            $stmt->close();
+
+            return $posts;
         } catch (Exception $e) {
+            // It's a good practice to log the error
+            // error_log($e->getMessage());
             return [];
         }
     }

@@ -4,25 +4,42 @@ session_start();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/functions.php';
 
+$db = $dbh->getConnection();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['report_id'])) {
     $action = $_POST['action'];
     $reportId = (int)$_POST['report_id'];
     // TODO: Sostituire con l'ID dell'admin loggato
     $adminId = 1;
 
+    $status = '';
+    $message = '';
+
     switch ($action) {
         case 'review':
-            $dbh->prepare("UPDATE reports SET status = 'in_review', reviewed_by = ?, reviewed_at = NOW() WHERE id = ?", [$adminId, $reportId]);
-            setFlashMessage('success', 'Report preso in carico');
+            $status = 'in_review';
+            $message = 'Report preso in carico';
             break;
         case 'resolve':
-            $dbh->prepare("UPDATE reports SET status = 'resolved', reviewed_by = ?, reviewed_at = NOW() WHERE id = ?", [$adminId, $reportId]);
-            setFlashMessage('success', 'Report risolto con successo');
+            $status = 'resolved';
+            $message = 'Report risolto con successo';
             break;
         case 'dismiss':
-            $dbh->prepare("UPDATE reports SET status = 'dismissed', reviewed_by = ?, reviewed_at = NOW() WHERE id = ?", [$adminId, $reportId]);
-            setFlashMessage('success', 'Report respinto');
+            $status = 'dismissed';
+            $message = 'Report respinto';
             break;
+    }
+
+    if ($status) {
+        try {
+            $stmt = $db->prepare("UPDATE reports SET status = ?, reviewed_by = ?, reviewed_at = NOW() WHERE id = ?");
+            $stmt->bind_param('sii', $status, $adminId, $reportId);
+            $stmt->execute();
+            $stmt->close();
+            setFlashMessage('success', $message);
+        } catch (Exception $e) {
+            setFlashMessage('error', 'Si è verificato un errore.');
+        }
     }
 
     redirect('/admin-reports.php');
@@ -45,26 +62,45 @@ $query = "SELECT r.id,
           WHERE 1=1";
 
 $params = [];
+$types = '';
 
 if ($statusFilter && in_array($statusFilter, ['open', 'in_review', 'resolved', 'dismissed'])) {
     $query .= " AND r.status = ?";
     $params[] = $statusFilter;
+    $types .= 's';
 }
 
 if ($searchTerm) {
     $query .= " AND (reporter.name LIKE ? OR reporter.surname LIKE ? OR reported.name LIKE ? OR reported.surname LIKE ? OR r.description LIKE ?)";
     $searchParam = "%{$searchTerm}%";
     $params = array_merge($params, array_fill(0, 5, $searchParam));
+    $types .= 'sssss';
 }
 
 $query .= " ORDER BY r.created_at DESC LIMIT 50";
 
-if (!empty($params)) {
-    $stmt = $dbh->prepare($query, $params);
-    $reports = $dbh->fetchAll($stmt->get_result());
-} else {
-    $reports = $dbh->fetchAll($dbh->query($query));
+$reports = [];
+try {
+    if (!empty($params)) {
+        $stmt = $db->prepare($query);
+        $refs = [];
+        $refs[] = $types;
+        foreach ($params as $key => $value) {
+            $refs[] = &$params[$key];
+        }
+        call_user_func_array([$stmt, 'bind_param'], $refs);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $reports = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+    } else {
+        $result = $db->query($query);
+        $reports = $result->fetch_all(MYSQLI_ASSOC);
+    }
+} catch (Exception $e) {
+    // Gestione errore, es. log
 }
+
 
 // Traduzione ragioni
 $reasonLabels = [
@@ -122,70 +158,78 @@ ob_start();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($reports as $report): ?>
+                    <?php if (empty($reports)): ?>
                         <tr>
-                            <td class="fw-semibold">#<?php echo htmlspecialchars($report['id']); ?></td>
-                            <td><?php echo htmlspecialchars($report['reporter']); ?></td>
-                            <td><?php echo htmlspecialchars($report['reported_user']); ?></td>
-                            <td>
-                                <span class="badge bg-primary-subtle text-primary">
-                                    <?php echo htmlspecialchars($reasonLabels[$report['reason']] ?? $report['reason']); ?>
-                                </span>
-                            </td>
-                            <td>
-                                <div class="text-truncate" style="max-width: 200px;" title="<?php echo htmlspecialchars($report['description']); ?>">
-                                    <?php echo htmlspecialchars($report['description']); ?>
-                                </div>
-                            </td>
-                            <td><?php echo htmlspecialchars($report['created']); ?></td>
-                            <td>
-                                <?php
-                                $statusConfig = [
-                                    'open' => ['class' => 'danger', 'label' => 'Aperto'],
-                                    'in_review' => ['class' => 'warning', 'label' => 'In revisione'],
-                                    'resolved' => ['class' => 'success', 'label' => 'Risolto'],
-                                    'dismissed' => ['class' => 'secondary', 'label' => 'Respinto'],
-                                ];
-                                $config = $statusConfig[$report['status']];
-                                ?>
-                                <span class="badge bg-<?php echo $config['class']; ?>-subtle text-<?php echo $config['class']; ?>">
-                                    <?php echo $config['label']; ?>
-                                </span>
-                            </td>
-                            <td class="text-end">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="/post-detail.php?id=<?php echo $report['post_id']; ?>" class="btn btn-outline-primary" title="Visualizza post">
-                                        <span class="bi bi-eye" aria-hidden="true"></span>
-                                    </a>
-                                    <?php if ($report['status'] === 'open'): ?>
-                                        <form method="POST" style="display: inline;">
-                                            <input type="hidden" name="action" value="review">
-                                            <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
-                                            <button type="submit" class="btn btn-outline-warning" title="Prendi in carico">
-                                                <span class="bi bi-check-circle" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
-                                    <?php endif; ?>
-                                    <?php if ($report['status'] !== 'resolved' && $report['status'] !== 'dismissed'): ?>
-                                        <form method="POST" style="display: inline;">
-                                            <input type="hidden" name="action" value="resolve">
-                                            <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
-                                            <button type="submit" class="btn btn-outline-success" title="Risolvi" onclick="return confirm('Segnare questo report come risolto?')">
-                                                <span class="bi bi-check-circle-fill" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
-                                        <form method="POST" style="display: inline;">
-                                            <input type="hidden" name="action" value="dismiss">
-                                            <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
-                                            <button type="submit" class="btn btn-outline-danger" title="Respingi" onclick="return confirm('Respingere questo report?')">
-                                                <span class="bi bi-x-circle-fill" aria-hidden="true"></span>
-                                            </button>
-                                        </form>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
+                            <td colspan="8" class="text-center py-4 text-muted">Nessun report trovato.</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php else: ?>
+                        <?php foreach ($reports as $report): ?>
+                            <tr>
+                                <td class="fw-semibold">#<?php echo htmlspecialchars($report['id']); ?></td>
+                                <td><?php echo htmlspecialchars($report['reporter']); ?></td>
+                                <td><?php echo htmlspecialchars($report['reported_user']); ?></td>
+                                <td>
+                                    <span class="badge bg-primary-subtle text-primary">
+                                        <?php echo htmlspecialchars($reasonLabels[$report['reason']] ?? $report['reason']); ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;" title="<?php echo htmlspecialchars($report['description']); ?>">
+                                        <?php echo htmlspecialchars($report['description']); ?>
+                                    </div>
+                                </td>
+                                <td><?php echo htmlspecialchars($report['created']); ?></td>
+                                <td>
+                                    <?php
+                                    $statusConfig = [
+                                        'open' => ['class' => 'danger', 'label' => 'Aperto'],
+                                        'in_review' => ['class' => 'warning', 'label' => 'In revisione'],
+                                        'resolved' => ['class' => 'success', 'label' => 'Risolto'],
+                                        'dismissed' => ['class' => 'secondary', 'label' => 'Respinto'],
+                                    ];
+                                    $config = $statusConfig[$report['status']] ?? ['class' => 'secondary', 'label' => $report['status']];
+                                    ?>
+                                    <span class="badge bg-<?php echo $config['class']; ?>-subtle text-<?php echo $config['class']; ?>">
+                                        <?php echo $config['label']; ?>
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <?php if (!empty($report['post_id'])): ?>
+                                        <a href="/post-detail.php?id=<?php echo $report['post_id']; ?>" class="btn btn-outline-primary" title="Visualizza post">
+                                            <span class="bi bi-eye" aria-hidden="true"></span>
+                                        </a>
+                                        <?php endif; ?>
+                                        <?php if ($report['status'] === 'open'): ?>
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="action" value="review">
+                                                <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
+                                                <button type="submit" class="btn btn-outline-warning" title="Prendi in carico">
+                                                    <span class="bi bi-check-circle" aria-hidden="true"></span>
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                        <?php if (in_array($report['status'], ['open', 'in_review'])): ?>
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="action" value="resolve">
+                                                <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
+                                                <button type="submit" class="btn btn-outline-success" title="Risolvi" onclick="return confirm('Segnare questo report come risolto?')">
+                                                    <span class="bi bi-check-circle-fill" aria-hidden="true"></span>
+                                                </button>
+                                            </form>
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="action" value="dismiss">
+                                                <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
+                                                <button type="submit" class="btn btn-outline-danger" title="Respingi" onclick="return confirm('Respingere questo report?')">
+                                                    <span class="bi bi-x-circle-fill" aria-hidden="true"></span>
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
