@@ -86,7 +86,7 @@ ob_start();
                     <div class="list-group list-group-flush">
                         <?php foreach ($chatList as $chat): ?>
                             <a href="?conversation_id=<?= $chat['id'] ?>"
-                               class="list-group-item list-group-item-action border-0 rounded-4 mb-2 bg-body <?= $chat['active'] ? 'active' : '' ?>">
+                                class="list-group-item list-group-item-action border-0 rounded-4 mb-2 bg-body <?= $chat['active'] ? 'active' : '' ?>">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div class="flex-grow-1 overflow-hidden">
                                         <h6 class="mb-1 fw-semibold text-truncate"><?= htmlspecialchars($chat['display_name']) ?></h6>
@@ -146,7 +146,7 @@ ob_start();
             <?php else: ?>
                 <div class="card-body d-flex flex-column justify-content-center align-items-center flex-grow-1">
                     <i class="bi bi-chat-text display-1 text-body-secondary mb-3 opacity-25"></i>
-                    <h4 class="h5 mb-2">Nessuna chat selezionata</h4>
+                    <h3 class="h5 mb-2">Nessuna chat selezionata</h3>
                     <p class="text-body-secondary text-center mb-0">
                         Seleziona una conversazione dalla lista<br>o avvia una nuova chat
                     </p>

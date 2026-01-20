@@ -83,7 +83,7 @@ foreach ($statsCards as $card) {
     <div class="col-12 col-md-6 col-lg-6">
         <div class="card border-0 rounded-5 bg-body-tertiary">
             <div class="card-body p-4">
-                <h6 class="text-body-secondary small mb-2">{$card['title']}</h6>
+                <h2 class="text-body-secondary small mb-2">{$card['title']}</h2>
                 <h3 class="h2 mb-0">{$card['value']}</h3>
                 <small class="{$card['badge_class']}">{$card['growth']}</small>
             </div>

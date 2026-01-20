@@ -85,7 +85,7 @@ $adminContent = <<<HTML
 <!-- Tabella utenti -->
 <div class="card border-0 rounded-5 bg-body-tertiary">
     <div class="card-header border-0 rounded-top-5 bg-transparent p-4 border-bottom">
-        <h5 class="mb-0">$total_users utenti trovati</h5>
+        <h2 class="mb-0">$total_users utenti trovati</h2>
     </div>
     <div class="card-body p-4">
         <div class="table-responsive">

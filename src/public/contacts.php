@@ -26,7 +26,7 @@ ob_start();
                             <?= $iconPerson ?>
                         </div>
                     </div>
-                    <h3 class="h5 mb-2"><?= htmlspecialchars($contact['name']) ?></h3>
+                    <h2 class="h5 mb-2"><?= htmlspecialchars($contact['name']) ?></h2>
                     <p class="text-muted small mb-3"><?= htmlspecialchars($contact['role']) ?></p>
                     <a href="mailto:<?= htmlspecialchars($contact['email']) ?>" class="btn btn-sm btn-outline-primary">
                         <?= $iconEmail ?>Email
