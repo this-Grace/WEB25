@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (isset($_SESSION['username'])) {
+    header('Location: index.php');
+    exit;
+}
+
 $hideNavbar = true;
 $authContent = isset($content) ? $content : '';
 $ariaLabel = $ariaLabel ?? ($pageTitle ?? 'Auth form');
