@@ -210,3 +210,12 @@ body {
 	border-radius: 50%;
 	object-fit: cover;
 }
+
+.post-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.post-card .card {
+    will-change: transform, opacity;
+}
