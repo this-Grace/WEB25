@@ -34,7 +34,7 @@ class User
     public function all(): array
     {
         $query = "SELECT u.username, u.email, u.first_name, u.surname, u.bio, u.avatar_url,
-                         u.faculty_id, u.blocked_until, u.created_at, u.updated_at,
+                         u.faculty_id, u.created_at, u.updated_at,
                          CASE WHEN a.username IS NOT NULL THEN 'admin' ELSE 'user' END AS role
                   FROM users u
                   LEFT JOIN admins a ON u.username = a.username";
@@ -74,7 +74,7 @@ class User
     {
         $stmt = $this->db->prepare(
             "SELECT u.username, u.email, u.password_hash, u.first_name, u.surname,
-                    u.bio, u.avatar_url, u.faculty_id, u.blocked_until,
+                    u.bio, u.avatar_url, u.faculty_id,
                     CASE WHEN a.username IS NOT NULL THEN 'admin' ELSE 'user' END AS role
              FROM users u
              LEFT JOIN admins a ON u.username = a.username
@@ -150,23 +150,6 @@ class User
         $stmt->close();
 
         return $exists;
-    }
-
-    /**
-     * Block a user until a specified date.
-     * * @param string $username The username of the user to block.
-     * @param string|null $until The date until which the user is blocked (YYYY-MM-DD HH:MM:SS).
-     *                           If null, the user is blocked indefinitely.
-     * @return bool True if successful, false otherwise.
-     */
-    public function block(string $username, ?string $until = null): bool
-    {
-        $stmt = $this->db->prepare("UPDATE users SET blocked_until = ? WHERE username = ?");
-
-        $stmt->bind_param('ss', $until, $username);
-        $success = $stmt->execute();
-        $stmt->close();
-        return $success;
     }
 
     /**
