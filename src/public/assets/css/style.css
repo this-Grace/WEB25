@@ -3,6 +3,33 @@ body {
 	font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+/* Focusable skip link utility (like Bootstrap's visually-hidden-focusable) */
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.visually-hidden-focusable:focus,
+.visually-hidden-focusable:focus-visible {
+	position: static;
+	width: auto;
+	height: auto;
+	clip: auto;
+	padding: 0.5rem 1rem;
+	margin: 0.5rem;
+	background: var(--bs-primary);
+	color: #fff;
+	border-radius: 999px;
+	z-index: 1100;
+	text-decoration: none;
+}
+
 /* Navbar */
 .navbar {
 	--nav-collapse-bg: transparent;

@@ -9,7 +9,7 @@ if (!empty($requireLogin)) {
 ?>
 
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xml:lang="it" dir="ltr" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -26,11 +26,15 @@ if (!empty($requireLogin)) {
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+    <a class="visually-hidden-focusable skip-link" href="#main-content">Salta al contenuto principale</a>
+
     <?php if (!isset($hideNavbar) || !$hideNavbar): ?>
         <?php include 'partials/navbar.php'; ?>
     <?php endif; ?>
 
-    <?php echo $content; ?>
+    <main id="main-content" tabindex="-1" role="main">
+        <?php echo $content; ?>
+    </main>
 
     <?php include 'partials/footer.php'; ?>
 
