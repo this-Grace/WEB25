@@ -101,3 +101,9 @@
 .auth-banner-img:hover {
     transform: rotate(0deg);
 }
+
+/* Admin dashboard */
+.stat-icon {
+    width: 56px;
+    height: 56px;
+}

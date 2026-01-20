@@ -11,12 +11,12 @@ ob_start();
 
 <div class="container py-4">
     <div class="row auth-row align-items-center">
-        <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center p-5 auth-banner-col">
+        <div class="col-lg-5 d-none d-lg-flex align-items-center justify-content-center p-5 auth-banner-col">
             <img src="<?php echo htmlspecialchars($templateParams['bannerImage']); ?>" alt="UniMatch" class="img-fluid auth-banner-img rounded-4">
         </div>
-        <div class="col-lg-6 d-flex align-items-center justify-content-center p-4">
+        <div class="col-lg-7 d-flex align-items-center justify-content-center p-4">
             <div class="row w-100 justify-content-center">
-                <div class="col-sm-10 col-md-8 col-lg-10 col-xl-8">
+                <div class="col-sm-10 col-md-8 col-lg-11 col-xl-9">
                     <?php echo $authContent; ?>
                 </div>
             </div>
