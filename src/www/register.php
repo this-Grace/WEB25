@@ -1,17 +1,13 @@
 <?php
 session_start();
 
-// Se già loggato, redirect alla home
-if (isset($_SESSION['user_id'])) {
-    header('Location: /index.php');
-    exit;
-}
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../app/User.php';
 
 $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // TODO: Implementare la logica di registrazione
     $name = trim($_POST['name'] ?? '');
     $surname = trim($_POST['surname'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -20,9 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmPassword = $_POST['confirm_password'] ?? '';
     $terms = isset($_POST['terms']);
 
-    // Placeholder per la validazione
     if (empty($name) || empty($surname) || empty($email) || empty($university) || empty($password) || empty($confirmPassword)) {
         $error = 'Tutti i campi sono obbligatori';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Inserisci un indirizzo email valido';
     } elseif ($password !== $confirmPassword) {
         $error = 'Le password non coincidono';
     } elseif (strlen($password) < 8) {
@@ -30,8 +27,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!$terms) {
         $error = 'Devi accettare i termini e condizioni';
     } else {
-        // TODO: Salvare l'utente nel database
-        $success = 'Registrazione completata! Puoi ora effettuare il login.';
+        try {
+            $userModel = new User();
+
+            // Verifica se email è già registrata
+            if ($userModel->emailExists($email)) {
+                $error = 'Questa email è già registrata';
+            } else {
+                // Crea il nuovo utente
+                if ($userModel->create($email, $password, $name, $surname, $university)) {
+                    $success = 'Registrazione completata! Puoi ora effettuare il login.';
+                    // Clear form
+                    $_POST = [];
+                } else {
+                    $error = 'Errore durante la registrazione. Riprova più tardi.';
+                }
+            }
+        } catch (Exception $e) {
+            $error = 'Errore durante la registrazione. Riprova più tardi.';
+        }
     }
 }
 

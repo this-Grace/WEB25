@@ -1,33 +1,79 @@
 <?php
 session_start();
 
-// TODO: proteggere questa pagina con controllo ruolo admin
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: /login.php');
-//     exit;
-// }
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../utils/functions.php';
 
-// Dati fittizi di esempio
-$reports = [
-    ['id' => 4521, 'reporter' => 'giulia.rossi', 'reported_user' => 'marco.neri', 'post_id' => 4, 'reason' => 'Contenuto inappropriato', 'description' => 'Il post contiene linguaggio offensivo', 'created' => '2026-01-06 10:30', 'status' => 'open'],
-    ['id' => 4520, 'reporter' => 'luca.bianchi', 'reported_user' => 'anna.blu', 'post_id' => 8, 'reason' => 'Spam', 'description' => 'Post promozionale ripetuto', 'created' => '2026-01-05 15:20', 'status' => 'open'],
-    ['id' => 4519, 'reporter' => 'sara.verdi', 'reported_user' => 'mario.rossi', 'post_id' => 12, 'reason' => 'Molestie', 'description' => 'Commenti inappropriati verso altri utenti', 'created' => '2026-01-05 09:45', 'status' => 'in_review'],
-    ['id' => 4518, 'reporter' => 'chiara.l', 'reported_user' => 'paolo.m', 'post_id' => 15, 'reason' => 'Informazioni false', 'description' => 'Diffusione di informazioni non verificate', 'created' => '2026-01-04 14:10', 'status' => 'resolved'],
-    ['id' => 4517, 'reporter' => 'federico.b', 'reported_user' => 'laura.v', 'post_id' => 20, 'reason' => 'Contenuto inappropriato', 'description' => 'Immagine non adeguata', 'created' => '2026-01-04 11:30', 'status' => 'dismissed'],
-];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['report_id'])) {
+    $action = $_POST['action'];
+    $reportId = (int)$_POST['report_id'];
+    // TODO: Sostituire con l'ID dell'admin loggato
+    $adminId = 1;
 
-// TODO: Implementare azioni (visualizza, risolvi, respingi)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-    $reportId = $_POST['report_id'] ?? 0;
+    switch ($action) {
+        case 'review':
+            $dbh->prepare("UPDATE reports SET status = 'in_review', reviewed_by = ?, reviewed_at = NOW() WHERE id = ?", [$adminId, $reportId]);
+            setFlashMessage('success', 'Report preso in carico');
+            break;
+        case 'resolve':
+            $dbh->prepare("UPDATE reports SET status = 'resolved', reviewed_by = ?, reviewed_at = NOW() WHERE id = ?", [$adminId, $reportId]);
+            setFlashMessage('success', 'Report risolto con successo');
+            break;
+        case 'dismiss':
+            $dbh->prepare("UPDATE reports SET status = 'dismissed', reviewed_by = ?, reviewed_at = NOW() WHERE id = ?", [$adminId, $reportId]);
+            setFlashMessage('success', 'Report respinto');
+            break;
+    }
 
-    // Placeholder per gestione azioni
-    // switch($action) {
-    //     case 'review': ...
-    //     case 'resolve': ...
-    //     case 'dismiss': ...
-    // }
+    redirect('/admin-reports.php');
 }
+
+// Filtri
+$statusFilter = $_GET['status'] ?? '';
+$searchTerm = $_GET['search'] ?? '';
+
+// Query base
+$query = "SELECT r.id, 
+          CONCAT(reporter.name, ' ', reporter.surname) as reporter,
+          CONCAT(reported.name, ' ', reported.surname) as reported_user,
+          r.post_id, r.reason, r.description,
+          DATE_FORMAT(r.created_at, '%Y-%m-%d %H:%i') as created,
+          r.status
+          FROM reports r
+          JOIN users reporter ON r.reporter_id = reporter.id
+          JOIN users reported ON r.reported_user_id = reported.id
+          WHERE 1=1";
+
+$params = [];
+
+if ($statusFilter && in_array($statusFilter, ['open', 'in_review', 'resolved', 'dismissed'])) {
+    $query .= " AND r.status = ?";
+    $params[] = $statusFilter;
+}
+
+if ($searchTerm) {
+    $query .= " AND (reporter.name LIKE ? OR reporter.surname LIKE ? OR reported.name LIKE ? OR reported.surname LIKE ? OR r.description LIKE ?)";
+    $searchParam = "%{$searchTerm}%";
+    $params = array_merge($params, array_fill(0, 5, $searchParam));
+}
+
+$query .= " ORDER BY r.created_at DESC LIMIT 50";
+
+if (!empty($params)) {
+    $stmt = $dbh->prepare($query, $params);
+    $reports = $dbh->fetchAll($stmt->get_result());
+} else {
+    $reports = $dbh->fetchAll($dbh->query($query));
+}
+
+// Traduzione ragioni
+$reasonLabels = [
+    'inappropriate_content' => 'Contenuto inappropriato',
+    'spam' => 'Spam',
+    'harassment' => 'Molestie',
+    'false_information' => 'Informazioni false',
+    'other' => 'Altro'
+];
 
 $templateParams['pageTitle'] = 'Gestione Report';
 
@@ -49,16 +95,16 @@ ob_start();
 <div class="card shadow-sm">
     <div class="card-header bg-body border-0 d-flex align-items-center justify-content-between">
         <h2 class="h6 mb-0">Elenco report (<?php echo count($reports); ?>)</h2>
-        <div class="d-flex gap-2">
-            <input type="search" class="form-control form-control-sm" placeholder="Cerca report..." style="max-width: 250px;">
-            <select class="form-select form-select-sm" style="max-width: 150px;">
+        <form method="GET" class="d-flex gap-2">
+            <input type="search" name="search" class="form-control form-control-sm" placeholder="Cerca report..." style="max-width: 250px;" value="<?php echo htmlspecialchars($searchTerm); ?>">
+            <select name="status" class="form-select form-select-sm" style="max-width: 150px;" onchange="this.form.submit()">
                 <option value="">Tutti gli stati</option>
-                <option value="open">Aperti</option>
-                <option value="in_review">In revisione</option>
-                <option value="resolved">Risolti</option>
-                <option value="dismissed">Respinti</option>
+                <option value="open" <?php echo $statusFilter === 'open' ? 'selected' : ''; ?>>Aperti</option>
+                <option value="in_review" <?php echo $statusFilter === 'in_review' ? 'selected' : ''; ?>>In revisione</option>
+                <option value="resolved" <?php echo $statusFilter === 'resolved' ? 'selected' : ''; ?>>Risolti</option>
+                <option value="dismissed" <?php echo $statusFilter === 'dismissed' ? 'selected' : ''; ?>>Respinti</option>
             </select>
-        </div>
+        </form>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -83,7 +129,7 @@ ob_start();
                             <td><?php echo htmlspecialchars($report['reported_user']); ?></td>
                             <td>
                                 <span class="badge bg-primary-subtle text-primary">
-                                    <?php echo htmlspecialchars($report['reason']); ?>
+                                    <?php echo htmlspecialchars($reasonLabels[$report['reason']] ?? $report['reason']); ?>
                                 </span>
                             </td>
                             <td>
@@ -108,21 +154,33 @@ ob_start();
                             </td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-primary" title="Visualizza dettagli">
+                                    <a href="/post-detail.php?id=<?php echo $report['post_id']; ?>" class="btn btn-outline-primary" title="Visualizza post">
                                         <span class="bi bi-eye" aria-hidden="true"></span>
-                                    </button>
+                                    </a>
                                     <?php if ($report['status'] === 'open'): ?>
-                                        <button class="btn btn-outline-warning" title="Prendi in carico">
-                                            <span class="bi bi-check-circle" aria-hidden="true"></span>
-                                        </button>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="review">
+                                            <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-warning" title="Prendi in carico">
+                                                <span class="bi bi-check-circle" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
                                     <?php if ($report['status'] !== 'resolved' && $report['status'] !== 'dismissed'): ?>
-                                        <button class="btn btn-outline-success" title="Risolvi">
-                                            <span class="bi bi-check-circle-fill" aria-hidden="true"></span>
-                                        </button>
-                                        <button class="btn btn-outline-danger" title="Respingi">
-                                            <span class="bi bi-x-circle-fill" aria-hidden="true"></span>
-                                        </button>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="resolve">
+                                            <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-success" title="Risolvi" onclick="return confirm('Segnare questo report come risolto?')">
+                                                <span class="bi bi-check-circle-fill" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="dismiss">
+                                            <input type="hidden" name="report_id" value="<?php echo $report['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-danger" title="Respingi" onclick="return confirm('Respingere questo report?')">
+                                                <span class="bi bi-x-circle-fill" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
                                 </div>
                             </td>
@@ -130,20 +188,6 @@ ob_start();
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="card-footer bg-body border-0">
-        <div class="d-flex align-items-center justify-content-between">
-            <span class="text-muted small">Mostrando <?php echo count($reports); ?> di <?php echo count($reports); ?> report</span>
-            <nav aria-label="Paginazione report">
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link" href="#">Precedente</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Successivo</a></li>
-                </ul>
-            </nav>
         </div>
     </div>
 </div>

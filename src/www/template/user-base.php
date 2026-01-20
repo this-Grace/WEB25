@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+	header('Location: /login.php');
+	exit;
+}
+
 $templateParams = $templateParams ?? [];
 $templateParams['navbarBg'] = $templateParams['navbarBg'] ?? 'primary';
 $templateParams['navItems'] = $templateParams['navItems'] ?? [

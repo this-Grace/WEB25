@@ -1,11 +1,17 @@
 <?php
+// Se non loggato o non admin, redirect a user area
+// if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+// 	header('Location: /index.php');
+// 	exit;
+// }
+
 $templateParams = $templateParams ?? [];
 $templateParams['navbarBg'] = $templateParams['navbarBg'] ?? 'danger';
 $templateParams['navItems'] = [
-    ['label' => 'Dashboard', 'url' => '/admin-dashboard.php', 'icon' => 'bi bi-speedometer2'],
-    ['label' => 'Utenti', 'url' => '/admin-users.php', 'icon' => 'bi bi-people'],
-    ['label' => 'Post', 'url' => '/admin-posts.php', 'icon' => 'bi bi-chat-dots'],
-    ['label' => 'Report', 'url' => '/admin-reports.php', 'icon' => 'bi bi-flag'],
+	['label' => 'Dashboard', 'url' => '/admin-dashboard.php', 'icon' => 'bi bi-speedometer2'],
+	['label' => 'Utenti', 'url' => '/admin-users.php', 'icon' => 'bi bi-people'],
+	['label' => 'Post', 'url' => '/admin-posts.php', 'icon' => 'bi bi-chat-dots'],
+	['label' => 'Report', 'url' => '/admin-reports.php', 'icon' => 'bi bi-flag'],
 ];
 
 $userContent = $templateParams['userContent'] ?? '';

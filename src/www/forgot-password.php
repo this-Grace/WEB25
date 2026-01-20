@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-// Se già loggato, redirect alla home
-if (isset($_SESSION['user_id'])) {
-    header('Location: /index.php');
-    exit;
-}
-
 $error = '';
 $success = '';
 
@@ -18,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Indirizzo email non valido';
     } else {
-        // TODO: Implementare invio email di reset password
         $success = 'Se l\'indirizzo email è registrato, riceverai le istruzioni per reimpostare la password.';
     }
 }

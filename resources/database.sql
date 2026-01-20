@@ -8,7 +8,7 @@ CREATE TABLE universities (
     code VARCHAR(50) NOT NULL UNIQUE,
     city VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,7 +31,7 @@ CREATE TABLE users (
     INDEX idx_email (email),
     INDEX idx_university (university_id),
     INDEX idx_status (status)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -49,7 +49,7 @@ CREATE TABLE posts (
     INDEX idx_user (user_id),
     INDEX idx_status (status),
     INDEX idx_created (created_at)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE likes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,7 +61,7 @@ CREATE TABLE likes (
     UNIQUE KEY unique_like (user_id, post_id),
     INDEX idx_user (user_id),
     INDEX idx_post (post_id)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE skips (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,7 +73,7 @@ CREATE TABLE skips (
     UNIQUE KEY unique_skip (user_id, post_id),
     INDEX idx_user (user_id),
     INDEX idx_post (post_id)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE matches (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -87,7 +87,7 @@ CREATE TABLE matches (
     UNIQUE KEY unique_match (post_id, matched_user_id),
     INDEX idx_post_owner (post_owner_id),
     INDEX idx_matched_user (matched_user_id)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE conversations (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -97,7 +97,7 @@ CREATE TABLE conversations (
     FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE,
     INDEX idx_match (match_id),
     INDEX idx_last_message (last_message_at)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -111,7 +111,7 @@ CREATE TABLE messages (
     INDEX idx_conversation (conversation_id),
     INDEX idx_sender (sender_id),
     INDEX idx_created (created_at)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE reports (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -133,7 +133,7 @@ CREATE TABLE reports (
     INDEX idx_reported (reported_user_id),
     INDEX idx_status (status),
     INDEX idx_created (created_at)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE password_reset_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -144,4 +144,4 @@ CREATE TABLE password_reset_tokens (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_token (token),
     INDEX idx_user (user_id)
-) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; 

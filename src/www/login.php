@@ -1,22 +1,42 @@
 <?php
 session_start();
 
-// Se già loggato, redirect alla home
-if (isset($_SESSION['user_id'])) {
-    header('Location: /index.php');
-    exit;
-}
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../app/User.php';
 
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // TODO: Implementare la logica di login
-    $email = $_POST['email'] ?? '';
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
+    $remember = isset($_POST['remember']);
 
-    // Placeholder per la validazione
     if (empty($email) || empty($password)) {
         $error = 'Inserisci email e password';
+    } else {
+        try {
+            $userModel = new User();
+            $user = $userModel->checkLogin($email, $password);
+
+            if ($user) {
+                $_SESSION['user_id'] = $user['username'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['first_name'] = $user['first_name'];
+                $_SESSION['surname'] = $user['surname'];
+                $_SESSION['role'] = $user['role'];
+
+                if ($remember) {
+                    setcookie('user_id', $user['username'], time() + (30 * 24 * 60 * 60), '/');
+                }
+
+                header('Location: /index.php');
+                exit;
+            } else {
+                $error = 'Email o password non corretti';
+            }
+        } catch (Exception $e) {
+            $error = 'Errore durante il login. Riprova più tardi.';
+        }
     }
 }
 

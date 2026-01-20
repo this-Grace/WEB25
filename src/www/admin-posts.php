@@ -1,32 +1,43 @@
 <?php
 session_start();
 
-// TODO: proteggere questa pagina con controllo ruolo admin
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: /login.php');
-//     exit;
-// }
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../app/Post.php';
 
-// Dati fittizi di esempio
-$posts = [
-    ['id' => 1, 'author' => 'Giulia Rossi', 'content' => 'Cerco qualcuno per progetto di programmazione web...', 'created' => '2026-01-06 14:32', 'likes' => 12, 'comments' => 5, 'status' => 'published'],
-    ['id' => 2, 'author' => 'Luca Bianchi', 'content' => 'Qualcuno sa dove trovare dispense di matematica?', 'created' => '2026-01-06 11:20', 'likes' => 8, 'comments' => 3, 'status' => 'published'],
-    ['id' => 3, 'author' => 'Sara Verdi', 'content' => 'Gruppo studio per esame di fisica cercasi!', 'created' => '2026-01-05 16:45', 'likes' => 15, 'comments' => 7, 'status' => 'published'],
-    ['id' => 4, 'author' => 'Marco Neri', 'content' => 'Contenuto inappropriato segnalato...', 'created' => '2026-01-05 09:12', 'likes' => 2, 'comments' => 1, 'status' => 'hidden'],
-    ['id' => 5, 'author' => 'Anna Blu', 'content' => 'Chi ha informazioni sul corso di web design?', 'created' => '2026-01-04 18:30', 'likes' => 10, 'comments' => 4, 'status' => 'published'],
-];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['post_id'])) {
+    $action = $_POST['action'];
+    $postId = (int)$_POST['post_id'];
 
-// TODO: Implementare azioni (nascondi, elimina, ripristina)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-    $postId = $_POST['post_id'] ?? 0;
+    try {
+        $postModel = new Post();
 
-    // Placeholder per gestione azioni
-    // switch($action) {
-    //     case 'hide': ...
-    //     case 'delete': ...
-    //     case 'restore': ...
-    // }
+        switch ($action) {
+            case 'hide':
+                $postModel->changeStatus($postId, 'hidden');
+                break;
+            case 'publish':
+                $postModel->changeStatus($postId, 'published');
+                break;
+            case 'delete':
+                $postModel->delete($postId);
+                break;
+        }
+
+        header('Location: /admin-posts.php?status=' . $_GET['status'] ?? '');
+        exit;
+    } catch (Exception $e) {
+        // Errore nella gestione
+    }
+}
+
+$statusFilter = $_GET['status'] ?? '';
+$searchTerm = $_GET['search'] ?? '';
+
+try {
+    $postModel = new Post();
+    $posts = $postModel->all($statusFilter, $searchTerm, 50);
+} catch (Exception $e) {
+    $posts = [];
 }
 
 $templateParams['pageTitle'] = 'Gestione Post';
@@ -49,14 +60,15 @@ ob_start();
 <div class="card shadow-sm">
     <div class="card-header bg-body border-0 d-flex align-items-center justify-content-between">
         <h2 class="h6 mb-0">Elenco post (<?php echo count($posts); ?>)</h2>
-        <div class="d-flex gap-2">
-            <input type="search" class="form-control form-control-sm" placeholder="Cerca post..." style="max-width: 250px;">
-            <select class="form-select form-select-sm" style="max-width: 150px;">
+        <form method="GET" class="d-flex gap-2">
+            <input type="search" name="search" class="form-control form-control-sm" placeholder="Cerca post..." style="max-width: 250px;" value="<?php echo htmlspecialchars($searchTerm); ?>">
+            <select name="status" class="form-select form-select-sm" style="max-width: 150px;" onchange="this.form.submit()">
                 <option value="">Tutti gli stati</option>
-                <option value="published">Pubblicati</option>
-                <option value="hidden">Nascosti</option>
+                <option value="published" <?php echo $statusFilter === 'published' ? 'selected' : ''; ?>>Pubblicati</option>
+                <option value="hidden" <?php echo $statusFilter === 'hidden' ? 'selected' : ''; ?>>Nascosti</option>
+                <option value="closed" <?php echo $statusFilter === 'closed' ? 'selected' : ''; ?>>Chiusi</option>
             </select>
-        </div>
+        </form>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -65,10 +77,10 @@ ob_start();
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Autore</th>
-                        <th scope="col">Contenuto</th>
+                        <th scope="col">Titolo</th>
                         <th scope="col">Data</th>
                         <th scope="col">Like</th>
-                        <th scope="col">Commenti</th>
+                        <th scope="col">Skip</th>
                         <th scope="col">Stato</th>
                         <th scope="col" class="text-end">Azioni</th>
                     </tr>
@@ -80,62 +92,62 @@ ob_start();
                             <td class="fw-semibold"><?php echo htmlspecialchars($post['author']); ?></td>
                             <td>
                                 <div class="text-truncate" style="max-width: 300px;">
-                                    <?php echo htmlspecialchars($post['content']); ?>
+                                    <?php echo htmlspecialchars($post['title']); ?>
                                 </div>
                             </td>
-                            <td><?php echo htmlspecialchars($post['created']); ?></td>
+                            <td><?php echo htmlspecialchars($post['created_at']); ?></td>
                             <td>
                                 <span class="bi bi-heart-fill text-danger me-1" aria-hidden="true"></span>
-                                <?php echo htmlspecialchars($post['likes']); ?>
+                                <?php echo htmlspecialchars($post['likes_count']); ?>
                             </td>
                             <td>
-                                <span class="bi bi-chat-fill text-primary me-1" aria-hidden="true"></span>
-                                <?php echo htmlspecialchars($post['comments']); ?>
+                                <span class="bi bi-skip-forward-fill text-warning me-1" aria-hidden="true"></span>
+                                <?php echo htmlspecialchars($post['skips_count']); ?>
                             </td>
                             <td>
                                 <?php if ($post['status'] === 'published'): ?>
                                     <span class="badge bg-success-subtle text-success">Pubblicato</span>
-                                <?php else: ?>
+                                <?php elseif ($post['status'] === 'hidden'): ?>
                                     <span class="badge bg-warning-subtle text-warning">Nascosto</span>
+                                <?php else: ?>
+                                    <span class="badge bg-secondary-subtle text-secondary">Chiuso</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-primary" title="Visualizza">
+                                    <a href="/post-detail.php?id=<?php echo $post['id']; ?>" class="btn btn-outline-primary" title="Visualizza">
                                         <span class="bi bi-eye" aria-hidden="true"></span>
-                                    </button>
+                                    </a>
                                     <?php if ($post['status'] === 'published'): ?>
-                                        <button class="btn btn-outline-warning" title="Nascondi">
-                                            <span class="bi bi-eye-slash" aria-hidden="true"></span>
-                                        </button>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="hide">
+                                            <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-warning" title="Nascondi" onclick="return confirm('Nascondere questo post?')">
+                                                <span class="bi bi-eye-slash" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
                                     <?php else: ?>
-                                        <button class="btn btn-outline-success" title="Ripubblica">
-                                            <span class="bi bi-eye" aria-hidden="true"></span>
-                                        </button>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="publish">
+                                            <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-success" title="Ripubblica">
+                                                <span class="bi bi-eye" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
-                                    <button class="btn btn-outline-danger" title="Elimina">
-                                        <span class="bi bi-trash" aria-hidden="true"></span>
-                                    </button>
+                                    <form method="POST" style="display: inline;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                                        <button type="submit" class="btn btn-outline-danger" title="Elimina" onclick="return confirm('Eliminare definitivamente questo post?')">
+                                            <span class="bi bi-trash" aria-hidden="true"></span>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="card-footer bg-body border-0">
-        <div class="d-flex align-items-center justify-content-between">
-            <span class="text-muted small">Mostrando <?php echo count($posts); ?> di <?php echo count($posts); ?> post</span>
-            <nav aria-label="Paginazione post">
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link" href="#">Precedente</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Successivo</a></li>
-                </ul>
-            </nav>
         </div>
     </div>
 </div>

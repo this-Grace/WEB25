@@ -1,32 +1,75 @@
 <?php
 session_start();
 
-// TODO: proteggere questa pagina con controllo ruolo admin
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: /login.php');
-//     exit;
-// }
+require_once __DIR__ . '/../config/database.php';
 
-// Dati fittizi di esempio
-$users = [
-    ['id' => 1, 'name' => 'Giulia Rossi', 'email' => 'giulia.rossi@uni.it', 'university' => 'Università di Bologna', 'joined' => '2026-01-05', 'status' => 'active'],
-    ['id' => 2, 'name' => 'Luca Bianchi', 'email' => 'luca.bianchi@uni.it', 'university' => 'Politecnico di Milano', 'joined' => '2026-01-03', 'status' => 'active'],
-    ['id' => 3, 'name' => 'Sara Verdi', 'email' => 'sara.verdi@uni.it', 'university' => 'Sapienza Università di Roma', 'joined' => '2026-01-02', 'status' => 'active'],
-    ['id' => 4, 'name' => 'Marco Neri', 'email' => 'marco.neri@uni.it', 'university' => 'Università di Padova', 'joined' => '2025-12-28', 'status' => 'suspended'],
-    ['id' => 5, 'name' => 'Anna Blu', 'email' => 'anna.blu@uni.it', 'university' => 'Università di Milano', 'joined' => '2025-12-20', 'status' => 'active'],
-];
+// Gestione azioni POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['user_id'])) {
+    $action = $_POST['action'];
+    $userId = (int)$_POST['user_id'];
 
-// TODO: Implementare azioni (sospendi, elimina, ripristina)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-    $userId = $_POST['user_id'] ?? 0;
+    try {
+        global $dbh;
+        $db = $dbh->getConnection();
 
-    // Placeholder per gestione azioni
-    // switch($action) {
-    //     case 'suspend': ...
-    //     case 'delete': ...
-    //     case 'restore': ...
-    // }
+        switch ($action) {
+            case 'suspend':
+                $stmt = $db->prepare("UPDATE users SET status = 'suspended' WHERE id = ?");
+                $stmt->bind_param('i', $userId);
+                $stmt->execute();
+                $stmt->close();
+                break;
+            case 'restore':
+                $stmt = $db->prepare("UPDATE users SET status = 'active' WHERE id = ?");
+                $stmt->bind_param('i', $userId);
+                $stmt->execute();
+                $stmt->close();
+                break;
+            case 'delete':
+                $stmt = $db->prepare("UPDATE users SET status = 'deleted' WHERE id = ?");
+                $stmt->bind_param('i', $userId);
+                $stmt->execute();
+                $stmt->close();
+                break;
+        }
+
+        header('Location: /admin-users.php?status=' . ($_GET['status'] ?? ''));
+        exit;
+    } catch (Exception $e) {
+        // Errore nella gestione
+    }
+}
+
+// Filtri
+$statusFilter = $_GET['status'] ?? '';
+$searchTerm = $_GET['search'] ?? '';
+
+try {
+    global $dbh;
+    $db = $dbh->getConnection();
+
+    // Query base
+    $query = "SELECT u.id, CONCAT(u.name, ' ', u.surname) as name, u.email, 
+              u.university, 
+              DATE_FORMAT(u.created_at, '%Y-%m-%d') as joined, u.status
+              FROM users u
+              WHERE u.role != 'admin'";
+
+    if (!empty($statusFilter)) {
+        $query .= " AND u.status = '" . $db->real_escape_string($statusFilter) . "'";
+    }
+
+    if (!empty($searchTerm)) {
+        $escaped = $db->real_escape_string($searchTerm);
+        $query .= " AND (u.name LIKE '%{$escaped}%' OR u.surname LIKE '%{$escaped}%' OR u.email LIKE '%{$escaped}%')";
+    }
+
+    $query .= " ORDER BY u.created_at DESC LIMIT 50";
+
+    $result = $db->query($query);
+    $users = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+} catch (Exception $e) {
+    $users = [];
 }
 
 $templateParams['pageTitle'] = 'Gestione Utenti';
@@ -49,14 +92,15 @@ ob_start();
 <div class="card shadow-sm">
     <div class="card-header bg-body border-0 d-flex align-items-center justify-content-between">
         <h2 class="h6 mb-0">Elenco utenti (<?php echo count($users); ?>)</h2>
-        <div class="d-flex gap-2">
-            <input type="search" class="form-control form-control-sm" placeholder="Cerca utente..." style="max-width: 250px;">
-            <select class="form-select form-select-sm" style="max-width: 150px;">
+        <form method="GET" class="d-flex gap-2">
+            <input type="search" name="search" class="form-control form-control-sm" placeholder="Cerca utente..." style="max-width: 250px;" value="<?php echo htmlspecialchars($searchTerm); ?>">
+            <select name="status" class="form-select form-select-sm" style="max-width: 150px;" onchange="this.form.submit()">
                 <option value="">Tutti gli stati</option>
-                <option value="active">Attivi</option>
-                <option value="suspended">Sospesi</option>
+                <option value="active" <?php echo $statusFilter === 'active' ? 'selected' : ''; ?>>Attivi</option>
+                <option value="suspended" <?php echo $statusFilter === 'suspended' ? 'selected' : ''; ?>>Sospesi</option>
+                <option value="deleted" <?php echo $statusFilter === 'deleted' ? 'selected' : ''; ?>>Eliminati</option>
             </select>
-        </div>
+        </form>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -83,47 +127,49 @@ ob_start();
                             <td>
                                 <?php if ($user['status'] === 'active'): ?>
                                     <span class="badge bg-success-subtle text-success">Attivo</span>
+                                <?php elseif ($user['status'] === 'suspended'): ?>
+                                    <span class="badge bg-warning-subtle text-warning">Sospeso</span>
                                 <?php else: ?>
-                                    <span class="badge bg-danger-subtle text-danger">Sospeso</span>
+                                    <span class="badge bg-danger-subtle text-danger">Eliminato</span>
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
                                 <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-outline-primary" title="Visualizza">
+                                    <a href="/profile.php?id=<?php echo $user['id']; ?>" class="btn btn-outline-primary" title="Visualizza">
                                         <span class="bi bi-eye" aria-hidden="true"></span>
-                                    </button>
+                                    </a>
                                     <?php if ($user['status'] === 'active'): ?>
-                                        <button class="btn btn-outline-warning" title="Sospendi">
-                                            <span class="bi bi-pause-circle" aria-hidden="true"></span>
-                                        </button>
-                                    <?php else: ?>
-                                        <button class="btn btn-outline-success" title="Ripristina">
-                                            <span class="bi bi-play-circle" aria-hidden="true"></span>
-                                        </button>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="suspend">
+                                            <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-warning" title="Sospendi" onclick="return confirm('Sospendere questo utente?')">
+                                                <span class="bi bi-pause-circle" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
+                                    <?php elseif ($user['status'] === 'suspended'): ?>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="restore">
+                                            <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-success" title="Ripristina">
+                                                <span class="bi bi-play-circle" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
-                                    <button class="btn btn-outline-danger" title="Elimina">
-                                        <span class="bi bi-trash" aria-hidden="true"></span>
-                                    </button>
+                                    <?php if ($user['status'] !== 'deleted'): ?>
+                                        <form method="POST" style="display: inline;">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
+                                            <button type="submit" class="btn btn-outline-danger" title="Elimina" onclick="return confirm('Eliminare definitivamente questo utente?')">
+                                                <span class="bi bi-trash" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="card-footer bg-body border-0">
-        <div class="d-flex align-items-center justify-content-between">
-            <span class="text-muted small">Mostrando <?php echo count($users); ?> di <?php echo count($users); ?> utenti</span>
-            <nav aria-label="Paginazione utenti">
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link" href="#">Precedente</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Successivo</a></li>
-                </ul>
-            </nav>
         </div>
     </div>
 </div>

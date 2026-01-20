@@ -1,29 +1,32 @@
 <?php
 session_start();
 
-// TODO: proteggere questa pagina con controllo ruolo admin
-// if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: /login.php');
-//     exit;
-// }
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../app/Dashboard.php';
 
-// Dati fittizi di esempio
+try {
+    $dashboard = new Dashboard();
+
+    $totalUsers = $dashboard->getTotalUsers();
+    $openReportsCount = $dashboard->getOpenReportsCount();
+    $publishedPosts = $dashboard->getPublishedPostsCount();
+    $activeMatches = $dashboard->getActiveMatchesCount();
+    $latestUsers = $dashboard->getLatestUsers(5);
+    $openReports = $dashboard->getOpenReports(5);
+} catch (Exception $e) {
+    $totalUsers = 0;
+    $openReportsCount = 0;
+    $publishedPosts = 0;
+    $activeMatches = 0;
+    $latestUsers = [];
+    $openReports = [];
+}
+
 $stats = [
-    ['label' => 'Utenti totali', 'value' => 1250, 'icon' => 'bi-people-fill', 'variant' => 'primary'],
-    ['label' => 'Report aperti', 'value' => 12, 'icon' => 'bi-flag-fill', 'variant' => 'danger'],
-    ['label' => 'Post pubblicati', 'value' => 487, 'icon' => 'bi-chat-dots-fill', 'variant' => 'info'],
-    ['label' => 'Team attivi', 'value' => 58, 'icon' => 'bi-diagram-3-fill', 'variant' => 'success'],
-];
-
-$latestUsers = [
-    ['name' => 'Giulia Rossi', 'email' => 'giulia.rossi@uni.it', 'joined' => '2026-01-05'],
-    ['name' => 'Luca Bianchi', 'email' => 'luca.bianchi@uni.it', 'joined' => '2026-01-03'],
-    ['name' => 'Sara Verdi', 'email' => 'sara.verdi@uni.it', 'joined' => '2026-01-02'],
-];
-
-$openReports = [
-    ['id' => '#4521', 'user' => 'mario.rossi', 'reason' => 'Contenuto inappropriato', 'created' => '2026-01-06'],
-    ['id' => '#4519', 'user' => 'chiara.l', 'reason' => 'Spam', 'created' => '2026-01-05'],
+    ['label' => 'Utenti totali', 'value' => $totalUsers, 'icon' => 'bi-people-fill', 'variant' => 'primary'],
+    ['label' => 'Report aperti', 'value' => $openReportsCount, 'icon' => 'bi-flag-fill', 'variant' => 'danger'],
+    ['label' => 'Post pubblicati', 'value' => $publishedPosts, 'icon' => 'bi-chat-dots-fill', 'variant' => 'info'],
+    ['label' => 'Match attivi', 'value' => $activeMatches, 'icon' => 'bi-diagram-3-fill', 'variant' => 'success'],
 ];
 
 $templateParams['pageTitle'] = 'Admin Dashboard';
@@ -37,7 +40,6 @@ ob_start();
         <p class="text-muted mb-0">Panoramica delle attività recenti</p>
     </div>
     <div class="d-flex gap-2">
-        <a href="/admin-users.php" class="btn btn-outline-primary"><span class="bi bi-person-plus me-2" aria-hidden="true"></span>Gestisci utenti</a>
         <a href="/admin-reports.php" class="btn btn-primary"><span class="bi bi-flag-fill me-2" aria-hidden="true"></span>Vedi report</a>
     </div>
 </div>
@@ -104,13 +106,22 @@ ob_start();
                     <p class="text-muted mb-0">Nessun report aperto</p>
                 <?php else: ?>
                     <div class="list-group list-group-flush">
-                        <?php foreach ($openReports as $report): ?>
+                        <?php
+                        $reasonLabels = [
+                            'inappropriate_content' => 'Contenuto inappropriato',
+                            'spam' => 'Spam',
+                            'harassment' => 'Molestie',
+                            'false_information' => 'Informazioni false',
+                            'other' => 'Altro'
+                        ];
+                        foreach ($openReports as $report):
+                        ?>
                             <div class="list-group-item d-flex flex-column gap-1 px-0">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <span class="badge bg-danger-subtle text-danger"><?php echo htmlspecialchars($report['id']); ?></span>
+                                    <span class="badge bg-danger-subtle text-danger">#<?php echo htmlspecialchars($report['id']); ?></span>
                                     <span class="text-muted small"><?php echo htmlspecialchars($report['created']); ?></span>
                                 </div>
-                                <div class="fw-semibold"><?php echo htmlspecialchars($report['reason']); ?></div>
+                                <div class="fw-semibold"><?php echo htmlspecialchars($reasonLabels[$report['reason']] ?? $report['reason']); ?></div>
                                 <div class="text-muted small">Utente: <?php echo htmlspecialchars($report['user']); ?></div>
                             </div>
                         <?php endforeach; ?>
