@@ -81,3 +81,23 @@
         transform: scale(1.05);
     }
 }
+
+/* Auth layout */
+.auth-row {
+    min-height: calc(100vh - 120px);
+}
+
+.auth-banner-col {
+    min-height: calc(100vh - 120px);
+}
+
+.auth-banner-img {
+    max-width: 90%;
+    height: auto;
+    transform: rotate(-5deg);
+    transition: transform 0.3s ease;
+}
+
+.auth-banner-img:hover {
+    transform: rotate(0deg);
+}

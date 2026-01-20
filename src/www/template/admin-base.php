@@ -1,21 +1,20 @@
 <?php
-$navbarBg = "danger";
-$navItems = $navItems ?? [
+$templateParams = $templateParams ?? [];
+$templateParams['navbarBg'] = $templateParams['navbarBg'] ?? 'danger';
+$templateParams['navItems'] = $templateParams['navItems'] ?? [
 	['label' => 'Home', 'url' => '/index.php', 'icon' => 'bi bi-house-door'],
 ];
 
-$userContent = $userContent ?? '';
+$userContent = $templateParams['userContent'] ?? '';
 
-$content = <<<HTML
-<main class="flex-grow-1 py-5">
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-lg-9 col-xl-8">
-				$userContent
-			</div>
+$templateParams['content'] = <<<HTML
+<div class="container py-5">
+	<div class="row justify-content-center">
+		<div class="col-lg-9 col-xl-8">
+			$userContent
 		</div>
 	</div>
-</main>
+</div>
 HTML;
 
 include __DIR__ . '/base.php';

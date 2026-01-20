@@ -1,10 +1,10 @@
-<nav class="navbar navbar-expand-lg navbar-<?= htmlspecialchars($navbarVariant) ?> bg-<?= htmlspecialchars($navbarBg) ?>">
+<nav class="navbar navbar-expand-lg navbar-<?= htmlspecialchars($templateParams['navbarVariant']) ?> bg-<?= htmlspecialchars($templateParams['navbarBg']) ?>">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="<?= htmlspecialchars($brandUrl) ?>">
-            <?php if (!empty($brandIcon)): ?>
-                <span class="<?= htmlspecialchars($brandIcon) ?>" aria-hidden="true"></span>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="<?= htmlspecialchars($templateParams['brandUrl']) ?>">
+            <?php if (!empty($templateParams['brandIcon'])): ?>
+                <span class="<?= htmlspecialchars($templateParams['brandIcon']) ?>" aria-hidden="true"></span>
             <?php endif; ?>
-            <span><?= htmlspecialchars($brandName) ?></span>
+            <span><?= htmlspecialchars($templateParams['brandName']) ?></span>
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -13,7 +13,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <?php foreach ($navItems as $item): ?>
+                <?php foreach ($templateParams['navItems'] as $item): ?>
                     <li class="nav-item">
                         <a class="nav-link d-flex align-items-center gap-2" href="<?= htmlspecialchars($item['url']) ?>">
                             <?php if (!empty($item['icon'])): ?>

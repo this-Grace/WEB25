@@ -1,6 +1,7 @@
 <?php
-$navbarBg = "primary";
-$navItems = $navItems ?? [
+$templateParams = $templateParams ?? [];
+$templateParams['navbarBg'] = $templateParams['navbarBg'] ?? 'primary';
+$templateParams['navItems'] = $templateParams['navItems'] ?? [
 	['label' => 'Home', 'url' => '/index.php', 'icon' => 'bi bi-house-door'],
 	['label' => 'Crea', 'url' => '/create-post.php', 'icon' => 'bi bi-plus-circle'],
 	['label' => 'Chat', 'url' => '/chat.php', 'icon' => 'bi bi-chat-dots'],
@@ -8,9 +9,9 @@ $navItems = $navItems ?? [
 	['label' => 'Logout', 'url' => '/logout.php', 'icon' => 'bi bi-box-arrow-right'],
 ];
 
-$userContent = $userContent ?? '';
+$userContent = $templateParams['userContent'] ?? '';
 
-$content = <<<HTML
+$templateParams['content'] = <<<HTML
 <div class="container py-5">
 	<div class="row justify-content-center">
 		<div class="col-lg-9 col-xl-8">
