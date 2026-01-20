@@ -3,12 +3,11 @@ $brandName = $brandName ?? 'UniMatch';
 $brandUrl = $brandUrl ?? '/index.php';
 $brandIcon = $brandIcon ?? 'bi bi-heart-fill';
 $navItems = $navItems ?? [];
-$navbarBg = $navbarBg ?? 'light';
+$navbarBg = $navbarBg ?? 'primary';
 $navbarVariant = $navbarVariant ?? (in_array($navbarBg, ['dark', 'primary', 'secondary', 'success', 'danger', 'info']) ? 'dark' : 'light');
 $footerLinks = $footerLinks ?? [
     ['label' => 'Privacy', 'url' => '/privacy.php'],
     ['label' => 'Termini', 'url' => '/terms.php'],
-    ['label' => 'Contatti', 'url' => '/contacts.php'],
 ];
 $description = $description ?? 'UniMatch - Connetti con studenti universitari';
 ?>
