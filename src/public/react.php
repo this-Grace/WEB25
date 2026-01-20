@@ -3,35 +3,42 @@
 /**
  * Reaction Controller
  * 
- * Handles user reactions (like/skip) to posts.
+ * Handles user reactions (like/skip) to posts and returns next post.
  */
 
 session_start();
 require_once __DIR__ . '/../app/functions.php';
 require_once __DIR__ . '/../app/Post.php';
 
-// Ensure user is logged in
-requireLogin();
+header('Content-Type: application/json');
 
-// Get user and reaction data from POST request
-$user = $_SESSION['username'] ?? null;
-$postId = intval($_POST['post_id'] ?? 0);
-$type = $_POST['type'] ?? null;
-
-// Validate input parameters
-if (!$user || !$postId || !in_array($type, ['like', 'skip'])) {
-    setFlashMessage('error', 'Invalid request parameters.');
-    redirect('index.php');
+if (!isset($_SESSION['username'])) {
+    echo json_encode(['success' => false, 'error' => 'Not authenticated']);
+    exit;
 }
 
-// Process the reaction
+$user   = $_SESSION['username'];
+$postId = intval($_POST['post_id'] ?? 0);
+$type   = strtolower(trim($_POST['type'] ?? ''));
+
+if (!$postId || !in_array($type, ['like', 'skip'])) {
+    echo json_encode(['success' => false, 'error' => 'Invalid request parameters']);
+    exit;
+}
+
 $postModel = new Post();
 $success = $postModel->react($postId, $user, $type);
 
 if (!$success) {
-    setFlashMessage('error', 'Unable to save reaction.');
-    redirect('index.php');
+    echo json_encode(['success' => false, 'error' => 'Unable to save reaction']);
+    exit;
 }
 
-// Redirect back to homepage after successful reaction
-redirect('index.php');
+$nextPost = $postModel->nextPost($user);
+
+echo json_encode([
+    'success' => true,
+    'next_post' => $nextPost,
+    'reaction' => $type
+]);
+exit;

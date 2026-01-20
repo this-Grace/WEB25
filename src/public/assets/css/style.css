@@ -271,3 +271,12 @@ body {
 	/* Circular avatar */
 	object-fit: cover;
 }
+
+.post-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.post-card .card {
+    will-change: transform, opacity;
+}
