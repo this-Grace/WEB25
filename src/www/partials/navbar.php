@@ -13,9 +13,15 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <?php foreach ($templateParams['navItems'] as $item): ?>
+                <?php
+                $currentPage = $_SERVER['REQUEST_URI'];
+                foreach ($templateParams['navItems'] as $item):
+                    $isActive = ($currentPage === $item['url']) || (basename($currentPage) === basename($item['url']));
+                ?>
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center gap-2" href="<?= htmlspecialchars($item['url']) ?>">
+                        <a class="nav-link d-flex align-items-center gap-2<?= $isActive ? ' active' : '' ?>"
+                            href="<?= htmlspecialchars($item['url']) ?>"
+                            <?= $isActive ? 'aria-current="page"' : '' ?>>
                             <?php if (!empty($item['icon'])): ?>
                                 <span class="<?= htmlspecialchars($item['icon']) ?>" aria-hidden="true"></span>
                             <?php endif; ?>
