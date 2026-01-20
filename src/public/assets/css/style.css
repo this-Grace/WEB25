@@ -1,82 +1,104 @@
+/* style.css */
 body {
 	font-family: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 /* Navbar */
-.navbar-toggler-icon-custom {
+.navbar {
+	--nav-collapse-bg: transparent;
+	/* Custom CSS property for mobile menu background */
+}
+
+/* Override collapse background based on navbar color class */
+.navbar.bg-primary {
+	--nav-collapse-bg: var(--bs-primary);
+}
+
+.navbar.bg-danger {
+	--nav-collapse-bg: var(--bs-danger);
+}
+
+.navbar.bg-success {
+	--nav-collapse-bg: var(--bs-success);
+}
+
+/* Custom hamburger menu icon */
+.navbar-toggler-icon-custom,
+.navbar-toggler-icon-custom::before,
+.navbar-toggler-icon-custom::after {
 	display: block;
 	width: 24px;
 	height: 2px;
 	background: white;
 	position: relative;
-	transition: all 0.3s ease;
+	transition: transform 0.3s ease, opacity 0.3s ease;
+	/* Smooth animation for menu toggle */
 }
 
 .navbar-toggler-icon-custom::before,
 .navbar-toggler-icon-custom::after {
 	content: '';
 	position: absolute;
-	width: 24px;
-	height: 2px;
-	background: white;
 	left: 0;
-	transition: all 0.3s ease;
 }
 
 .navbar-toggler-icon-custom::before {
 	top: -7px;
+	/* Position top bar */
 }
 
 .navbar-toggler-icon-custom::after {
 	top: 7px;
+	/* Position bottom bar */
 }
 
+/* Transform hamburger to X when expanded */
 .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon-custom {
 	background: transparent;
+	/* Hide middle bar */
 }
 
 .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon-custom::before {
 	transform: rotate(45deg) translate(5px, 5px);
+	/* Rotate top bar to form X */
 }
 
 .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon-custom::after {
 	transform: rotate(-45deg) translate(5px, -5px);
+	/* Rotate bottom bar to form X */
 }
 
+/* Mobile-responsive navbar collapse menu */
 @media (max-width: 767px) {
 	.navbar-collapse {
 		position: fixed;
 		top: 56px;
+		/* Below navbar height */
 		left: 0;
 		right: 0;
 		bottom: 0;
 		z-index: 1050;
+		/* Above other content */
 		padding: 2rem 0;
+		background: var(--nav-collapse-bg);
+		/* Use dynamic background color */
 		transition: opacity 0.3s ease, visibility 0.3s ease;
+		/* Fade in/out */
 	}
 
-	.navbar.bg-primary .navbar-collapse {
-		background: var(--bs-primary);
-	}
-
-	.navbar.bg-danger .navbar-collapse {
-		background: var(--bs-danger);
-	}
-
-	.navbar.bg-success .navbar-collapse {
-		background: var(--bs-success);
-	}
-
+	/* Hidden state */
 	.navbar-collapse:not(.show) {
 		opacity: 0;
 		visibility: hidden;
 	}
 
+	/* Visible state */
 	.navbar-collapse.show {
 		opacity: 1;
 		visibility: visible;
 	}
 
+	/* Center nav items vertically */
 	.navbar-collapse .navbar-nav {
 		height: 100%;
 		display: flex;
@@ -86,18 +108,20 @@ body {
 	}
 
 	.navbar-collapse .nav-item {
-		text-align: center;
 		padding: 0.75rem 0;
 	}
 
+	/* Larger font for mobile nav links */
 	.navbar-collapse .nav-link {
 		font-size: 1.5rem;
 		padding: 1rem 2rem;
-		transition: all 0.2s ease;
+		transition: transform 0.2s ease;
+		/* Hover scale effect */
 	}
 
 	.navbar-collapse .nav-link:hover {
 		transform: scale(1.05);
+		/* Slight zoom on hover */
 	}
 }
 
@@ -106,19 +130,24 @@ body {
 	padding: 1.5rem;
 }
 
+/* Center auth content */
 .auth-page>.container>.auth-grid {
 	max-width: 1140px;
 	margin: 0 auto;
 }
 
+/* Styled hero image with rotation and shadow */
 .auth-page>.container>.auth-grid>.col-lg-6>.auth-hero {
 	max-width: 360px;
 	width: 100%;
 	border-radius: 14px;
 	transform: rotate(-2deg);
+	/* Slight rotation for visual interest */
 	box-shadow: 0 12px 45px rgba(0, 0, 0, 0.35);
+	/* Deep shadow for depth */
 }
 
+/* Auth form panel */
 .auth-page>.container>.auth-grid>.col-lg-4 .auth-panel {
 	max-width: 420px;
 	margin: 0 auto;
@@ -126,6 +155,7 @@ body {
 
 .auth-page>.container>.auth-grid>.col-lg-4 .auth-panel>.auth-title {
 	font-weight: 700;
+	/* Bold title */
 }
 
 /* Profile Page */
@@ -135,6 +165,7 @@ body {
 	margin: 0 auto;
 }
 
+/* Larger container for big screens */
 @media (min-width: 1400px) {
 	.profile-container {
 		max-width: 1600px;
@@ -142,19 +173,26 @@ body {
 	}
 }
 
+/* Sticky sidebar on desktop */
 .profile-sidebar {
 	position: sticky;
 	top: 80px;
+	/* Offset from top */
 }
 
+/* Circular profile avatar */
 .profile-avatar {
 	width: 150px;
 	height: 150px;
 	border-radius: 50%;
+	/* Perfect circle */
 	object-fit: cover;
+	/* Crop image to fit */
 	border: 3px solid var(--bs-border-color);
+	/* Border using theme color */
 }
 
+/* Horizontal stats layout */
 .profile-stats {
 	display: flex;
 	gap: 2rem;
@@ -169,42 +207,53 @@ body {
 .posts-grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
+	/* 3-column grid by default */
 	gap: 12px;
 }
 
+/* Responsive grid adjustments */
 @media (max-width: 768px) {
 	.posts-grid {
 		grid-template-columns: repeat(2, 1fr);
+		/* 2 columns on tablet */
 	}
 
 	.profile-sidebar {
 		position: static;
+		/* Remove sticky on mobile */
 	}
 }
 
 @media (max-width: 480px) {
 	.posts-grid {
 		grid-template-columns: 1fr;
+		/* Single column on mobile */
 	}
 }
 
+/* Individual post item (square aspect ratio) */
 .post-item {
 	position: relative;
 	display: block;
 	aspect-ratio: 1;
+	/* Square container */
 	overflow: hidden;
 	background: var(--bs-secondary-bg);
+	/* Fallback background */
 }
 
 .post-item img {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	/* Crop image to fill square */
 	transition: transform 0.3s ease;
+	/* Smooth zoom transition */
 }
 
 .post-item:hover img {
 	transform: scale(1.05);
+	/* Slight zoom on hover */
 }
 
 /* Modal User List */
@@ -219,5 +268,6 @@ body {
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
+	/* Circular avatar */
 	object-fit: cover;
 }
