@@ -1,4 +1,6 @@
 <?php
-$pageTitle = 'Home';
-$userContent = '';
+$templateParams = [
+    'pageTitle' => 'Home',
+    'userContent' => ''
+];
 include __DIR__ . '/template/user-base.php';

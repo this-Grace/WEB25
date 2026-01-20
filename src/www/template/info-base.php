@@ -1,7 +1,11 @@
 <?php
+$templateParams = $templateParams ?? [];
+$sections = $templateParams['sections'] ?? null;
+$pageTitle = $templateParams['pageTitle'] ?? '';
+$content = $templateParams['content'] ?? null;
 
 if (!isset($content) && isset($sections)) {
-    $lastUpdated = $lastUpdated ?? null;
+    $lastUpdated = $templateParams['lastUpdated'] ?? null;
     ob_start();
 ?>
     <div class="container py-5">
@@ -42,9 +46,9 @@ if (!isset($content) && isset($sections)) {
         </div>
     </div>
 <?php
-    $content = ob_get_clean();
+    $templateParams['content'] = ob_get_clean();
 } elseif (!isset($content)) {
-    $content = '<div class="container py-5"><p class="text-muted mb-0">Nessun contenuto disponibile.</p></div>';
+    $templateParams['content'] = '<div class="container py-5"><p class="text-muted mb-0">Nessun contenuto disponibile.</p></div>';
 }
 
 include __DIR__ . '/base.php';
