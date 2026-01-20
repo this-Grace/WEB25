@@ -50,10 +50,21 @@ body {
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: var(--bs-primary);
 		z-index: 1050;
 		padding: 2rem 0;
 		transition: opacity 0.3s ease, visibility 0.3s ease;
+	}
+
+	.navbar.bg-primary .navbar-collapse {
+		background: var(--bs-primary);
+	}
+
+	.navbar.bg-danger .navbar-collapse {
+		background: var(--bs-danger);
+	}
+
+	.navbar.bg-success .navbar-collapse {
+		background: var(--bs-success);
 	}
 
 	.navbar-collapse:not(.show) {
