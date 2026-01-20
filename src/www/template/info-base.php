@@ -1,5 +1,6 @@
 <?php
 $templateParams = $templateParams ?? [];
+$templateParams['navbarBg'] = $templateParams['navbarBg'] ?? 'success';
 $sections = $templateParams['sections'] ?? null;
 $pageTitle = $templateParams['pageTitle'] ?? '';
 $content = $templateParams['content'] ?? null;

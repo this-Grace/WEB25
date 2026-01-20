@@ -41,49 +41,53 @@ ob_start();
 ?>
 
 <div class="text-center mb-4">
-    <i class="bi bi-heart-fill text-primary" style="font-size: 3rem;"></i>
+    <span class="bi bi-heart-fill text-primary" style="font-size: 3rem;" aria-hidden="true"></span>
     <h1 class="h3 mt-3 fw-bold">Unisciti a UniMatch</h1>
     <p class="text-muted">Crea il tuo account e inizia a connetterti</p>
 </div>
 
 <?php if ($error): ?>
     <div class="alert alert-danger" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i><?php echo htmlspecialchars($error); ?>
+        <span class="bi bi-exclamation-triangle-fill me-2" aria-hidden="true"></span><?php echo htmlspecialchars($error); ?>
     </div>
 <?php endif; ?>
 
 <?php if ($success): ?>
     <div class="alert alert-success" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i><?php echo htmlspecialchars($success); ?>
+        <span class="bi bi-check-circle-fill me-2" aria-hidden="true"></span><?php echo htmlspecialchars($success); ?>
     </div>
 <?php endif; ?>
 
 <form method="POST" action="/register.php">
     <div class="row">
         <div class="col-md-6 mb-3">
+            <label for="name" class="form-label">Nome</label>
             <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <span class="input-group-text"><span class="bi bi-person" aria-hidden="true"></span></span>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Nome" value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>" required autofocus>
             </div>
         </div>
         <div class="col-md-6 mb-3">
+            <label for="surname" class="form-label">Cognome</label>
             <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <span class="input-group-text"><span class="bi bi-person" aria-hidden="true"></span></span>
                 <input type="text" class="form-control" id="surname" name="surname" placeholder="Cognome" value="<?php echo htmlspecialchars($_POST['surname'] ?? ''); ?>" required>
             </div>
         </div>
     </div>
 
     <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
         <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <span class="input-group-text"><span class="bi bi-envelope" aria-hidden="true"></span></span>
             <input type="email" class="form-control" id="email" name="email" placeholder="tua.email@università.it" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required>
         </div>
     </div>
 
     <div class="mb-3">
+        <label for="university" class="form-label">Università</label>
         <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-building"></i></span>
+            <span class="input-group-text"><span class="bi bi-building" aria-hidden="true"></span></span>
             <select class="form-select" id="university" name="university" required>
                 <option value="">Seleziona la tua università</option>
                 <option value="unibo">Università di Bologna</option>
@@ -99,15 +103,17 @@ ob_start();
     </div>
 
     <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
         <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <span class="input-group-text"><span class="bi bi-lock" aria-hidden="true"></span></span>
             <input type="password" class="form-control" id="password" name="password" placeholder="Password (min. 8 caratteri)" required>
         </div>
     </div>
 
     <div class="mb-3">
+        <label for="confirm_password" class="form-label">Conferma password</label>
         <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+            <span class="input-group-text"><span class="bi bi-lock-fill" aria-hidden="true"></span></span>
             <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Conferma password" required>
         </div>
     </div>
@@ -121,7 +127,7 @@ ob_start();
 
     <div class="d-grid">
         <button type="submit" class="btn btn-primary btn-lg">
-            <i class="bi bi-person-plus me-2"></i>Registrati
+            <span class="bi bi-person-plus me-2" aria-hidden="true"></span>Registrati
         </button>
     </div>
 </form>
@@ -131,7 +137,7 @@ ob_start();
 <div class="text-center">
     <p class="text-muted mb-2">Hai già un account?</p>
     <a href="/login.php" class="btn btn-outline-primary">
-        <i class="bi bi-box-arrow-in-right me-2"></i>Accedi
+        <span class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></span>Accedi
     </a>
 </div>
 
