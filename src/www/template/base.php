@@ -4,6 +4,7 @@ $templateParams['brandName'] = $templateParams['brandName'] ?? 'UniMatch';
 $templateParams['brandUrl'] = $templateParams['brandUrl'] ?? '/index.php';
 $templateParams['brandIcon'] = $templateParams['brandIcon'] ?? 'bi bi-heart-fill';
 $templateParams['navItems'] = $templateParams['navItems'] ?? [];
+$templateParams['showNavbar'] = $templateParams['showNavbar'] ?? true;
 $templateParams['navbarBg'] = $templateParams['navbarBg'] ?? 'primary';
 $templateParams['navbarVariant'] = $templateParams['navbarVariant'] ?? (in_array($templateParams['navbarBg'], ['dark', 'primary', 'secondary', 'success', 'danger', 'info']) ? 'dark' : 'light');
 $templateParams['footerLinks'] = $templateParams['footerLinks'] ?? [
@@ -33,7 +34,9 @@ $templateParams['content'] = $templateParams['content'] ?? '';
 
 <body class="d-flex flex-column min-vh-100">
 
-    <?php include __DIR__ . '/../partials/navbar.php'; ?>
+    <?php if ($templateParams['showNavbar']): ?>
+        <?php include __DIR__ . '/../partials/navbar.php'; ?>
+    <?php endif; ?>
 
     <main class="flex-grow-1">
         <?php echo $templateParams['content']; ?>
