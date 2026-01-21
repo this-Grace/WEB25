@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS web25;
 USE web25;
 
--- Utenti
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -12,21 +11,18 @@ CREATE TABLE users (
     avatar_url VARCHAR(500)
 );
 
--- Utenti che possono creare eventi
 CREATE TABLE event_owners (
     owner_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT UNIQUE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
--- Categorie eventi
 CREATE TABLE categories (
     category_id INT PRIMARY KEY AUTO_INCREMENT,
     category_name VARCHAR(100) NOT NULL UNIQUE,
     category_icon VARCHAR(100)
 );
 
--- Eventi
 CREATE TABLE events (
     event_id INT PRIMARY KEY AUTO_INCREMENT,
     event_name VARCHAR(255) NOT NULL,
@@ -43,7 +39,6 @@ CREATE TABLE events (
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
--- Registrazioni ai eventi
 CREATE TABLE event_registrations (
     participant_id INT PRIMARY KEY AUTO_INCREMENT,
     event_id INT NOT NULL,
