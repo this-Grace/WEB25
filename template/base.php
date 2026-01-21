@@ -15,7 +15,7 @@ $templateParams['brandName'] = "Brand";
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-        <div class="container">
+        <div class="container p-3">
             <a class="navbar-brand" href="#">
                 <?php echo htmlspecialchars($templateParams['brandName']) ?>
             </a>
@@ -26,8 +26,8 @@ $templateParams['brandName'] = "Brand";
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto">
                     <?php foreach ($templateParams['navlinks'] as $link): ?>
-                        <li class="nav-item<?php echo $link['active'] ? ' active' : ''; ?>">
-                            <a class="nav-link<?php echo $link['disabled'] ? ' disabled' : ''; ?>" href="<?php echo htmlspecialchars($link['href']); ?>">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo htmlspecialchars($link['href']); ?>">
                                 <?php echo htmlspecialchars($link['label']); ?>
                             </a>
                         </li>
@@ -46,14 +46,10 @@ $templateParams['brandName'] = "Brand";
     </main>
 
     <footer class="mt-auto py-4">
-        <div class="container">
+        <div class="container p-3">
             <div class="row align-items-center gy-2">
-                <div class="col-12 col-md text-center text-md-start text-body-secondary small">
+                <div class="col-12 text-center text-body-secondary small mb-3">
                     &copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars($templateParams['brandName']) ?> — Tutti i diritti riservati
-                </div>
-                <div class="col-12 col-md-auto">
-                    <ul class="nav justify-content-center">
-                    </ul>
                 </div>
             </div>
         </div>
