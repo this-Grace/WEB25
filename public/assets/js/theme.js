@@ -14,4 +14,5 @@
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         setTheme(getPreferredTheme());
     });
+    // theme.js: only theme-related behavior remains here
 })();
