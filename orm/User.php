@@ -6,13 +6,13 @@
  */
 class User
 {
-    public ?int $user_id;
-    public string $email;
-    public string $password_hash;
-    public string $first_name;
-    public string $last_name;
-    public ?string $avatar_url;
-    public string $registration_date;
+    private ?int $user_id;
+    private string $email;
+    private string $password_hash;
+    private string $first_name;
+    private string $last_name;
+    private ?string $avatar_url;
+    private string $registration_date;
 
     /**
      * Constructor to initialize User properties.
