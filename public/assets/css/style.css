@@ -1,0 +1,96 @@
+:root {
+    --primary-color: #6a11cb;
+    --primary-hover-color: #5a0ab3;
+    --body-bg: #f6f8fb;
+    --card-bg: #fff;
+    --text-color: #212529;
+    --text-muted-color: #6c757d;
+    --border-color: #e3e6ea;
+    --shadow: 0 4px 8px rgba(0, 0, 0, .08)
+}
+
+[data-bs-theme="dark"] {
+    --body-bg: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --text-muted-color: #a0a0a0
+}
+
+body {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    margin: 0
+}
+
+/* Layout for auth pages */
+.auth-form-container {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem
+}
+
+.auth-form-container .card {
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    background-color: var(--card-bg)
+}
+
+/* Forms */
+.form-control {
+    padding: .75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-color)
+}
+
+.form-text {
+    color: var(--text-muted-color);
+    font-size: .875rem
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-hover-color));
+    border: none;
+    color: #fff;
+    padding: .75rem 1rem
+}
+
+.btn-primary:hover {
+    filter: brightness(.95)
+}
+
+.text-muted {
+    color: var(--text-muted-color) !important
+}
+
+/* Skip link */
+.visually-hidden-focusable {
+    position: absolute;
+    left: -9999px
+}
+
+.visually-hidden-focusable:focus,
+.visually-hidden-focusable:active {
+    position: static;
+    left: auto;
+    padding: .5rem 1rem;
+    background: #fff;
+    color: #000;
+    border-radius: 4px;
+    z-index: 9999
+}
+
+/* Accessible focus */
+:where(input, button, a):focus-visible {
+    outline: 3px solid rgba(106, 17, 203, .18);
+    outline-offset: 2px
+}
