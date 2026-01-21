@@ -60,17 +60,70 @@
 
 \chapter{Analisi}
 \section{Descrizione}
+UniEvents è una web application per la creazione, la gestione e la
+scoperta di eventi universitari (workshop, conferenze, seminari e
+attività sociali). Fornisce agli organizzatori strumenti per
+impostare eventi con metadati (titolo, descrizione, data/ora, luogo,
+immagine, capienza) e ai partecipanti un'interfaccia per cercare,
+filtrare e iscriversi agli eventi.
 
 \subsection*{Requisiti Funzionali}
+\begin{itemize}
+  \item Creazione e modifica di eventi con campi: titolo,
+    descrizione, data/ora, luogo, immagine e numero massimo partecipanti.
+  \item Anteprima live durante la creazione (immagine e metadati
+    aggiornati in tempo reale).
+  \item Possibilità di salvare bozze e pubblicare eventi quando pronti.
+  \item Registrazione degli utenti agli eventi e conteggio
+    partecipanti con limite massimo.
+  \item Ricerca e filtri per categoria e data nella pagina principale.
+\end{itemize}
 
 \subsection*{Requisiti Non Funzionali}
+\begin{itemize}
+  \item Accessibilità: i componenti interattivi (modali, form) devono
+    rispettare le linee guida ARIA e la gestione del focus.
+  \item Usabilità: interfaccia semplice e reattiva; anteprime
+    immediate per feedback all'utente.
+  \item Performance: caricamento veloce delle liste e gestione
+    efficiente delle immagini (lazy-loading quando possibile).
+  \item Portabilità e responsive design: funzionamento corretto su
+    dispositivi mobile e desktop.
+\end{itemize}
+
+\chapter{Personas e Scenari}
+\section*{Personas}
+\begin{itemize}
+  \item \textbf{Martina (Studentessa, 21 anni)}: cerca workshop e
+    seminari tramite smartphone. Vuole trovare eventi rapidamente e
+    iscriversi con pochi passaggi.
+  \item \textbf{Prof. Rossi (Organizzatore)}: pubblica conferenze e
+    controlla le iscrizioni da desktop; usa bozze per preparare
+    contenuti prima della pubblicazione.
+  \item \textbf{Lucia (Admin)}: gestisce categorie, rimuove contenuti
+    inappropriati e controlla statistiche di utilizzo.
+\end{itemize}
+
+\section*{Scenari}
+\begin{enumerate}
+  \item \textbf{Creare e pubblicare un evento (Organizzatore)}:
+    l'organizzatore apre la modale di creazione, compila i campi,
+    trascina un'immagine nella dropzone, verifica l'anteprima e
+    pubblica. L'evento appare nella homepage.
+  \item \textbf{Iscriversi a un evento (Studente)}: lo studente
+    filtra per categoria, apre il dettaglio e clicca "Iscriviti";
+    riceve conferma e il contatore partecipanti si aggiorna.
+  \item \textbf{Moderazione (Admin)}: l'admin individua un evento
+    segnalato, apre il pannello di moderazione e decide di rimuoverlo
+    o segnalarlo come non conforme.
+\end{enumerate}
 
 \chapter{Mockup}
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{img/index.png}
-    \caption{Mockup della homepage di UniEvents}
-    \label{fig:mockup-homepage}
+  \centering
+  \includegraphics[width=\textwidth]{img/index.png}
+  \caption{Mockup della homepage di UniEvents}
+  \label{fig:mockup-homepage}
 \end{figure}
 
 \appendix

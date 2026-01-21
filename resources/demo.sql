@@ -27,28 +27,28 @@ INSERT INTO CATEGORIA (nome, slug, descrizione) VALUES
 INSERT INTO EVENTO (
     titolo, descrizione, data_evento, ora_evento, luogo,
     posti_totali, posti_disponibili, stato,
-    data_pubblicazione, id_admin, id_categoria
+    data_pubblicazione, immagine, id_admin, id_categoria
 ) VALUES
 (
     'Conferenza su Intelligenza Artificiale',
     'Introduzione alle applicazioni dell’AI',
     '2026-03-15', '10:00:00', 'Aula Magna',
     200, 197, 'PUBBLICATO',
-    CURRENT_TIMESTAMP, 1, 1
+    CURRENT_TIMESTAMP, 'img/ai_conference.jpg', 1, 1
 ),
 (
     'Workshop di Cybersecurity',
     'Laboratorio pratico sulla sicurezza informatica',
     '2026-03-20', '14:00:00', 'Laboratorio 3',
     30, 28, 'PUBBLICATO',
-    CURRENT_TIMESTAMP, 2, 2
+    CURRENT_TIMESTAMP, 'img/cyber_workshop.png', 2, 2
 ),
 (
     'Seminario di Basi di Dati',
     'Normalizzazione e progettazione ER',
     '2026-04-02', '09:30:00', 'Aula B1',
     100, 100, 'BOZZA',
-    NULL, 1, 3
+    NULL, 'img/db_seminar.jpg', 1, 3
 );
 
 -- =====================================

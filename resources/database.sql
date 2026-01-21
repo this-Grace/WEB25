@@ -47,6 +47,7 @@ CREATE TABLE EVENTO (
     stato ENUM('BOZZA', 'PUBBLICATO', 'ANNULLATO') NOT NULL,
     data_creazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_pubblicazione TIMESTAMP NULL,
+    immagine VARCHAR(255) NULL,
 
     id_admin INT NOT NULL,
     id_categoria INT NOT NULL,
