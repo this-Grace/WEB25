@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventi Universitari 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <header class="hero-section">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <div class="container-fluid px-0">
+                    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                        <span class="bi bi-calendar-check-fill fs-4" aria-hidden="true"></span>
+                        <span class="ms-2 fw-bold">UniEvents</span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
+                        aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="main-nav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item"><a href="index.html" class="nav-link active" aria-current="page">Home</a></li>
+                            <li class="nav-item"><a href="create-event.html" class="nav-link">Crea Eventi</a></li>
+                            <li class="nav-item"><a href="profile.html" class="nav-link">Profilo</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="text-center mt-4">
+                <h1 class="display-4 fw-bold">Eventi Universitari 2026</h1>
+                <p class="lead">Scopri, partecipa e connettiti con la community universitaria</p>
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-8">
+                        <label for="event-search" class="visually-hidden">Cerca eventi e conferenze
+                            universitarie</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bg-white border-0"><span class="bi bi-search"
+                                    aria-hidden="true"></span></span>
+                            <input id="event-search" type="text" class="form-control border-0"
+                                placeholder="Cerca eventi, conferenze..." aria-label="Cerca eventi e conferenze">
+                            <button class="btn btn-light" type="button" aria-label="Esegui ricerca eventi">Cerca
+                                Eventi</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-3">
+                        <h2 class="fw-bold">250+</h2>
+                        <p class="small">Eventi Totali</p>
+                    </div>
+                    <div class="col-3">
+                        <h2 class="fw-bold">5.000+</h2>
+                        <p class="small">Studenti Attivi</p>
+                    </div>
+                    <div class="col-3">
+                        <h2 class="fw-bold">50+</h2>
+                        <p class="small d-none d-lg-block">Organizzazioni</p>
+                    </div>
+                    <div class="col-3">
+                        <h2 class="fw-bold">12</h2>
+                        <p class="small d-none d-lg-block">Categorie</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filters -->
+    <div class="py-3 bg-light border-bottom">
+        <div class="container">
+            <h2 class="visually-hidden">Filtra eventi per categoria</h2>
+            <ul class="nav nav-pills justify-content-center flex-wrap gap-2">
+                <li class="nav-item"><a href="#filter-tutti" class="nav-link">Tutti gli eventi</a></li>
+                <li class="nav-item"><a href="#filter-conferenze" class="nav-link">Conferenze</a></li>
+                <li class="nav-item"><a href="#filter-workshop" class="nav-link active">Workshop</a></li>
+                <li class="nav-item"><a href="#filter-seminari" class="nav-link">Seminari</a></li>
+                <li class="nav-item"><a href="#filter-party" class="nav-link">Party</a></li>
+                <li class="nav-item"><a href="#filter-sport" class="nav-link">Sport</a></li>
+                <li class="nav-item"><a href="#filter-social" class="nav-link">Social</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Events -->
+    <main class="py-5 bg-light border-bottom">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4">Eventi in Evidenza</h2>
+            </div>
+            <p class="text-muted mb-4 d-none d-lg-block">Scopri i prossimi eventi organizzati dalla nostra università
+            </p>
+            <div class="row">
+                <!-- Event 1 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card event-card h-100">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop"
+                                class="card-img-top"
+                                alt="Audience listening to a speaker at an artificial intelligence conference presentation">
+                            <span
+                                class="badge bg-white text-primary position-absolute top-0 start-0 m-3">Conferenza</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title">Conferenza sull'Intelligenza Artificiale</h3>
+                            <p class="card-text text-muted small flex-grow-1">
+                                <span class="bi bi-calendar" aria-hidden="true"></span> 25 Gennaio 2026 - 14:30<br>
+                                <span class="bi bi-geo-alt" aria-hidden="true"></span> Aula Magna - Edificio A<br>
+                                <span class="bi bi-people" aria-hidden="true"></span> 87/150 iscritti
+                            </p>
+                            <a href="#" class="btn btn-dark w-100 mt-auto"
+                                aria-label="Iscriviti alla conferenza sull'Intelligenza Artificiale">Iscriviti
+                                all'evento</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Event 2 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card event-card h-100">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=2070&auto=format&fit=crop"
+                                class="card-img-top"
+                                alt="Hands typing on a laptop keyboard during a modern web development workshop">
+                            <span
+                                class="badge bg-white text-success position-absolute top-0 start-0 m-3">Workshop</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title">Workshop Sviluppo Web Moderno</h3>
+                            <p class="card-text text-muted small flex-grow-1">
+                                <span class="bi bi-calendar" aria-hidden="true"></span> 28 Gennaio 2026 - 10:00<br>
+                                <span class="bi bi-geo-alt" aria-hidden="true"></span> Laboratorio Info 3<br>
+                                <span class="bi bi-people" aria-hidden="true"></span> 24/30 iscritti
+                            </p>
+                            <a href="#" class="btn btn-dark w-100 mt-auto"
+                                aria-label="Iscriviti al workshop Sviluppo Web Moderno">Iscriviti all'evento</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Event 3 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card event-card h-100">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop"
+                                class="card-img-top"
+                                alt="Robotic arm and advanced robotics equipment used in an advanced robotics seminar">
+                            <span class="badge bg-white text-info position-absolute top-0 start-0 m-3">Seminario</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title">Seminario di Robotica Avanzata</h3>
+                            <p class="card-text text-muted small flex-grow-1">
+                                <span class="bi bi-calendar" aria-hidden="true"></span> 1 Febbraio 2026 - 09:30<br>
+                                <span class="bi bi-geo-alt" aria-hidden="true"></span> Aula Seminari<br>
+                                <span class="bi bi-people" aria-hidden="true"></span> 45/60 iscritti
+                            </p>
+                            <a href="#" class="btn btn-dark w-100 mt-auto"
+                                aria-label="Iscriviti al seminario di Robotica Avanzata">Iscriviti all'evento</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-dark ">Carica altri eventi</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Community Stats -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">Statistiche della Community</h2>
+            <div class="row text-center">
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-card stat-card-blue p-4">
+                        <div class="stat-icon mb-3">
+                            <span class="bi bi-calendar-event" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="fw-bold">28</h3>
+                        <p class="small">Eventi Questo Mese</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-card stat-card-green p-4">
+                        <div class="stat-icon mb-3">
+                            <span class="bi bi-percent" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="fw-bold">89%</h3>
+                        <p class="small">Partecipazione Media</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-card stat-card-purple p-4">
+                        <div class="stat-icon mb-3">
+                            <span class="bi bi-check-circle" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="fw-bold">188</h3>
+                        <p class="small">Eventi Completati</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-card stat-card-orange p-4">
+                        <div class="stat-icon mb-3">
+                            <span class="bi bi-star" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="fw-bold">4.3/5</h3>
+                        <p class="small">Valutazione Media</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h3 class="fw-bold text-white h5">UniEvents</h3>
+                    <p class="small text-white-50">Il futuro dei tuoi eventi universitari, oggi.</p>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h3 class="fw-bold text-white h5">Link Utili</h3>
+                    <ul class="list-unstyled small">
+                        <li><a href="#chi-siamo" class="text-white-50 text-decoration-none">Chi Siamo</a></li>
+                        <li><a href="#contatti" class="text-white-50 text-decoration-none">Contatti</a></li>
+                        <li><a href="#privacy" class="text-white-50 text-decoration-none">Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h3 class="fw-bold text-white h5">Seguici</h3>
+                    <div>
+                        <a href="#" class="text-white-50 text-decoration-none me-3"
+                            aria-label="Seguici su Facebook"><span class="bi bi-facebook" aria-hidden="true"></span></a>
+                        <a href="#" class="text-white-50 text-decoration-none me-3"
+                            aria-label="Seguici su Twitter"><span class="bi bi-twitter" aria-hidden="true"></span></a>
+                        <a href="#" class="text-white-50 text-decoration-none" aria-label="Seguici su Instagram"><span
+                                class="bi bi-instagram" aria-hidden="true"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-white-50 border-top border-secondary pt-4 mt-4 small">
+                <p>&copy; 2026 UniEvents. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Nav Removed -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
