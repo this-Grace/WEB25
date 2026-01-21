@@ -7,4 +7,6 @@ $templateParams['navlinks'] = [
     ['href' => '/contact', 'label' => 'Contatti']
 ];
 
+$templateParams["content"] = "view/index-view.php";
+
 require 'template/base.php';
