@@ -3,7 +3,7 @@
 $templateParams['section'] = "Forgot Password";
 
 $templateParams["content"] = <<<HTML
-    <main id="main-content" class="auth-form-container" role="main" aria-labelledby="forgot-title">
+    <main id="main-content" class="auth-form-container">
         <div class="card shadow-lg border-0 rounded-4">
             <div class="card-body p-5">
                 <h1 id="forgot-title" class="h3 fw-bold text-center mb-2">Password Dimenticata?</h1>
@@ -11,12 +11,12 @@ $templateParams["content"] = <<<HTML
                 <div id="form-error" role="alert" aria-live="polite" class="visually-hidden"></div>
                 <form method="post" action="forgot.php" novalidate>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Indirizzo Email <span aria-hidden="true">*</span></label>
+                        <label for="email" class="form-label">Indirizzo Email</label>
                         <input name="email" type="email" class="form-control form-control-lg" id="email" required aria-required="true" aria-describedby="emailHelp">
                         <div id="emailHelp" class="form-text">Ti invieremo un link per resettare la password.</div>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Resetta Password</button>
+                        <button type="submit" class="btn btn-light btn-lg">Resetta Password</button>
                     </div>
                 </form>
                 <div class="text-center mt-4">

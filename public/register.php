@@ -3,7 +3,7 @@
 $templateParams['section'] = "Register";
 
 $templateParams["content"] = <<<HTML
-    <main class="auth-form-container">
+    <main id="main-content" class="auth-form-container">
         <div class="card shadow-lg border-0 rounded-4">
             <div class="card-body p-5">
                 <h1 class="h3 fw-bold text-center mb-4">Crea il tuo Account</h1>
@@ -25,7 +25,7 @@ $templateParams["content"] = <<<HTML
                         <input type="password" class="form-control form-control-lg" id="confirm-password" required>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Registrati</button>
+                        <button type="submit" class="btn btn-light btn-lg">Registrati</button>
                     </div>
                 </form>
                 <div class="text-center mt-4">
