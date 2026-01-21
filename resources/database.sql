@@ -30,6 +30,8 @@ CREATE TABLE events (
     eventOwner_id INT NOT NULL,
     category_id INT NOT NULL,
     location VARCHAR(255) NOT NULL,
+    latitude DECIMAL(10,8) NOT NULL,
+    longitude DECIMAL(11,8) NOT NULL,
     description TEXT,
     event_url VARCHAR(500),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -48,3 +50,12 @@ CREATE TABLE event_registrations (
     FOREIGN KEY (event_id) REFERENCES events(event_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+CREATE TABLE event_attendances (
+    attendance_id INT PRIMARY KEY AUTO_INCREMENT,
+    registration_id INT NOT NULL,
+    checkin_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY attendance_unique (registration_id),
+    FOREIGN KEY (registration_id) REFERENCES event_registrations(participant_id)
+);
+
