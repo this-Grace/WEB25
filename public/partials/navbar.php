@@ -14,7 +14,14 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a href="index.html" class="nav-link active"
                                 aria-current="page">Home</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Crea Eventi</a></li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link d-inline-flex align-items-center gap-2"
+                                data-bs-toggle="modal" data-bs-target="#createEventModal" role="button"
+                                aria-haspopup="dialog" aria-controls="createEventModal">
+                                <span class="bi bi-plus-circle" aria-hidden="true"></span>
+                                Crea Evento
+                            </a>
+                        </li>
                         <li class="nav-item"><a href="#" class="nav-link">Profilo</a></li>
                     </ul>
                 </div>
