@@ -18,7 +18,25 @@
 
     <a class="visually-hidden-focusable" href="#main-content">Salta al contenuto</a>
 
-    <?php echo $templateParams['content']; ?>
+    <?php
+    if (!empty($templateParams['navbar'])) {
+        $navPath = __DIR__ . '/../' . ltrim($templateParams['navbar'], '/');
+        if (file_exists($navPath)) {
+            include $navPath;
+        }
+    }
+
+    if (!empty($templateParams['content'])) {
+        echo $templateParams['content'];
+    }
+
+    if (!empty($templateParams['footer'])) {
+        $footerPath = __DIR__ . '/../' . ltrim($templateParams['footer'], '/');
+        if (file_exists($footerPath)) {
+            include $footerPath;
+        }
+    }
+    ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="assets/js/theme.js"></script>

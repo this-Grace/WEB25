@@ -17,12 +17,85 @@
 }
 
 body {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', sans-serif;
     background-color: var(--body-bg);
     color: var(--text-color);
     margin: 0
 }
 
+.hero-section {
+    background: linear-gradient(90deg, rgba(106, 17, 203, 1) 0%, rgba(37, 117, 252, 1) 100%);
+    padding-bottom: 3rem;
+    color: #fff;
+}
+
+.hero-section .navbar-brand {
+    font-size: 1.5rem;
+}
+
+.hero-section .navbar-nav .nav-link {
+    font-weight: 500;
+}
+
+.hero-section .form-control-lg {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.hero-section .btn-primary {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.event-card {
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+    border-radius: .75rem;
+    overflow: hidden;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(31, 45, 61, .125);
+}
+
+.event-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.event-card .badge {
+    font-weight: 600;
+    padding: .5em .75em;
+}
+
+.nav-pills .nav-link {
+    font-weight: 500;
+}
+
+.stat-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: .75rem;
+    box-shadow: var(--shadow);
+}
+
+.footer {
+    background-color: #212529;
+    color: #fff;
+}
+
+.footer .h5,
+.footer .h6 {
+    color: #fff;
+}
+
+.footer a {
+    color: #adb5bd;
+}
+
+.footer a:hover {
+    color: #fff;
+}
 /* Layout for auth pages */
 .auth-form-container {
     min-height: 100dvh;
