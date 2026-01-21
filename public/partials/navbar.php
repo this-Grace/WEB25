@@ -2,7 +2,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid px-0">
-                <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="index.php">
                     <span class="bi bi-calendar-check-fill fs-4" aria-hidden="true"></span>
                     <span class="ms-2 fw-bold">UniEvents</span>
                 </a>
@@ -14,8 +14,8 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a href="index.html" class="nav-link active"
                                 aria-current="page">Home</a></li>
-                        <li class="nav-item"><a href="create-event.html" class="nav-link">Crea Eventi</a></li>
-                        <li class="nav-item"><a href="profile.html" class="nav-link">Profilo</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Crea Eventi</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Profilo</a></li>
                     </ul>
                 </div>
             </div>
@@ -25,16 +25,26 @@
             <p class="lead">Scopri, partecipa e connettiti con la community universitaria</p>
             <div class="row justify-content-center mt-4">
                 <div class="col-md-8">
-                    <label for="event-search" class="visually-hidden">Cerca eventi e conferenze
-                        universitarie</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text bg-white border-0"><span class="bi bi-search"
-                                aria-hidden="true"></span></span>
-                        <input id="event-search" type="text" class="form-control border-0"
-                            placeholder="Cerca eventi, conferenze..." aria-label="Cerca eventi e conferenze">
-                        <button class="btn btn-light" type="button" aria-label="Esegui ricerca eventi">Cerca
-                            Eventi</button>
-                    </div>
+                    <label for="event-search" class="visually-hidden">Cerca eventi e conferenze universitarie</label>
+                    <input id="event-search" type="text" class="form-control" placeholder="Cerca eventi, conferenze..." aria-label="Cerca eventi e conferenze">
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-3">
+                    <h2 class="fw-bold">250+</h2>
+                    <p class="small">Eventi Totali</p>
+                </div>
+                <div class="col-3">
+                    <h2 class="fw-bold">5.000+</h2>
+                    <p class="small">Studenti Attivi</p>
+                </div>
+                <div class="col-3">
+                    <h2 class="fw-bold">50+</h2>
+                    <p class="small d-none d-lg-block">Organizzazioni</p>
+                </div>
+                <div class="col-3">
+                    <h2 class="fw-bold">12</h2>
+                    <p class="small d-none d-lg-block">Categorie</p>
                 </div>
             </div>
         </div>

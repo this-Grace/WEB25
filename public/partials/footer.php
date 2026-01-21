@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-center text-white-50 border-top border-secondary pt-4 mt-4 small">
+        <div class="text-center text-white-50 border-secondary pt-4 small">
             <p>&copy; <?php echo date('Y') ?> UniEvents. Tutti i diritti riservati.</p>
         </div>
     </div>

@@ -19,22 +19,8 @@
     <a class="visually-hidden-focusable" href="#main-content">Salta al contenuto</a>
 
     <?php
-    if (!empty($templateParams['navbar'])) {
-        $navPath = __DIR__ . '/../' . ltrim($templateParams['navbar'], '/');
-        if (file_exists($navPath)) {
-            include $navPath;
-        }
-    }
-
     if (!empty($templateParams['content'])) {
         echo $templateParams['content'];
-    }
-
-    if (!empty($templateParams['footer'])) {
-        $footerPath = __DIR__ . '/../' . ltrim($templateParams['footer'], '/');
-        if (file_exists($footerPath)) {
-            include $footerPath;
-        }
     }
     ?>
 

@@ -3,11 +3,11 @@
 $templateParams['section'] = "Login";
 
 $templateParams["content"] = <<<HTML
-    <main class="auth-form-container">
+    <main id="main-content" class="auth-form-container">
         <div class="card shadow-lg border-0 rounded-4">
             <div class="card-body p-5">
                 <h1 class="h3 fw-bold text-center mb-4">Accedi a UniEvents</h1>
-                <form>
+                <form method="post" action="forgot.php" novalidate>
                     <div class="mb-3">
                         <label for="email" class="form-label">Indirizzo Email</label>
                         <input type="email" class="form-control form-control-lg" id="email" required>
@@ -21,10 +21,10 @@ $templateParams["content"] = <<<HTML
                             <input type="checkbox" class="form-check-input" id="remember-me">
                             <label class="form-check-label" for="remember-me">Ricordami</label>
                         </div>
-                        <a href="forgot.php" class="small">Password dimenticata?</a>
+                        <a href="forgot-password.php" class="small">Password dimenticata?</a>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                        <button type="submit" class="btn btn-light btn-lg">Login</button>
                     </div>
                 </form>
                 <div class="text-center mt-4">
