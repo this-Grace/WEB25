@@ -1,7 +1,45 @@
 <?php
+session_start();
+require_once __DIR__ . '/../app/bootstrap.php';
+require_once __DIR__ . '/../app/orm/User.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $first = trim($_POST['first_name'] ?? '');
+    $last = trim($_POST['last_name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm = $_POST['confirm_password'] ?? '';
+
+    if (!$first || !$last || !$email || !$password) {
+        header('Location: register.php?error=missing');
+        exit;
+    }
+
+    if ($password !== $confirm) {
+        header('Location: register.php?error=nomatch');
+        exit;
+    }
+
+    // Connect to DB
+    $conn = $dbh->getConnection();
+
+    $userMapper = new User($conn);
+    if ($userMapper->exists($email)) {
+        header('Location: register.php?error=exists');
+        exit;
+    }
+
+    $ok = $userMapper->create($email, $first, $last, $password, 'USER');
+    if ($ok) {
+        header('Location: login.php?registered=1');
+        exit;
+    } else {
+        header('Location: register.php?error=dberror');
+        exit;
+    }
+}
 
 $templateParams['title'] = "Register";
-
 $templateParams['content'] = "partials/register-form.php";
 
 require 'template/base.php';

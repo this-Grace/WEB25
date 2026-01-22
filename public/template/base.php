@@ -1,12 +1,10 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 $templateParams["brand"] = "UniEvents";
 $templateParams["tagline"] = "Il futuro dei tuoi eventi universitari, oggi.";
-
-$templateParams["navbar"] = [
-    ["name" => "Home", "link" => "index.php", "title" => "Home"],
-    ["name" => "Crea Evento", "link" => "create.php", "title" => "Create Event"],
-    ["name" => "Login", "link" => "login.php", "title" => "Login"],
-];
 
 $templateParams["footer"] = [
     ['role' => 'Developer', 'name' => 'Alessandro Rebosio', 'email' => 'alessandro.rebosio@studio.unibo.it'],
@@ -45,14 +43,28 @@ $templateParams["footer"] = [
             </a>
 
             <ul class="nav nav-pills justify-content-center mt-md-2">
-                <?php foreach ($templateParams["navbar"] as $item): ?>
+                <li class="nav-item">
+                    <a href="index.php"
+                        class="nav-link px-3 <?php echo ($templateParams['title'] === 'Home' ? 'active bg-dark text-white' : 'link-dark'); ?>">
+                        Home
+                    </a>
+                </li>
+
+                <?php if (isset($_SESSION['user'])): ?>
                     <li class="nav-item">
-                        <a href="<?php echo htmlspecialchars($item['link'], ENT_QUOTES, 'UTF-8'); ?>"
-                            class="nav-link px-3 <?php echo ($templateParams['title'] == $item['title'] ? 'active bg-dark text-white' : 'link-dark'); ?>">
-                            <?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>
+                        <a href="logout.php"
+                            class="nav-link text-danger px-3 <?php echo ($templateParams['title'] === 'Logout' ? 'active bg-dark text-white' : 'link-dark'); ?>">
+                            Logout
                         </a>
                     </li>
-                <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a href="login.php"
+                            class="nav-link text-primary px-3 <?php echo ($templateParams['title'] === 'Login' ? 'active bg-dark text-white' : 'link-dark'); ?>">
+                            Login
+                        </a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>

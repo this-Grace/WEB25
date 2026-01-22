@@ -26,7 +26,7 @@
                 <small class="opacity-75">Organizzazioni</small>
             </div>
             <div class="col-6 col-md-2">
-                <div class="h3 fw-bold mb-0">12</div>
+                <div class="h3 fw-bold mb-0">6</div>
                 <small class="opacity-75">Categorie</small>
             </div>
         </div>
@@ -82,8 +82,11 @@
                                 <span class="bi bi-geo-alt text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
                                 <span class="bi bi-people text-success" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['attendees'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                             </p>
-                            <a href="<?php echo htmlspecialchars($ev['cta_href'] ?? '#', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-dark w-100 mt-auto"
-                                aria-label="<?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?></a>
+
+                            <?php if (isset($_SESSION['user'])) : ?>
+                                <a href="<?php echo htmlspecialchars($ev['cta_href'] ?? '#', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-dark w-100 mt-auto"
+                                    aria-label="<?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?></a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

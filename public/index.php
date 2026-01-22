@@ -31,7 +31,6 @@ $templateParams['featured_events'] = [
     ],
 ];
 
-
 $templateParams['stats'] = [
     ['card_class' => 'stat-card stat-card-blue p-4', 'icon' => 'bi bi-calendar-event', 'value' => '28', 'label' => 'Eventi Questo Mese'],
     ['card_class' => 'stat-card stat-card-green p-4', 'icon' => 'bi bi-percent', 'value' => '89%', 'label' => 'Partecipazione Media'],

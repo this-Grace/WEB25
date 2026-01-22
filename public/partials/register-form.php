@@ -2,12 +2,37 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
-                <form action="../app/controller/register-action.php" method="POST">
+                <form action="register.php" method="POST">
                     <div class="text-center mb-4">
                         <i class="bi bi-calendar-check-fill fs-1 text-primary"></i>
                         <h1 class="h3 mb-3 fw-normal">Crea il tuo Account</h1>
                         <p class="text-muted">Entra a far parte della community di UniEvents.</p>
                     </div>
+
+                    <?php if (isset($_GET['error'])): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php 
+                            switch ($_GET['error']) {
+                                case 'missing':
+                                    echo 'Tutti i campi sono obbligatori.';
+                                    break;
+                                case 'nomatch':
+                                    echo 'Le password non coincidono.';
+                                    break;
+                                case 'exists':
+                                    echo 'Esiste già un account con questa email.';
+                                    break;
+                                case 'dberror':
+                                    echo 'Si è verificato un errore durante la registrazione. Riprova più tardi.';
+                                    break;
+                                default:
+                                    echo 'Si è verificato un errore.';
+                                    break;
+                            }
+                            ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">

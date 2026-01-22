@@ -4,9 +4,9 @@ class DatabaseHelper
 {
     private $db;
 
-    public function __construct($servername, $username, $password, $dbname, $charset)
+    public function __construct($servername, $username, $password, $dbname, $port, $charset)
     {
-        $this->db = new mysqli($servername, $username, $password, $dbname);
+        $this->db = new mysqli($servername, $username, $password, $dbname, $port);
         if ($this->db->connect_error) {
             die("Connection failed: " . $this->db->connect_error);
         }
@@ -17,5 +17,4 @@ class DatabaseHelper
     {
         return $this->db;
     }
-
 }
