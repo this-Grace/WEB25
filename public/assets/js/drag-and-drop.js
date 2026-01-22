@@ -1,120 +1,83 @@
-(() => {
-    'use strict';
+document.addEventListener('DOMContentLoaded', function () {
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('fileElem');
+    const previewImg = document.getElementById('previewImageSidebar');
 
-    const resizeToDataUrl = (image, w, h, quality = 0.9) => {
-        const canvas = document.createElement('canvas');
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, w, h);
-        const ratio = Math.min(w / image.width, h / image.height);
-        const newW = image.width * ratio;
-        const newH = image.height * ratio;
-        const dx = (w - newW) / 2;
-        const dy = (h - newH) / 2;
-        ctx.drawImage(image, dx, dy, newW, newH);
-        return canvas.toDataURL('image/jpeg', quality);
-    };
+    if (!dropArea || !fileInput || !previewImg) return;
 
-    function handleFiles(files, previewImageSidebar, gallery) {
-        if (files.length > 0) {
-            const file = files[0];
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function () {
-                const imgObj = new Image();
-                imgObj.onload = function () {
-                    const targetW = 800;
-                    const targetH = 450;
-                    const dataUrl = resizeToDataUrl(imgObj, targetW, targetH, 0.92);
-                    if (previewImageSidebar) previewImageSidebar.src = dataUrl;
-                    const thumb = document.createElement('img');
-                    thumb.src = resizeToDataUrl(imgObj, 300, 170, 0.8);
-                    thumb.classList.add('img-fluid', 'rounded-3', 'mt-3');
-                    thumb.style.maxHeight = '120px';
-                    if (gallery) {
-                        gallery.innerHTML = '';
-                        gallery.appendChild(thumb);
-                    }
-                };
-                imgObj.src = reader.result;
-            }
-        }
-    }
+    // Visual feedback for drag state
+    function highlight() { dropArea.classList.add('dragover'); }
+    function unhighlight() { dropArea.classList.remove('dragover'); }
 
-    function setupFileUpload(dropArea, fileElem, previewImageSidebar) {
-        if (!dropArea || !fileElem) return;
-
-        const gallery = document.getElementById('gallery');
-
-        dropArea.addEventListener('click', () => fileElem.click());
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, e => {
-                e.preventDefault();
-                e.stopPropagation();
-            }, false);
-        });
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.add('bg-primary-subtle'), false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.remove('bg-primary-subtle'), false);
-        });
-
-        dropArea.addEventListener('drop', e => {
-            handleFiles(e.dataTransfer.files, previewImageSidebar, gallery);
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            highlight();
         }, false);
+    });
 
-        fileElem.addEventListener('change', function () {
-            handleFiles(this.files, previewImageSidebar, gallery);
-        });
-    }
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            unhighlight();
+        }, false);
+    });
 
-    function updateCategoryBadge(previewCategoryBadge, value) {
-        if (!previewCategoryBadge) return;
-        if (!value) value = 'Categoria';
-        previewCategoryBadge.textContent = value;
-        const suffix = value.toString().toLowerCase().replace(/\s+/g, '-');
-        previewCategoryBadge.className = `badge badge-cate-${suffix} position-absolute top-0 start-0 m-3 shadow-sm`;
-    }
+    dropArea.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }, false);
 
-    function setupLivePreview(eventTitleInput, previewTitleDisplay, eventCategorySelector, previewCategoryBadge) {
-        if (eventTitleInput) {
-            eventTitleInput.addEventListener('input', (e) => {
-                if (previewTitleDisplay) previewTitleDisplay.textContent = e.target.value || "Titolo del tuo evento";
-            });
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(fileInput.files);
+    });
+
+    // Allow clicking the whole area to open file selector
+    dropArea.addEventListener('click', () => fileInput.click());
+
+    function handleFiles(files) {
+        if (!files || files.length === 0) return;
+        const file = files[0];
+
+        // Basic validation: image and size < 10MB
+        if (!file.type.startsWith('image/')) {
+            alert('Seleziona un file immagine (PNG/JPG/GIF).');
+            return;
+        }
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+            alert('Immagine troppo grande. Dimensione massima: 10MB.');
+            return;
         }
 
-        if (eventCategorySelector) {
-            eventCategorySelector.addEventListener('change', (e) => {
-                updateCategoryBadge(previewCategoryBadge, e.target.value);
-            });
-            if (eventCategorySelector.value) {
-                updateCategoryBadge(previewCategoryBadge, eventCategorySelector.value);
-            }
+        // Preview
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImg.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Place the dropped file into the file input so form submit works
+        try {
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
+        } catch (err) {
+            // DataTransfer may not be available in some older browsers; do nothing
+            console.warn('Could not assign file to input programmatically', err);
         }
     }
+});
 
-    function init() {
-        const dropArea = document.getElementById('drop-area');
-        const fileElem = document.getElementById('fileElem');
-        const previewImageSidebar = document.getElementById('previewImageSidebar');
-        const previewTitleDisplay = document.getElementById('previewTitleDisplay');
-        const eventTitleInput = document.getElementById('eventTitleInput');
-        const eventCategorySelector = document.getElementById('eventCategorySelector');
-        const previewCategoryBadge = document.getElementById('previewCategoryBadge');
-
-        setupFileUpload(dropArea, fileElem, previewImageSidebar);
-        setupLivePreview(eventTitleInput, previewTitleDisplay, eventCategorySelector, previewCategoryBadge);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+// Optional: small style injection for dragover state if page CSS doesn't cover it
+(function addDragStyle() {
+    const id = 'drag-and-drop-inline-style';
+    if (document.getElementById(id)) return;
+    const style = document.createElement('style');
+    style.id = id;
+    style.innerHTML = `#drop-area.dragover { border-color: #0d6efd; background-color: rgba(13,110,253,0.03); }`;
+    document.head.appendChild(style);
 })();

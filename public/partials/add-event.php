@@ -16,34 +16,46 @@
                                 <label for="eventTitleInput" class="form-label small fw-bold">Titolo Evento *</label>
                                 <input id="eventTitleInput" name="title" type="text" class="form-control" placeholder="es. Workshop di Programmazione Python">
                             </div>
-                            <div class="row">
-                                <div class="col-md-12 mb-3">
-                                    <label class="form-label small fw-bold">Organizzatore *</label>
-                                    <input name="organizer" type="text" class="form-control" placeholder="es. Dipartimento di Informatica">
-                                </div>
-                            </div>
                             <div class="mb-0">
                                 <label class="form-label small fw-bold">Descrizione *</label>
-                                <textarea name="description" class="form-control" rows="3" placeholder="Descrivi il tuo evento in dettaglio..."></textarea>
+                                <textarea id="eventDescriptionInput" name="description" class="form-control" rows="3" placeholder="Descrivi il tuo evento in dettaglio..."></textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body p-4">
-                            <h5 class="card-title mb-4"><i class="bi bi-geo-alt me-2"></i>Luogo</h5>
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold">Sede *</label>
-                                <input name="location" type="text" class="form-control" placeholder="es. Aula Magna - Edificio A">
-                            </div>
+                            <h5 class="card-title mb-4"><i class="bi bi-calendar-event me-2"></i>Data e Luogo</h5>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label small fw-bold">Indirizzo</label>
-                                    <input name="address" type="text" class="form-control" placeholder="Via Università 1, Milano">
+                                    <label class="form-label small fw-bold">Data Evento</label>
+                                    <input id="eventDateInput" name="event_date" type="date" class="form-control bg-light">
                                 </div>
                                 <div class="col-md-6 mb-3">
+                                    <label class="form-label small fw-bold">Orario</label>
+                                    <div class="input-group">
+                                        <select id="eventTimeHour" class="form-select bg-light" aria-label="Ora (24H)">
+                                            <?php for ($h = 0; $h < 24; $h++): $hh = str_pad($h, 2, '0', STR_PAD_LEFT); ?>
+                                                <option value="<?php echo $hh; ?>"><?php echo $hh; ?></option>
+                                            <?php endfor; ?>
+                                        </select>
+                                        <select id="eventTimeMinute" class="form-select bg-light" aria-label="Minuti">
+                                            <?php for ($m = 0; $m < 60; $m += 1): $mm = str_pad($m, 2, '0', STR_PAD_LEFT); ?>
+                                                <option value="<?php echo $mm; ?>"><?php echo $mm; ?></option>
+                                            <?php endfor; ?>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="eventTimeInput" name="event_time" value="">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label small fw-bold">Sede *</label>
+                                    <input id="eventLocationInput" name="location" type="text" class="form-control" placeholder="es. Aula Magna - Edificio A">
+                                </div>
+                                <div class="col-md-12 mb-3">
                                     <label class="form-label small fw-bold">Aula/Sala</label>
-                                    <input name="room" type="text" class="form-control" placeholder="es. Aula 201">
+                                    <input id="eventRoomInput" name="room" type="text" class="form-control" placeholder="es. Aula 201">
                                 </div>
                             </div>
                         </div>
@@ -51,8 +63,9 @@
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body p-4">
-                            <h5 class="card-title mb-4"><i class="bi bi-tag me-2"></i>Tipo di Evento</h5>
-                            <div class="mb-0">
+                            <h5 class="card-title mb-4"><i class="bi bi-sliders me-2"></i>Altro</h5>
+
+                            <div class="mb-4">
                                 <label class="form-label small fw-bold">Seleziona Tipologia *</label>
                                 <select class="form-select bg-light" id="eventCategorySelector" name="event_type">
                                     <option value="" selected disabled>Scegli una categoria...</option>
@@ -64,32 +77,10 @@
                                     <option value="Social">Social</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="card border-0 shadow-sm rounded-4 mb-4">
-                        <div class="card-body p-4">
-                            <h5 class="card-title mb-4"><i class="bi bi-people me-2"></i>Partecipanti</h5>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label small fw-bold">Numero Massimo Partecipanti *</label>
-                                    <input type="number" class="form-control bg-light" placeholder="es. 100">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label small fw-bold">Scadenza Iscrizioni</label>
-                                    <input type="date" class="form-control bg-light">
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <label class="form-label small fw-bold d-block">Requisiti di Partecipazione</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" name="only_students" value="1" type="checkbox" id="req1">
-                                    <label class="form-check-label small" for="req1">Solo studenti universitari</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" name="registration_required" value="1" type="checkbox" id="req2">
-                                    <label class="form-check-label small" for="req2">Registrazione obbligatoria</label>
-                                </div>
+                            <div>
+                                <label class="form-label small fw-bold">Numero Massimo Partecipanti *</label>
+                                <input id="eventMaxSeatsInput" name="max_seats" type="number" class="form-control bg-light mb-2" placeholder="es. 100">
                             </div>
                         </div>
                     </div>
@@ -129,11 +120,15 @@
 
                         <div class="card-body d-flex flex-column p-4">
                             <h3 id="previewTitleDisplay" class="h5 card-title fw-bold">Titolo del tuo evento</h3>
+                            <p id="previewDescription" class="small text-muted mb-2">Breve descrizione dell'evento</p>
 
                             <p class="card-text text-muted small flex-grow-1">
-                                <span class="bi bi-calendar me-1" aria-hidden="true"></span> <span id="previewDate">Data da definire</span><br>
-                                <span class="bi bi-geo-alt me-1" aria-hidden="true"></span> <span id="previewLocation">Luogo da definire</span><br>
-                                <span class="bi bi-people me-1" aria-hidden="true"></span> 0 / <span id="previewMaxSeats">∞</span> iscritti
+                                <span class="bi bi-calendar me-1 text-primary" aria-hidden="true"></span>
+                                <span id="previewDate">Data da definire</span>
+                                <span id="previewTime" class="ms-2">Ora da</span>
+                                <br>
+                                <span class="bi bi-geo-alt me-1 text-danger" aria-hidden="true"></span> <span id="previewLocation">Luogo da definire</span><br>
+                                <span class="bi bi-people me-1 text-success" aria-hidden="true"></span> 0 / <span id="previewMaxSeats">∞</span> iscritti
                             </p>
                         </div>
                     </div>

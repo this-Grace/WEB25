@@ -67,12 +67,13 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h3 class="card-title"><?php echo htmlspecialchars($ev['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
+                            <p id="previewDescription" class="small text-muted mb-2">Breve descrizione dell'evento</p>
                             <p class="card-text text-muted small flex-grow-1">
-                                <span class="bi bi-calendar" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['date'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-geo-alt" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-people" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['attendees'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                <span class="bi bi-calendar text-primary" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['date'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-geo-alt text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-people text-success" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['attendees'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                             </p>
-                            <a href="<?php echo htmlspecialchars($ev['cta_href'] ?? '#', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-light w-100 mt-auto"
+                            <a href="<?php echo htmlspecialchars($ev['cta_href'] ?? '#', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-dark w-100 mt-auto"
                                 aria-label="<?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?></a>
                         </div>
                     </div>
@@ -80,7 +81,7 @@
             <?php endforeach; ?>
 
             <div class="text-center m-4 w-100">
-                <a href="#" class="btn btn-dark">Carica altri eventi</a>
+                <a href="#" class="btn btn-light border border-dark">Carica altri eventi</a>
             </div>
         </div>
 </main>

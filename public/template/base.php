@@ -100,7 +100,7 @@ $templateParams["footer"] = [
 
     <?php if (!empty($templateParams['js']) && is_array($templateParams['js'])): ?>
         <?php foreach ($templateParams['js'] as $script) : ?>
-            <script src="<?php echo htmlspecialchars($script, ENT_QUOTES, 'UTF-8'); ?>"></script>
+            <script src="<?php echo htmlspecialchars($script); ?>"></script>
         <?php endforeach ?>
     <?php endif; ?>
 </body>
