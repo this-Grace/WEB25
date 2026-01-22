@@ -90,7 +90,7 @@
         <h2 class="text-center mb-4">Statistiche della Community</h2>
         <div class="row text-center">
             <?php foreach ($templateParams['stats'] as $s) : ?>
-                <div class="col-md-3 col-6 mb-4">
+                <div class="col-md-4 col-6 mb-4">
                     <div class="<?php echo htmlspecialchars($s['card_class'] ?? 'stat-card p-4', ENT_QUOTES, 'UTF-8'); ?>">
                         <div class="stat-icon mb-3">
                             <span class="<?php echo htmlspecialchars($s['icon'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" aria-hidden="true"></span>
