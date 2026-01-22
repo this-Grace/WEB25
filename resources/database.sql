@@ -3,12 +3,6 @@ CREATE DATABASE web25;
 USE web25;
 
 -- =====================================
--- DATABASE
--- =====================================
-CREATE DATABASE eventi_universitari;
-USE eventi_universitari;
-
--- =====================================
 -- UTENTE
 -- =====================================
 CREATE TABLE UTENTE (
@@ -44,7 +38,7 @@ CREATE TABLE EVENTO (
     luogo VARCHAR(100) NOT NULL,
     posti_totali INT NOT NULL CHECK (posti_totali > 0),
     posti_disponibili INT NOT NULL CHECK (posti_disponibili >= 0),
-    stato ENUM('BOZZA', 'PUBBLICATO', 'ANNULLATO') NOT NULL,
+    stato ENUM('BOZZA', 'PUBBLICATO', 'APPROVATO', 'ANNULLATO') NOT NULL,
     data_creazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_pubblicazione TIMESTAMP NULL,
     immagine VARCHAR(255) NULL,
