@@ -1,20 +1,33 @@
 <?php
 
 /**
- * Simple User data mapper for the USERS table.
- * Provides basic CRUD and authentication helpers using mysqli prepared statements.
+ * User Class
+ * A data mapper for the USERS table providing CRUD operations and authentication.
+ * Uses prepared statements to prevent SQL injection.
  */
 class User
 {
-    private $conn; // mysqli connection
+    /**
+     * @var mysqli $conn MySQLi database connection
+     */
+    private $conn;
 
+    /**
+     * Constructor - Initializes with a MySQLi connection
+     * 
+     * @param mysqli $conn MySQLi database connection instance
+     */
     public function __construct(mysqli $conn)
     {
         $this->conn = $conn;
     }
 
     /**
-     * Find a user by email. Returns associative array or null.
+     * Find a user by email address
+     * 
+     * @param string $email User's email address
+     * @return array|null Associative array with user data or null if not found
+     *                    Returns: email, name, surname, password, role, registration_date
      */
     public function findByEmail(string $email): ?array
     {
@@ -30,7 +43,10 @@ class User
     }
 
     /**
-     * Check existence by email.
+     * Check if a user exists by email address
+     * 
+     * @param string $email User's email address to check
+     * @return bool True if user exists, false otherwise
      */
     public function exists(string $email): bool
     {
@@ -38,7 +54,14 @@ class User
     }
 
     /**
-     * Create a new user. $password is plain text and will be hashed.
+     * Create a new user in the database
+     * 
+     * @param string $email User's email address
+     * @param string $name User's first name
+     * @param string $surname User's last name
+     * @param string $password Plain text password (will be hashed)
+     * @param string $role User role (default: 'USER')
+     * @return bool True if creation successful, false otherwise
      */
     public function create(string $email, string $name, string $surname, string $password, string $role = 'USER'): bool
     {
@@ -53,7 +76,12 @@ class User
     }
 
     /**
-     * Verify credentials; returns user data on success or null on failure.
+     * Authenticate a user with email and password
+     * 
+     * @param string $email User's email address
+     * @param string $password Plain text password to verify
+     * @return array|null User data without password on success, null on failure
+     *                    Returns: email, name, surname, role, registration_date
      */
     public function authenticate(string $email, string $password): ?array
     {
@@ -61,7 +89,7 @@ class User
         if (!$user) return null;
         $hash = $user['password'] ?? null;
         if ($hash && password_verify($password, $hash)) {
-            // do not expose password hash
+            // Remove password hash from returned data for security
             unset($user['password']);
             return $user;
         }
@@ -69,7 +97,11 @@ class User
     }
 
     /**
-     * Update user's password (hashes the new password).
+     * Update a user's password
+     * 
+     * @param string $email User's email address
+     * @param string $newPassword New plain text password (will be hashed)
+     * @return bool True if update successful, false otherwise
      */
     public function updatePassword(string $email, string $newPassword): bool
     {
@@ -84,7 +116,10 @@ class User
     }
 
     /**
-     * Delete a user by email.
+     * Delete a user by email address
+     * 
+     * @param string $email User's email address to delete
+     * @return bool True if deletion successful, false otherwise
      */
     public function delete(string $email): bool
     {
