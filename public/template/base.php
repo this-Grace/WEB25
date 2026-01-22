@@ -4,7 +4,8 @@ $templateParams["tagline"] = "Il futuro dei tuoi eventi universitari, oggi.";
 
 $templateParams["navbar"] = [
     ["name" => "Home", "link" => "index.php", "title" => "Home"],
-    ["name" => "Crea Evento", "link" => "create.php", "title" => "Create Event"]
+    ["name" => "Crea Evento", "link" => "create.php", "title" => "Create Event"],
+    ["name" => "Login", "link" => "login.php", "title" => "Login"],
 ];
 
 $templateParams["footer"] = [
@@ -36,7 +37,7 @@ $templateParams["footer"] = [
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="d-flex flex-column vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-2">
         <div class="container flex-column flex-lg-row"> <a class="navbar-brand d-flex align-items-center mx-auto mx-lg-0 mb-2 mb-lg-0" href="index.php">
                 <i class="bi bi-calendar-check-fill fs-3 text-primary me-2"></i>
@@ -53,7 +54,6 @@ $templateParams["footer"] = [
                     </li>
                 <?php endforeach; ?>
             </ul>
-
         </div>
     </nav>
 
