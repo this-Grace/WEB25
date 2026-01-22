@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetToDefault() {
         const categoryFilters = categoryFilterButtonsContainer.querySelectorAll('.btn-cate');
         categoryFilters.forEach(btn => btn.classList.remove('active'));
-        
+
         const tuttiButton = Array.from(categoryFilters).find(btn => btn.textContent.trim() === 'Tutti');
         if (tuttiButton) {
             tuttiButton.classList.add('active');
@@ -33,15 +33,19 @@ document.addEventListener('DOMContentLoaded', () => {
         activeFiltersList.innerHTML = '';
         const activeFilterButtons = categoryFilterButtonsContainer.querySelectorAll('.btn-cate.active');
         let hasActiveFilters = false;
+        const activeCategories = [];
 
         activeFilterButtons.forEach(button => {
             const filterLabel = button.textContent.trim();
             if (filterLabel === 'Tutti') {
                 return;
             }
-            
+
             hasActiveFilters = true;
             const badgeClass = categoryClassMap[filterLabel] || 'bg-secondary text-white';
+
+            // collect active categories for filtering
+            activeCategories.push(filterLabel);
 
             const filterBadge = document.createElement('span');
             filterBadge.className = `badge rounded-pill d-flex align-items-center p-2 ps-3 ${badgeClass}`;
@@ -53,6 +57,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         activeFiltersSection.style.display = hasActiveFilters ? 'block' : 'none';
+
+        // Filter event cards on the page
+        const eventCards = document.querySelectorAll('[data-category]');
+        if (!eventCards) return;
+
+        if (activeCategories.length === 0) {
+            // show all
+            eventCards.forEach(card => {
+                card.style.display = '';
+            });
+        } else {
+            eventCards.forEach(card => {
+                const cat = (card.dataset.category || '').trim();
+                if (activeCategories.indexOf(cat) !== -1) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
     }
 
     categoryFilterButtonsContainer.addEventListener('click', function (e) {
@@ -60,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         e.preventDefault();
-        
+
         const clickedButton = e.target;
         const isTutti = clickedButton.textContent.trim() === 'Tutti';
         const categoryFilters = categoryFilterButtonsContainer.querySelectorAll('.btn-cate');
@@ -89,11 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!e.target.matches('button[data-filter]')) {
             return;
         }
-        
+
         const filterToRemove = e.target.dataset.filter;
         const categoryFilters = categoryFilterButtonsContainer.querySelectorAll('.btn-cate');
         const buttonToDeactivate = Array.from(categoryFilters).find(btn => btn.textContent.trim() === filterToRemove);
-        
+
         if (buttonToDeactivate) {
             buttonToDeactivate.classList.remove('active');
         }
@@ -105,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tuttiButton.classList.add('active');
             }
         }
-        
+
         updateActiveFilters();
     });
 
@@ -115,6 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
             resetToDefault();
         });
     }
-    
+
     updateActiveFilters();
 });

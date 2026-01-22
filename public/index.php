@@ -21,7 +21,7 @@ $templateParams['featured_events'] = [
         'img' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop',
         'img_alt' => "Audience listening to a speaker at an artificial intelligence conference presentation",
         'badge_class' => 'badge badge-cate-conferenze position-absolute top-0 start-0 m-3',
-        'category_label' => 'Conferenza',
+        'category_label' => 'Conferenze',
         'title' => "Conferenza sull'Intelligenza Artificiale",
         'date' => '25 Gennaio 2026 - 14:30',
         'location' => 'Aula Magna - Edificio A',
