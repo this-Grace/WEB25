@@ -1,37 +1,108 @@
+<?php
+$templateParams["brand"] = "UniEvents";
+$templateParams["tagline"] = "Il futuro dei tuoi eventi universitari, oggi.";
+
+$templateParams["navbar"] = [
+    ["name" => "Home", "link" => "index.php", "title" => "Home"],
+    ["name" => "Crea Evento", "link" => "create.php", "title" => "Create Event"],
+    ["name" => "Login", "link" => "login.php", "title" => "Login"],
+];
+
+$templateParams["footer"] = [
+    ['role' => 'Developer', 'name' => 'Alessandro Rebosio', 'email' => 'alessandro.rebosio@studio.unibo.it'],
+    ['role' => 'Developer', 'name' => 'Grazia Bochdanovits de Kavna', 'email' => 'grazia.bochdanovits@studio.unibo.it']
+];
+?>
+
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-bs-theme="auto">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniEvents | <?php echo htmlspecialchars($templateParams['section']); ?></title>
+    <title><?php echo htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8') . " | " . htmlspecialchars($templateParams['title'], ENT_QUOTES, 'UTF-8'); ?></title>
 
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <?php if (!empty($templateParams['css']) && is_array($templateParams['css'])): ?>
+        <?php foreach ($templateParams['css'] as $stylesheet) : ?>
+            <link rel="stylesheet" href="<?php echo htmlspecialchars($stylesheet, ENT_QUOTES, 'UTF-8'); ?>">
+        <?php endforeach ?>
+    <?php endif; ?>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
 </head>
 
-<body>
+<body class="d-flex flex-column vh-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-2">
+        <div class="container flex-column flex-lg-row"> <a class="navbar-brand d-flex align-items-center mx-auto mx-lg-0 mb-2 mb-lg-0" href="index.php">
+                <i class="bi bi-calendar-check-fill fs-3 text-primary me-2"></i>
+                <span class="fs-4 fw-bold tracking-tight"><?php echo $templateParams['brand']; ?></span>
+            </a>
 
-    <a class="visually-hidden-focusable" href="#main-content">Salta al contenuto</a>
+            <ul class="nav nav-pills justify-content-center mt-md-2">
+                <?php foreach ($templateParams["navbar"] as $item): ?>
+                    <li class="nav-item">
+                        <a href="<?php echo htmlspecialchars($item['link'], ENT_QUOTES, 'UTF-8'); ?>"
+                            class="nav-link px-3 <?php echo ($templateParams['title'] == $item['title'] ? 'active bg-dark text-white' : 'link-dark'); ?>">
+                            <?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </nav>
 
     <?php
-    if (!empty($templateParams['content'])) {
-        echo $templateParams['content'];
-    }
-
-    $modalPath = __DIR__ . '/../partials/modal-crea-evento.php';
-    if (file_exists($modalPath)) {
-        include $modalPath;
-    }
+    require $templateParams["content"];
     ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="assets/js/modal-create-event.js"></script>
-    <script src="assets/js/theme.js"></script>
+    <footer class="bg-dark text-white py-5" role="contentinfo" aria-label="Footer">
+        <div class="container">
+            <div class="row text-center text-md-start g-4 align-items-start">
+
+                <div class="col-12 col-md-4">
+                    <h5 class="text-primary fw-bold mb-2"><?php echo htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8'); ?></h5>
+                    <p class="small text-white-50 mb-0"><?php echo htmlspecialchars($templateParams['tagline'], ENT_QUOTES, 'UTF-8'); ?></p>
+                </div>
+
+                <?php foreach ($templateParams["footer"] as $item): ?>
+                    <div class="col-6 col-md-4">
+                        <h6 class="text-uppercase mb-2 small fw-bold text-white"><?php echo $item['role']; ?></h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-2">
+                                <i class="bi bi-envelope text-primary me-2" aria-hidden="true"></i>
+                                <a href="mailto:<?php echo htmlspecialchars($item['email'], ENT_QUOTES, 'UTF-8'); ?>" class="text-white-50 text-decoration-none">
+                                    <?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                <?php endforeach; ?>
+
+            </div>
+
+            <hr class="my-4 border-secondary">
+
+            <div class="text-center small text-white-50">
+                &copy; <?php echo date('Y'); ?> <strong><?php echo htmlspecialchars($templateParams['brand']); ?></strong>. Tutti i diritti riservati.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <?php if (!empty($templateParams['js']) && is_array($templateParams['js'])): ?>
+        <?php foreach ($templateParams['js'] as $script) : ?>
+            <script src="<?php echo htmlspecialchars($script); ?>"></script>
+        <?php endforeach ?>
+    <?php endif; ?>
 </body>
 
 </html>
