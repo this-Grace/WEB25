@@ -1,0 +1,12 @@
+.upload-area {
+    border-style: dashed !important;
+    border-color: #dee2e6 !important;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.upload-area:hover,
+.upload-area.bg-primary-subtle {
+    background-color: #eef2ff !important;
+    border-color: #6366f1 !important;
+}
