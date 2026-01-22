@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const titleInput = document.getElementById('eventTitleInput');
     const descInput = document.getElementById('eventDescriptionInput');
     const dateInput = document.getElementById('eventDateInput');
-    const timeInput = document.getElementById('eventTimeInput'); // hidden input to submit HH:MM
+    const timeInput = document.getElementById('eventTimeInput');
     const timeHourSelect = document.getElementById('eventTimeHour');
     const timeMinuteSelect = document.getElementById('eventTimeMinute');
     const locationInput = document.getElementById('eventLocationInput');
@@ -38,21 +38,20 @@ document.addEventListener('DOMContentLoaded', function () {
         if (previewTitle && titleInput) previewTitle.textContent = titleInput.value.trim() || 'Titolo del tuo evento';
         if (previewDescription && descInput) previewDescription.textContent = descInput.value.trim() || 'Breve descrizione dell\'evento';
 
-        // Combine date and time into a single display (Data - Ora in 24H)
         if (previewDate) {
             const dateVal = dateInput && dateInput.value ? formatDate(dateInput.value) : '';
-            // build HH:MM from selects (if available) or fallback to hidden input
+
             let timeVal = '';
             if (timeHourSelect && timeMinuteSelect) {
                 timeVal = timeHourSelect.value + ':' + timeMinuteSelect.value;
-                if (timeInput) timeInput.value = timeVal; // populate hidden input for form submit
+                if (timeInput) timeInput.value = timeVal;
             } else if (timeInput && timeInput.value) {
                 timeVal = timeInput.value;
             }
             timeVal = timeVal ? formatTime24(timeVal) : '';
             previewDate.textContent = (dateVal || timeVal) ? [dateVal, timeVal].filter(Boolean).join(' - ') : 'Data da definire';
         }
-        if (previewTime) previewTime.textContent = ''; // not used now
+        if (previewTime) previewTime.textContent = '';
 
         if (previewLocation && locationInput) {
             const building = locationInput.value.trim();
@@ -100,8 +99,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (maxSeatsInput) maxSeatsInput.addEventListener('input', updatePreview);
     if (categorySelect) categorySelect.addEventListener('change', updatePreview);
 
-    // Initialize preview with current values
-    // If hidden time input already has a value (e.g., from server or previous state), populate selects
     if (timeInput && timeInput.value && timeHourSelect && timeMinuteSelect) {
         const parts = timeInput.value.split(':');
         if (parts.length >= 2) {

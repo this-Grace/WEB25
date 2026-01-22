@@ -49,6 +49,15 @@
 
 <main class="py-5">
     <div class="container border-bottom">
+        <div id="active-filters-section" class="mb-4" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                <h2 class="h6 text-muted mb-0 fw-bold">FILTRI ATTIVI</h2>
+                <button id="clear-filters-btn" class="btn btn-sm btn-link text-danger text-decoration-none">Rimuovi</button>
+            </div>
+            <div id="active-filters-list" class="d-flex flex-wrap gap-2">
+                <!-- Active filters will be shown here -->
+            </div>
+        </div>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="h4">Eventi in Evidenza</h2>
         </div>

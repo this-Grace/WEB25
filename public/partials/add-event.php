@@ -40,7 +40,7 @@
                                             <?php endfor; ?>
                                         </select>
                                         <select id="eventTimeMinute" class="form-select bg-light" aria-label="Minuti">
-                                            <?php for ($m = 0; $m < 60; $m += 1): $mm = str_pad($m, 2, '0', STR_PAD_LEFT); ?>
+                                            <?php for ($m = 0; $m < 60; $m += 15): $mm = str_pad($m, 2, '0', STR_PAD_LEFT); ?>
                                                 <option value="<?php echo $mm; ?>"><?php echo $mm; ?></option>
                                             <?php endfor; ?>
                                         </select>

@@ -2,6 +2,7 @@
 
 $templateParams['title'] = "Home";
 $templateParams['css'] = ['assets/css/home.css'];
+$templateParams['js'] = ['assets/js/filters.js'];
 
 $templateParams['content'] = "partials/homepage.php";
 
