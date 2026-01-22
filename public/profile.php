@@ -39,7 +39,9 @@ $content = <<<HTML
                     </ul>
                 </div>
                 <div class="col-md-3 text-end">
-                    <a href="#" class="btn btn-outline-primary">Modifica Profilo</a>
+                    <a href="#" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                        Modifica Profilo
+                    </a>
                 </div>
             </div>
         </div>
@@ -49,19 +51,19 @@ $content = <<<HTML
             <div class="col-md-4">
                 <div class="card p-3 h-100">
                     <span class="bi bi-calendar-check fs-2 text-primary-emphasis" aria-hidden="true"></span>
-                    <h2 class="h5 mt-2 mb-0">15 Eventi Frequentati</h2>
+                    <h3 class="h5 mt-2 mb-0">15 Eventi Frequentati</h3>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card p-3 h-100">
                     <span class="bi bi-patch-check-fill fs-2 text-success-emphasis" aria-hidden="true"></span>
-                    <h2 class="h5 mt-2 mb-0">Organizzatore Certificato</h2>
+                    <h3 class="h5 mt-2 mb-0">Organizzatore Certificato</h3>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card p-3 h-100">
                     <span class="bi bi-people-fill fs-2 text-info-emphasis" aria-hidden="true"></span>
-                    <h2 class="h5 mt-2 mb-0">Top Networker</h2>
+                    <h3 class="h5 mt-2 mb-0">Top Networker</h3>
                 </div>
             </div>
         </div>
@@ -151,7 +153,7 @@ $content = <<<HTML
                                     <div class="d-flex align-items-start">
                                         <span class="bi bi-briefcase me-3 text-warning fs-4"></span>
                                         <div>
-                                            <h3 class="h5 mb-1 text-body-emphasis">Career Day 2026</h3>
+                                            <h4 class="h5 mb-1 text-body-emphasis">Career Day 2026</h4>
                                             <div class="event-details">
                                                 <div class="d-flex flex-wrap gap-3 align-items-center">
                                                     <span class="text-body-secondary">
@@ -191,7 +193,7 @@ $content = <<<HTML
                     
                     <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                         <h2 class="h5 text-body-emphasis mb-0">Eventi Organizzati</h2>
-                        <a href="crea-evento.php" class="btn btn-primary">
+                        <a href="partials/modal-crea-evento.php" class="btn btn-primary">
                             <span class="bi bi-plus-circle me-2"></span>
                             Crea Nuovo Evento
                         </a>
@@ -227,8 +229,7 @@ $content = <<<HTML
                                 </div>
                                 <div class="col-md-4">
                                     <div class="d-flex flex-column align-items-end gap-2">
-                                        <a href="#" class="btn btn-primary btn-sm">
-                                            <span class="bi bi-gear me-1"></span>
+                                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#manageEventModal">
                                             Gestisci
                                         </a>
                                     </div>
@@ -257,7 +258,7 @@ $content = <<<HTML
                                     <div class="d-flex align-items-start">
                                         <span class="bi bi-code-slash me-3 text-success fs-4"></span>
                                         <div>
-                                            <h3 class="h5 mb-1 text-body-emphasis">Conferenza Python Milano</h3>
+                                            <h4 class="h5 mb-1 text-body-emphasis">Conferenza Python Milano</h4>
                                             <div class="event-details">
                                                 <div class="d-flex flex-wrap gap-3 align-items-center">
                                                     <span class="text-body-secondary">
@@ -348,7 +349,7 @@ $content = <<<HTML
                                     <div class="d-flex align-items-start">
                                         <span class="bi bi-plus-circle-fill me-3 text-success fs-4"></span>
                                         <div>
-                                            <h3 class="h5 mb-1 text-body-emphasis">Hai creato l'evento "Hackathon Universitario 2026"</h3>
+                                            <h4 class="h5 mb-1 text-body-emphasis">Hai creato l'evento "Hackathon Universitario 2026"</h4>
                                             <div class="event-details">
                                                 <div class="d-flex flex-wrap gap-3 align-items-center">
                                                     <span class="text-body-secondary">
@@ -376,7 +377,7 @@ $content = <<<HTML
                                     <div class="d-flex align-items-start">
                                         <span class="bi bi-patch-check-fill me-3 text-warning fs-4"></span>
                                         <div>
-                                            <h3 class="h5 mb-1 text-body-emphasis">Hai ottenuto il badge "Organizzatore Certificato"</h3>
+                                            <h4 class="h5 mb-1 text-body-emphasis">Hai ottenuto il badge "Organizzatore Certificato"</h4>
                                             <div class="event-details">
                                                 <div class="d-flex flex-wrap gap-3 align-items-center">
                                                     <span class="text-body-secondary">
@@ -401,6 +402,112 @@ $content = <<<HTML
         </div>
 
     </div>
+
+    <!-- Profile Edit Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editProfileModalLabel">Modifica Profilo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="editProfileForm">
+            <div class="mb-3">
+                <label for="profileName" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="profileName" value="Marco Rossi">
+            </div>
+            <div class="mb-3">
+                <label for="profileEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="profileEmail" value="marco.rossi@studenti.unimi.it">
+            </div>
+            <div class="mb-3">
+                <label for="profilePhone" class="form-label">Telefono</label>
+                <input type="tel" class="form-control" id="profilePhone" value="+39 340 123 4567">
+            </div>
+            <div class="mb-3">
+                <label for="profileLocation" class="form-label">Posizione</label>
+                <input type="text" class="form-control" id="profileLocation" value="Milano, Italia">
+            </div>
+            <div class="mb-3">
+                <label for="profileImage" class="form-label">Foto Profilo</label>
+                <input type="file" class="form-control" id="profileImage">
+            </div>
+            <div class="mb-3">
+                <label for="profileStudentId" class="form-label">Matricola</label>
+                <input type="text" class="form-control" id="profileStudentId" value="12345678">
+            </div>
+            <div class="mb-3">
+                <label for="profileCourse" class="form-label">Corso di Studi</label>
+                <input type="text" class="form-control" id="profileCourse" value="Informatica">
+            </div>
+            <div class="mb-3">
+                <label for="profileYear" class="form-label">Anno di Corso</label>
+                <select class="form-select" id="profileYear">
+                <option value="1">Primo Anno</option>
+                <option value="2">Secondo Anno</option>
+                <option value="3" selected>Terzo Anno</option>
+                <option value="4">Quarto Anno</option>
+                <option value="5">Quinto Anno</option>
+                </select>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+            <button type="button" class="btn btn-primary" id="saveProfileBtn">Salva Modifiche</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Manage Event Modal -->
+    <div class="modal fade" id="manageEventModal" tabindex="-1" aria-labelledby="manageEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="manageEventModalLabel">Gestisci Evento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="manageEventForm">
+                        <div class="mb-3">
+                            <label for="eventTitle" class="form-label">Titolo Evento</label>
+                            <input type="text" class="form-control" id="eventTitle" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDate" class="form-label">Data</label>
+                            <input type="date" class="form-control" id="eventDate" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventTime" class="form-label">Orario</label>
+                            <input type="text" class="form-control" id="eventTime" placeholder="Es: 9:00 - 18:00" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventLocation" class="form-label">Luogo</label>
+                            <input type="text" class="form-control" id="eventLocation" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Descrizione</label>
+                            <textarea class="form-control" id="eventDescription" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="eventAvailableSeats" class="form-label">Posti Disponibili</label>
+                                <input type="number" class="form-control" id="eventAvailableSeats" value="">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteEventBtn">Elimina Evento</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary" id="saveEventBtn">Salva Modifiche</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 HTML;
 
