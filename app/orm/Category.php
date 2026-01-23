@@ -8,18 +8,18 @@
 class Category
 {
     /**
-     * @var mysqli $conn MySQLi database connection
+     * @var DatabaseHelper $db Database helper instance
      */
-    private $conn;
+    private $db;
 
     /**
-     * Constructor - Initializes with a MySQLi connection
+     * Constructor - Initializes with DatabaseHelper
      *
-     * @param mysqli $conn MySQLi database connection instance
+     * @param DatabaseHelper $db DatabaseHelper instance
      */
-    public function __construct(mysqli $conn)
+    public function __construct(DatabaseHelper $db)
     {
-        $this->conn = $conn;
+        $this->db = $db;
     }
 
     /**
@@ -30,15 +30,12 @@ class Category
     public function findAll(): array
     {
         $sql = 'SELECT id, name FROM CATEGORY ORDER BY id';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return [];
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, []);
+        if (!$res || !($res instanceof mysqli_result)) return [];
         $rows = [];
         while ($row = $res->fetch_assoc()) {
             $rows[] = $row;
         }
-        $stmt->close();
         return $rows;
     }
 
@@ -51,13 +48,9 @@ class Category
     public function findByName(string $name): ?array
     {
         $sql = 'SELECT id, name FROM CATEGORY WHERE name = ? LIMIT 1';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return null;
-        $stmt->bind_param('s', $name);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$name]);
+        if (!$res || !($res instanceof mysqli_result)) return null;
         $row = $res->fetch_assoc();
-        $stmt->close();
         return $row ?: null;
     }
 
@@ -70,13 +63,9 @@ class Category
     public function findById(int $id): ?array
     {
         $sql = 'SELECT id, name FROM CATEGORY WHERE id = ? LIMIT 1';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return null;
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$id]);
+        if (!$res || !($res instanceof mysqli_result)) return null;
         $row = $res->fetch_assoc();
-        $stmt->close();
         return $row ?: null;
     }
 
@@ -100,11 +89,7 @@ class Category
     public function create(string $name): bool
     {
         $sql = 'INSERT INTO CATEGORY (name) VALUES (?)';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('s', $name);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$name]);
         return (bool)$ok;
     }
 
@@ -118,11 +103,7 @@ class Category
     public function updateName(int $id, string $newName): bool
     {
         $sql = 'UPDATE CATEGORY SET name = ? WHERE id = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('si', $newName, $id);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$newName, $id]);
         return (bool)$ok;
     }
 
@@ -135,11 +116,7 @@ class Category
     public function deleteById(int $id): bool
     {
         $sql = 'DELETE FROM CATEGORY WHERE id = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('i', $id);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$id]);
         return (bool)$ok;
     }
 }

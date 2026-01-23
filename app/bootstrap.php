@@ -16,6 +16,6 @@ define("PROFILE_IMG_DIR", "/upload/img/profile/");
 
 $dbh = new DatabaseHelper("localhost", "root", "", "web25", 3306, 'utf8mb4');
 
-$userMapper = new User($dbh->getConnection());
-$eventMapper = new Event($dbh->getConnection());
-$catMapper = new Category($dbh->getConnection());
+$userMapper = new User($dbh);
+$eventMapper = new Event($dbh);
+$catMapper = new Category($dbh);

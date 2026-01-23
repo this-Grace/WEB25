@@ -8,18 +8,18 @@
 class User
 {
     /**
-     * @var mysqli $conn MySQLi database connection
+     * @var DatabaseHelper $db Database helper instance
      */
-    private $conn;
+    private $db;
 
     /**
-     * Constructor - Initializes with a MySQLi connection
-     * 
-     * @param mysqli $conn MySQLi database connection instance
+     * Constructor - Initializes with DatabaseHelper
+     *
+     * @param DatabaseHelper $db DatabaseHelper instance
      */
-    public function __construct(mysqli $conn)
+    public function __construct(DatabaseHelper $db)
     {
-        $this->conn = $conn;
+        $this->db = $db;
     }
 
     /**
@@ -32,13 +32,9 @@ class User
     public function findByEmail(string $email): ?array
     {
         $sql = 'SELECT email, name, surname, password, role, registration_date FROM USER WHERE email = ? LIMIT 1';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return null;
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$email]);
+        if (!$res || !($res instanceof mysqli_result)) return null;
         $row = $res->fetch_assoc();
-        $stmt->close();
         return $row ?: null;
     }
 
@@ -67,11 +63,7 @@ class User
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $sql = 'INSERT INTO USER (email, name, surname, password, role) VALUES (?, ?, ?, ?, ?)';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('sssss', $email, $name, $surname, $hash, $role);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$email, $name, $surname, $hash, $role]);
         return (bool)$ok;
     }
 
@@ -87,11 +79,7 @@ class User
     public function updateProfile(string $email, string $name, string $surname, string $newEmail): bool
     {
         $sql = 'UPDATE USER SET name = ?, surname = ?, email = ? WHERE email = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('ssss', $name, $surname, $newEmail, $email);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$name, $surname, $newEmail, $email]);
         return (bool)$ok;
     }
 
@@ -105,11 +93,7 @@ class User
     public function updateAvatar(string $email, ?string $avatarPath): bool
     {
         $sql = 'UPDATE USER SET avatar = ? WHERE email = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('ss', $avatarPath, $email);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$avatarPath, $email]);
         return (bool)$ok;
     }
 
@@ -145,11 +129,7 @@ class User
     {
         $hash = password_hash($newPassword, PASSWORD_DEFAULT);
         $sql = 'UPDATE USER SET password = ? WHERE email = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('ss', $hash, $email);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$hash, $email]);
         return (bool)$ok;
     }
 
@@ -162,11 +142,7 @@ class User
     public function delete(string $email): bool
     {
         $sql = 'DELETE FROM USER WHERE email = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('s', $email);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$email]);
         return (bool)$ok;
     }
 }

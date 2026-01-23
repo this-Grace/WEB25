@@ -7,16 +7,16 @@
  */
 class Event
 {
-    /** @var mysqli $conn */
-    private $conn;
+    /** @var DatabaseHelper $db */
+    private $db;
 
     /**
      * Constructor
-     * @param mysqli $conn
+     * @param DatabaseHelper $db
      */
-    public function __construct(mysqli $conn)
+    public function __construct(DatabaseHelper $db)
     {
-        $this->conn = $conn;
+        $this->db = $db;
     }
 
     /**
@@ -27,13 +27,9 @@ class Event
     public function findById(int $id): ?array
     {
         $sql = 'SELECT id, title, description, event_date,  location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE id = ? LIMIT 1';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return null;
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$id]);
+        if (!$res || !($res instanceof mysqli_result)) return null;
         $row = $res->fetch_assoc();
-        $stmt->close();
         return $row ?: null;
     }
 
@@ -51,11 +47,8 @@ class Event
             . ' ORDER BY e.event_date'
             . ' LIMIT ? OFFSET ?';
 
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return [];
-        $stmt->bind_param('ii', $limit, $offset);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$limit, $offset]);
+        if (!$res || !($res instanceof mysqli_result)) return [];
         $rows = [];
         while ($row = $res->fetch_assoc()) {
             if (!isset($row['category_label'])) {
@@ -63,7 +56,6 @@ class Event
             }
             $rows[] = $row;
         }
-        $stmt->close();
         return $rows;
     }
 
@@ -75,16 +67,12 @@ class Event
     public function findByUser(string $email): array
     {
         $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE user_email = ? ORDER BY event_date';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return [];
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$email]);
+        if (!$res || !($res instanceof mysqli_result)) return [];
         $rows = [];
         while ($row = $res->fetch_assoc()) {
             $rows[] = $row;
         }
-        $stmt->close();
         return $rows;
     }
 
@@ -96,16 +84,12 @@ class Event
     public function findByCategory(int $categoryId): array
     {
         $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE category_id = ? ORDER BY event_date';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return [];
-        $stmt->bind_param('i', $categoryId);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$categoryId]);
+        if (!$res || !($res instanceof mysqli_result)) return [];
         $rows = [];
         while ($row = $res->fetch_assoc()) {
             $rows[] = $row;
         }
-        $stmt->close();
         return $rows;
     }
 
@@ -116,10 +100,7 @@ class Event
     public function create(string $title, string $description, string $event_date, string $location, int $total_seats, int $available_seats, string $status, ?string $image, string $user_email, int $category_id): bool
     {
         $sql = 'INSERT INTO EVENT (title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $ok = $stmt->bind_param('ssssiisssi', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id) && $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id]);
         return (bool)$ok;
     }
 
@@ -130,10 +111,7 @@ class Event
     public function update(int $id, string $title, string $description, string $event_date, string $location, int $total_seats, int $available_seats, string $status, ?string $image, int $category_id): bool
     {
         $sql = 'UPDATE EVENT SET title = ?, description = ?, event_date = ?, location = ?, total_seats = ?, available_seats = ?, status = ?, image = ?, category_id = ? WHERE id = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $ok = $stmt->bind_param('ssssiissii', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $category_id, $id) && $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $category_id, $id]);
         return (bool)$ok;
     }
 
@@ -145,11 +123,7 @@ class Event
     public function delete(int $id): bool
     {
         $sql = 'DELETE FROM EVENT WHERE id = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('i', $id);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$id]);
         return (bool)$ok;
     }
 
@@ -161,13 +135,8 @@ class Event
     public function reserveSeat(int $id): bool
     {
         $sql = 'UPDATE EVENT SET available_seats = available_seats - 1 WHERE id = ? AND available_seats > 0';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $affected = $stmt->affected_rows;
-        $stmt->close();
-        return $affected > 0;
+        $ok = $this->db->prepareAndExecute($sql, [$id]);
+        return $this->db->affectedRows() > 0;
     }
 
     /**
@@ -178,11 +147,7 @@ class Event
     public function cancelReservation(int $id): bool
     {
         $sql = 'UPDATE EVENT SET available_seats = available_seats + 1 WHERE id = ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('i', $id);
-        $ok = $stmt->execute();
-        $stmt->close();
+        $ok = $this->db->prepareAndExecute($sql, [$id]);
         return (bool)$ok;
     }
 
@@ -202,11 +167,8 @@ class Event
             . ' WHERE e.title LIKE ? OR e.description LIKE ?'
             . ' ORDER BY e.event_date'
             . ' LIMIT ? OFFSET ?';
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return [];
-        $stmt->bind_param('ssii', $like, $like, $limit, $offset);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        $res = $this->db->prepareAndExecute($sql, [$like, $like, $limit, $offset]);
+        if (!$res || !($res instanceof mysqli_result)) return [];
         $rows = [];
         while ($row = $res->fetch_assoc()) {
             if (!isset($row['category_label'])) {
@@ -214,7 +176,6 @@ class Event
             }
             $rows[] = $row;
         }
-        $stmt->close();
         return $rows;
     }
 }

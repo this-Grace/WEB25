@@ -8,7 +8,7 @@
                 <form id="homepage-search-form" class="d-flex" role="search" method="get" action="#">
                     <label for="searchInput" class="visually-hidden">Cerca eventi, organizzazioni o luoghi</label>
                     <input id="searchInput" name="q" type="search" class="form-control form-control-lg rounded-3 me-2" placeholder="Cerca eventi, organizzazioni o luoghi" aria-label="Cerca">
-                    <button class="btn btn-primary btn-lg" type="submit">Cerca</button>
+                    <button class="btn btn-primary btn-lg visually-hidden" type="submit">Cerca</button>
                 </form>
             </div>
         </div>
@@ -122,7 +122,7 @@
     <div class="container border-bottom">
         <h2 class="text-center mb-4">Statistiche della Community</h2>
         <div class="row text-center">
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-md-4 col-6 mb-4">
                 <div class="stat-card stat-card-blue p-4">
                     <div class="stat-icon mb-3">
                         <span class="bi bi-calendar-event" aria-hidden="true"></span>
@@ -131,7 +131,7 @@
                     <p class="small">Eventi Questo Mese</p>
                 </div>
             </div>
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-md-4 col-6 mb-4">
                 <div class="stat-card stat-card-green p-4">
                     <div class="stat-icon mb-3">
                         <span class="bi bi-percent" aria-hidden="true"></span>
@@ -140,7 +140,7 @@
                     <p class="small">Partecipazione Media</p>
                 </div>
             </div>
-            <div class="col-12 col-md-4 mb-4">
+            <div class="col-md-4 col-6 mb-4">
                 <div class="stat-card stat-card-orange p-4">
                     <div class="stat-icon mb-3">
                         <span class="bi bi-check-circle" aria-hidden="true"></span>
