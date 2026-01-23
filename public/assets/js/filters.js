@@ -19,7 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = document.querySelector('.btn-cate[data-id="' + id + '"]');
             const label = btn ? btn.textContent.trim() : id;
             const span = document.createElement('span');
-            span.className = 'badge rounded-pill d-flex align-items-center p-2';
+
+            let badgeClasses = 'badge d-flex align-items-center p-2 btn-cate';
+
+            if (btn) {
+                btn.classList.forEach(cls => {
+                    if (cls.startsWith('btn-cate-')) {
+                        badgeClasses += ' ' + cls;
+                    }
+                });
+            }
+
+            span.className = badgeClasses;
             span.innerHTML = '<span class="fw-medium">' + label + '</span>';
             const rem = document.createElement('button');
             rem.type = 'button';
