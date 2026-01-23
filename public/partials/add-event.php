@@ -11,7 +11,7 @@
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body p-4">
-                            <h5 class="card-title mb-4"><i class="bi bi-file-text me-2"></i>Informazioni Base</h5>
+                            <h2 class="card-title mb-4"><span class="bi bi-file-text me-2" aria-hidden="true"></span>Informazioni Base</h2>
                             <div class="mb-3">
                                 <label for="eventTitleInput" class="form-label small fw-bold">Titolo Evento *</label>
                                 <input id="eventTitleInput" name="title" type="text" class="form-control" placeholder="es. Workshop di Programmazione Python">
@@ -25,7 +25,7 @@
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body p-4">
-                            <h5 class="card-title mb-4"><i class="bi bi-calendar-event me-2"></i>Data e Luogo</h5>
+                            <h2 class="card-title mb-4"><span class="bi bi-calendar-event me-2" aria-hidden="true"></span>Data e Luogo</h2>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label small fw-bold">Data Evento</label>
@@ -63,7 +63,7 @@
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body p-4">
-                            <h5 class="card-title mb-4"><i class="bi bi-sliders me-2"></i>Altro</h5>
+                            <h2 class="card-title mb-4"><span class="bi bi-sliders me-2" aria-hidden="true"></span>Altro</h2>
 
                             <div class="mb-4">
                                 <label class="form-label small fw-bold">Seleziona Tipologia *</label>
@@ -87,10 +87,10 @@
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
                         <div class="card-body p-4">
-                            <h5 class="card-title mb-4"><i class="bi bi-upload me-2"></i>Immagine Evento</h5>
+                            <h2 class="card-title mb-4"><span class="bi bi-upload me-2" aria-hidden="true"></span>Immagine Evento</h2>
                             <div id="drop-area" class="upload-area p-5 border border-2 border-dashed rounded-4 text-center">
-                                <i class="bi bi-cloud-arrow-up display-4 text-primary"></i>
-                                <h6 class="mt-3 fw-bold">Trascina qui l'immagine o clicca</h6>
+                                <span class="bi bi-cloud-arrow-up display-4 text-primary" aria-hidden="true"></span>
+                                <h3 class="mt-3 fw-bold">Trascina qui l'immagine o clicca</h3>
                                 <p class="small text-muted">PNG, JPG fino a 10MB</p>
                                 <input type="file" id="fileElem" name="event_image" accept="image/*" class="d-none">
                                 <button type="button" class="btn btn-primary btn-sm px-4" onclick="document.getElementById('fileElem').click()">Seleziona File</button>
@@ -102,7 +102,7 @@
 
             <div class="col-lg-4">
                 <div class="sticky-top" style="top: 100px;">
-                    <h6 class="text-muted small mb-3 text-uppercase fw-bold tracking-wider">Anteprima</h6>
+                    <h2 class="text-muted small mb-3 text-uppercase fw-bold tracking-wider">Anteprima</h2>
 
                     <div class="card event-card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
                         <div class="position-relative">
@@ -135,7 +135,7 @@
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4 bg-primary-subtle border-start border-primary border-4">
                         <div class="card-body p-4">
-                            <h6 class="fw-bold text-primary"><i class="bi bi-lightbulb me-2"></i>Suggerimenti</h6>
+                            <h3 class="fw-bold text-primary"><span class="bi bi-lightbulb me-2" aria-hidden="true"></span>Suggerimenti</h3>
                             <ul class="small mb-0 mt-2 ps-3 text-primary-emphasis">
                                 <li>Usa un titolo chiaro e descrittivo</li>
                                 <li>Aggiungi un'immagine accattivante</li>

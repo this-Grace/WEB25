@@ -38,7 +38,7 @@ $templateParams["footer"] = [
 <body class="d-flex flex-column vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-2">
         <div class="container flex-column flex-lg-row"> <a class="navbar-brand d-flex align-items-center mx-auto mx-lg-0 mb-2 mb-lg-0" href="index.php">
-                <i class="bi bi-calendar-check-fill fs-3 text-primary me-2"></i>
+                <span class="bi bi-calendar-check-fill fs-3 text-primary me-2" aria-hidden="true"></span>
                 <span class="fs-4 fw-bold tracking-tight"><?php echo $templateParams['brand']; ?></span>
             </a>
 
@@ -73,21 +73,21 @@ $templateParams["footer"] = [
     require $templateParams["content"];
     ?>
 
-    <footer class="bg-dark text-white py-5" role="contentinfo" aria-label="Footer">
+    <footer class="bg-dark text-white py-5" aria-label="Footer">
         <div class="container">
             <div class="row text-center text-md-start g-4 align-items-start">
 
                 <div class="col-12 col-md-4">
-                    <h5 class="text-primary fw-bold mb-2"><?php echo htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8'); ?></h5>
+                    <h2 class="h5 text-primary fw-bold mb-2"><?php echo htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8'); ?></h2>
                     <p class="small text-white-50 mb-0"><?php echo htmlspecialchars($templateParams['tagline'], ENT_QUOTES, 'UTF-8'); ?></p>
                 </div>
 
                 <?php foreach ($templateParams["footer"] as $item): ?>
                     <div class="col-6 col-md-4">
-                        <h6 class="text-uppercase mb-2 small fw-bold text-white"><?php echo $item['role']; ?></h6>
+                        <h3 class="h6 text-uppercase mb-2 small fw-bold text-white"><?php echo $item['role']; ?></h3>
                         <ul class="list-unstyled small mb-0">
                             <li class="mb-2">
-                                <i class="bi bi-envelope text-primary me-2" aria-hidden="true"></i>
+                                <span class="bi bi-envelope text-primary me-2" aria-hidden="true"></span>
                                 <a href="mailto:<?php echo htmlspecialchars($item['email'], ENT_QUOTES, 'UTF-8'); ?>" class="text-white-50 text-decoration-none">
                                     <?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>
                                 </a>
