@@ -83,10 +83,8 @@ filtrare e iscriversi agli eventi.
 \begin{itemize}
   \item Accessibilità: i componenti interattivi (modali, form) devono
     rispettare le linee guida ARIA e la gestione del focus.
-  \item Usabilità: interfaccia semplice e reattiva; \newline anteprime
-    immediate per feedback all'utente.
-  \item Performance: caricamento veloce delle liste e gestione
-    efficiente delle immagini (lazy-loading quando possibile).
+  \item Usabilità: interfaccia semplice e reattiva;  anteprime
+    immediate \newline per feedback all'utente.
   \item Portabilità e responsive design: funzionamento corretto su
     dispositivi mobile e desktop.
 \end{itemize}
@@ -128,5 +126,31 @@ filtrare e iscriversi agli eventi.
 
 \appendix
 \chapter{Guida Utente}
+
+\section{Creazione del database}
+Per creare il database MySQL a partire dagli script SQL forniti,
+assicurarsi di avere MySQL installato e in esecuzione.
+
+\begin{verbatim}
+> mysql < resources/database.sql
+> mysql < resources/demo.sql
+\end{verbatim}
+
+\section{Avvio dell'applicazione}
+Il progetto è basato su PHP. Per impostare le credenziali per la
+connessione al database modificare il file \texttt{app/bootstrap.css}
+(o il file di configurazione equivalente) e inserire host, nome
+database, utente e password.
+
+\vspace{\baselineskip}
+\noindent Per avviare l'applicazione usare il server integrato di PHP:
+
+\begin{verbatim}
+> php -S localhost:8080 -t public
+\end{verbatim}
+
+L'applicazione sarà accessibile all'indirizzo
+\url{http://localhost:8080/}. Effettuare il login o la registrazione
+per iniziare a utilizzare il sistema.
 
 \end{document}
