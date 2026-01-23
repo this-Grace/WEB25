@@ -1,58 +1,8 @@
-.form-control-inline {
-    background: transparent !important;
-    border: none;
-    border-bottom: 1.5px dashed transparent;
-    padding: 0 !important;
-    margin: 0 !important;
-    outline: none !important;
-    transition: 0.2s ease;
-    line-height: inherit !important;
-    height: auto !important;
-    max-width: 100%;
-}
-
-#input-first-name,
-#input-last-name {
-    width: 150px;
-}
-
-#input-email {
-    width: 300px;
-}
-
-.edit-mode .form-control-inline {
-    border-bottom-color: rgba(99, 102, 241, 0.4);
-}
-
-.edit-mode .form-control-inline:focus {
-    border-bottom-color: #6366f1;
-    border-bottom-style: solid;
-    background: rgba(99, 102, 241, 0.03) !important;
-}
-
-.profile-title-edit {
-    font-size: calc(1.325rem + 0.9vw) !important;
-    font-weight: 700;
-    line-height: 1.2 !important;
-}
-
-.profile-sub-edit {
-    font-size: 1rem !important;
-    color: #6c757d;
-    line-height: 1.5 !important;
-}
-
-.edit-input-flex {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: 0 8px;
-    align-items: baseline;
-}
-
 .avatar-container {
     width: 140px;
     height: 140px;
     position: relative;
+    flex-shrink: 0;
 }
 
 .profile-img {
@@ -61,6 +11,7 @@
     object-fit: cover;
     border-radius: 50%;
     border: 4px solid white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
 }
 
 .avatar-edit-btn {
@@ -75,65 +26,134 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none;
+    border: 3px solid white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
 }
 
 .avatar-edit-btn:hover {
     transform: scale(1.1);
+    background: #4f46e5;
 }
 
-.btn-tiny {
-    font-size: 0.75rem !important;
-    padding: 2px 12px !important;
-    color: #6c757d;
-    border: 1px solid #dee2e6 !important;
+.name-group {
+    min-height: 2.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-.btn-tiny:hover {
-    background: #6366f1;
-    color: white;
-    border-color: #6366f1 !important;
-}
-
-.badge-cate-tag {
-    display: inline-block;
-    font-size: 0.7rem;
+.form-control-inline {
+    background: transparent !important;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0 !important;
+    margin: 0 !important;
+    outline: none !important;
+    line-height: 1.2 !important;
+    font-family: inherit;
+    font-size: inherit;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 4px 14px;
-    border-radius: 50px;
-    text-transform: uppercase;
-    transition: 0.2s;
+    color: inherit;
+    text-align: center;
+    display: inline-block;
+    width: auto;
+    min-width: 40px;
+}
+
+.edit-mode .form-control-inline {
+    border-bottom: 2px dashed rgba(99, 102, 241, 0.4);
+    background: rgba(99, 102, 241, 0.03) !important;
+}
+
+.edit-mode .form-control-inline:focus {
+    border-bottom: 2px solid #6366f1;
+    background: rgba(99, 102, 241, 0.08) !important;
+}
+
+.profile-title-edit {
+    font-size: calc(1.325rem + 0.9vw) !important;
+}
+
+.profile-sub-edit {
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    color: #6c757d;
+}
+
+.email-group .view-mode,
+.email-group .edit-mode.d-flex {
+    justify-content: center;
+}
+
+.profile-actions-wrapper {
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-header-action {
+    min-width: 130px;
+    white-space: nowrap;
+}
+
+.justify-content-center-mobile {
+    justify-content: center !important;
 }
 
 .event-wide-card {
-    transition: 0.2s;
+    transition: 0.2s ease-in-out;
     border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    min-height: 200px;
 }
 
-.event-wide-card:hover {
-    transform: translateX(5px);
-    border-color: #6366f1 !important;
+.event-wide-card .row {
+    align-items: stretch;
 }
 
-.event-wide-card .img-fluid {
+.event-card-img {
     width: 100%;
-    object-fit: cover;
     height: 100%;
-    min-height: 160px;
+    object-fit: cover;
+    display: block;
+}
+
+.badge-cate-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-transform: uppercase;
+}
+
+.btn-event {
+    font-size: 0.8rem !important;
+    padding: 4px 16px !important;
+    min-width: 110px;
+}
+
+.event-action-wrapper {
+    display: flex;
+    justify-content: center;
 }
 
 .custom-progress {
     height: 4px !important;
     background-color: #e9ecef !important;
     border-radius: 10px;
-    overflow: hidden;
 }
 
-.progress-bar {
-    border-radius: 10px;
-    transition: width 0.6s ease;
+.nav-tabs-container {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nav-tabs-container::-webkit-scrollbar {
+    display: none;
 }
 
 #profileTabs .nav-link {
@@ -145,17 +165,52 @@
 #profileTabs .nav-link.active {
     color: #6366f1 !important;
     border-bottom-color: #6366f1 !important;
+    font-weight: 700;
 }
 
-@media (max-width: 768px) {
-    .edit-input-flex {
-        justify-content: center;
-        flex-direction: column;
-        gap: 8px;
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+}
+
+.edit-mode.d-flex {
+    align-items: baseline;
+}
+
+@media (min-width: 768px) {
+    .name-group {
+        align-items: flex-start;
+        text-align: left;
     }
 
     .form-control-inline {
-        text-align: center;
-        width: 100% !important;
+        text-align: left;
+    }
+
+    .justify-content-center-mobile,
+    .profile-actions-wrapper,
+    .email-group .view-mode,
+    .email-group .edit-mode.d-flex {
+        justify-content: flex-start !important;
+    }
+
+    .email-group .form-control-inline {
+        text-align: left !important;
+    }
+
+    .event-action-wrapper {
+        justify-content: flex-end;
+    }
+
+    .event-wide-card:hover {
+        transform: translateX(5px);
+        border-color: #6366f1 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .event-card-img {
+        height: 200px;
     }
 }
