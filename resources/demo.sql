@@ -1,19 +1,19 @@
 USE web25;
 
 -- =====================================
--- DEMO DATA FOR USERS
+-- USER
 -- =====================================
-INSERT INTO USERS (email, name, surname, password, role) VALUES
-('mario.rossi@example.com', 'Mario', 'Rossi', '$2y$10$hashedpassword1', 'USER'),
-('luisa.bianchi@example.com', 'Luisa', 'Bianchi', '$2y$10$hashedpassword2', 'USER'),
-('giulia.verdi@example.com', 'Giulia', 'Verdi', '$2y$10$hashedpassword3', 'HOST'),
-('paolo.neri@example.com', 'Paolo', 'Neri', '$2y$10$hashedpassword4', 'HOST'),
-('admin@web25.com', 'Admin', 'System', '$2y$10$hashedpassword5', 'ADMINISTRATOR');
+INSERT INTO USER (email, name, surname, password, role) VALUES
+('mario.rossi@example.com', 'Mario', 'Rossi', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'USER'),
+('luisa.bianchi@example.com', 'Luisa', 'Bianchi', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'USER'),
+('giulia.verdi@example.com', 'Giulia', 'Verdi', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'HOST'),
+('paolo.neri@example.com', 'Paolo', 'Neri', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'HOST'),
+('admin@web25.com', 'Admin', 'System', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'ADMINISTRATOR');
 
 -- =====================================
--- CATEGORIE
+-- CATEGORY
 -- =====================================
-INSERT INTO CATEGORIES (name) VALUES
+INSERT INTO CATEGORY (name) VALUES
 ('Conferenze'),
 ('Workshop'),
 ('Seminari'),

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Categories Class
- * A data mapper for the CATEGORIES table providing CRUD operations.
+ * CATEGORY Class
+ * A data mapper for the CATEGORY table providing CRUD operations.
  * Uses prepared statements to prevent SQL injection.
  */
-class Categories
+class Category
 {
     /**
      * @var mysqli $conn MySQLi database connection
@@ -23,13 +23,13 @@ class Categories
     }
 
     /**
-     * Retrieve all categories
+     * Retrieve all CATEGORY
      *
      * @return array An array of associative arrays with keys `id` and `name`
      */
     public function findAll(): array
     {
-        $sql = 'SELECT id, name FROM CATEGORIES ORDER BY id';
+        $sql = 'SELECT id, name FROM CATEGORY ORDER BY id';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->execute();
@@ -50,7 +50,7 @@ class Categories
      */
     public function findByName(string $name): ?array
     {
-        $sql = 'SELECT id, name FROM CATEGORIES WHERE name = ? LIMIT 1';
+        $sql = 'SELECT id, name FROM CATEGORY WHERE name = ? LIMIT 1';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return null;
         $stmt->bind_param('s', $name);
@@ -69,7 +69,7 @@ class Categories
      */
     public function findById(int $id): ?array
     {
-        $sql = 'SELECT id, name FROM CATEGORIES WHERE id = ? LIMIT 1';
+        $sql = 'SELECT id, name FROM CATEGORY WHERE id = ? LIMIT 1';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return null;
         $stmt->bind_param('i', $id);
@@ -99,7 +99,7 @@ class Categories
      */
     public function create(string $name): bool
     {
-        $sql = 'INSERT INTO CATEGORIES (name) VALUES (?)';
+        $sql = 'INSERT INTO CATEGORY (name) VALUES (?)';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('s', $name);
@@ -117,7 +117,7 @@ class Categories
      */
     public function updateName(int $id, string $newName): bool
     {
-        $sql = 'UPDATE CATEGORIES SET name = ? WHERE id = ?';
+        $sql = 'UPDATE CATEGORY SET name = ? WHERE id = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('si', $newName, $id);
@@ -134,7 +134,7 @@ class Categories
      */
     public function deleteById(int $id): bool
     {
-        $sql = 'DELETE FROM CATEGORIES WHERE id = ?';
+        $sql = 'DELETE FROM CATEGORY WHERE id = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('i', $id);

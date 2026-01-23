@@ -2,7 +2,7 @@
 
 /**
  * User Class
- * A data mapper for the USERS table providing CRUD operations and authentication.
+ * A data mapper for the USER table providing CRUD operations and authentication.
  * Uses prepared statements to prevent SQL injection.
  */
 class User
@@ -31,7 +31,7 @@ class User
      */
     public function findByEmail(string $email): ?array
     {
-        $sql = 'SELECT email, name, surname, password, role, registration_date FROM USERS WHERE email = ? LIMIT 1';
+        $sql = 'SELECT email, name, surname, password, role, registration_date FROM USER WHERE email = ? LIMIT 1';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return null;
         $stmt->bind_param('s', $email);
@@ -66,7 +66,7 @@ class User
     public function create(string $email, string $name, string $surname, string $password, string $role = 'USER'): bool
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $sql = 'INSERT INTO USERS (email, name, surname, password, role) VALUES (?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO USER (email, name, surname, password, role) VALUES (?, ?, ?, ?, ?)';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('sssss', $email, $name, $surname, $hash, $role);
@@ -86,7 +86,7 @@ class User
      */
     public function updateProfile(string $email, string $name, string $surname, string $newEmail): bool
     {
-        $sql = 'UPDATE USERS SET name = ?, surname = ?, email = ? WHERE email = ?';
+        $sql = 'UPDATE USER SET name = ?, surname = ?, email = ? WHERE email = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('ssss', $name, $surname, $newEmail, $email);
@@ -104,7 +104,7 @@ class User
      */
     public function updateAvatar(string $email, ?string $avatarPath): bool
     {
-        $sql = 'UPDATE USERS SET avatar = ? WHERE email = ?';
+        $sql = 'UPDATE USER SET avatar = ? WHERE email = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('ss', $avatarPath, $email);
@@ -144,7 +144,7 @@ class User
     public function updatePassword(string $email, string $newPassword): bool
     {
         $hash = password_hash($newPassword, PASSWORD_DEFAULT);
-        $sql = 'UPDATE USERS SET password = ? WHERE email = ?';
+        $sql = 'UPDATE USER SET password = ? WHERE email = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('ss', $hash, $email);
@@ -161,7 +161,7 @@ class User
      */
     public function delete(string $email): bool
     {
-        $sql = 'DELETE FROM USERS WHERE email = ?';
+        $sql = 'DELETE FROM USER WHERE email = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('s', $email);

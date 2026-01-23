@@ -5,7 +5,7 @@ USE web25;
 -- =====================================
 -- USER
 -- =====================================
-CREATE TABLE USERS (
+CREATE TABLE USER (
     email VARCHAR(100) PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     surname VARCHAR(50) NOT NULL,
@@ -16,9 +16,9 @@ CREATE TABLE USERS (
 );
 
 -- -- =====================================
--- -- CATEGORIES
+-- -- CATEGORIY
 -- -- =====================================
-CREATE TABLE CATEGORIES (
+CREATE TABLE CATEGORY (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE
 );
@@ -44,11 +44,11 @@ CREATE TABLE EVENT (
 
     CONSTRAINT fk_event_user
         FOREIGN KEY (user_email)
-        REFERENCES USERS(email),
+        REFERENCES USER(email),
 
     CONSTRAINT fk_event_category
         FOREIGN KEY (category_id)
-        REFERENCES CATEGORIES(id)
+        REFERENCES CATEGORY(id)
 );
 
 -- -- =====================================
