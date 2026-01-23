@@ -45,7 +45,6 @@ class Event
      */
     public function findAll(int $limit = 100, int $offset = 0): array
     {
-        // Join with CATEGORY to include the category name as `category_label`.
         $sql = 'SELECT e.id, e.title, e.description, e.event_date, e.location, e.total_seats, e.available_seats, e.status, e.created_at, e.image, e.user_email, e.category_id, c.name AS category_label'
             . ' FROM EVENT e'
             . ' LEFT JOIN CATEGORY c ON e.category_id = c.id'

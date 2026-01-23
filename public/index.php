@@ -4,7 +4,7 @@ require_once __DIR__ . '/../app/bootstrap.php';
 
 $templateParams['title'] = "Home";
 $templateParams['css'] = ['assets/css/home.css'];
-$templateParams['js'] = ['assets/js/filters.js'];
+$templateParams['js'] = ['assets/js/filters.js', 'assets/js/load-more.js'];
 
 $templateParams['content'] = "partials/homepage.php";
 

@@ -66,7 +66,7 @@
         <p class="text-muted mb-4 d-none d-lg-block">Scopri i prossimi eventi organizzati dalla nostra università
         </p>
 
-        <div class="row">
+        <div id="events-grid" class="row">
             <?php foreach ($templateParams['featured_events'] as $ev) : ?>
                 <div class="col-lg-4 col-md-6 mb-4" data-category-id="<?php echo htmlspecialchars($ev['category_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <div class="card event-card h-100">
@@ -113,7 +113,7 @@
             <?php endforeach; ?>
 
             <div class="text-center m-4 w-100">
-                <a href="#" class="btn btn-light border border-dark">Carica altri eventi</a>
+                <button id="load-more-btn" data-page="1" data-limit="6" class="btn btn-light border border-dark">Carica altri eventi</button>
             </div>
         </div>
 </main>
