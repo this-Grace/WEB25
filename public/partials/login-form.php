@@ -4,7 +4,7 @@
             <div class="col-md-6 col-lg-4">
                 <form action="login.php" method="POST">
                     <div class="text-center mb-4">
-                        <i class="bi bi-calendar-check-fill fs-1 text-primary"></i>
+                        <span class="bi bi-calendar-check-fill fs-1 text-primary" aria-hidden="true"></span>
                         <h1 class="h3 mb-3 fw-normal">Accedi a UniEvents</h1>
                         <p class="text-muted">Bentornato! Inserisci le tue credenziali.</p>
                     </div>

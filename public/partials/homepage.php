@@ -6,7 +6,8 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6">
                 <form class="d-flex" role="search" method="get" action="/events.php">
-                    <input name="q" type="search" class="form-control form-control-lg rounded-3 me-2" placeholder="Cerca eventi, organizzazioni o luoghi" aria-label="Cerca">
+                    <label for="searchInput" class="visually-hidden">Cerca eventi, organizzazioni o luoghi</label>
+                    <input id="searchInput" name="q" type="search" class="form-control form-control-lg rounded-3 me-2" placeholder="Cerca eventi, organizzazioni o luoghi" aria-label="Cerca">
                     <button class="btn btn-primary btn-lg" type="submit">Cerca</button>
                 </form>
             </div>

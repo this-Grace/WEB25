@@ -17,7 +17,7 @@
                                 <input id="eventTitleInput" name="title" type="text" class="form-control" placeholder="es. Workshop di Programmazione Python">
                             </div>
                             <div class="mb-0">
-                                <label class="form-label small fw-bold">Descrizione *</label>
+                                <label for="eventDescriptionInput" class="form-label small fw-bold">Descrizione *</label>
                                 <textarea id="eventDescriptionInput" name="description" class="form-control" rows="3" placeholder="Descrivi il tuo evento in dettaglio..."></textarea>
                             </div>
                         </div>
@@ -28,17 +28,18 @@
                             <h2 class="card-title mb-4"><span class="bi bi-calendar-event me-2" aria-hidden="true"></span>Data e Luogo</h2>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label small fw-bold">Data Evento</label>
+                                    <label for="eventDateInput" class="form-label small fw-bold">Data Evento</label>
                                     <input id="eventDateInput" name="event_date" type="date" class="form-control bg-light">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label small fw-bold">Orario</label>
+                                    <label for="eventTimeHour" class="form-label small fw-bold">Orario</label>
                                     <div class="input-group">
                                         <select id="eventTimeHour" class="form-select bg-light" aria-label="Ora (24H)">
                                             <?php for ($h = 0; $h < 24; $h++): $hh = str_pad($h, 2, '0', STR_PAD_LEFT); ?>
                                                 <option value="<?php echo $hh; ?>"><?php echo $hh; ?></option>
                                             <?php endfor; ?>
                                         </select>
+                                        <label for="eventTimeMinute" class="visually-hidden">Minuti</label>
                                         <select id="eventTimeMinute" class="form-select bg-light" aria-label="Minuti">
                                             <?php for ($m = 0; $m < 60; $m += 15): $mm = str_pad($m, 2, '0', STR_PAD_LEFT); ?>
                                                 <option value="<?php echo $mm; ?>"><?php echo $mm; ?></option>
@@ -50,11 +51,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 mb-3">
-                                    <label class="form-label small fw-bold">Sede *</label>
+                                    <label for="eventLocationInput" class="form-label small fw-bold">Sede *</label>
                                     <input id="eventLocationInput" name="location" type="text" class="form-control" placeholder="es. Aula Magna - Edificio A">
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label class="form-label small fw-bold">Aula/Sala</label>
+                                    <label for="eventRoomInput" class="form-label small fw-bold">Aula/Sala</label>
                                     <input id="eventRoomInput" name="room" type="text" class="form-control" placeholder="es. Aula 201">
                                 </div>
                             </div>
@@ -66,7 +67,7 @@
                             <h2 class="card-title mb-4"><span class="bi bi-sliders me-2" aria-hidden="true"></span>Altro</h2>
 
                             <div class="mb-4">
-                                <label class="form-label small fw-bold">Seleziona Tipologia *</label>
+                                <label for="eventCategorySelector" class="form-label small fw-bold">Seleziona Tipologia *</label>
                                 <select class="form-select bg-light" id="eventCategorySelector" name="event_type">
                                     <option value="" selected disabled>Scegli una categoria...</option>
                                     <option value="Conferenze">Conferenze</option>
@@ -79,7 +80,7 @@
                             </div>
 
                             <div>
-                                <label class="form-label small fw-bold">Numero Massimo Partecipanti *</label>
+                                <label for="eventMaxSeatsInput" class="form-label small fw-bold">Numero Massimo Partecipanti *</label>
                                 <input id="eventMaxSeatsInput" name="max_seats" type="number" class="form-control bg-light mb-2" placeholder="es. 100">
                             </div>
                         </div>
@@ -92,7 +93,8 @@
                                 <span class="bi bi-cloud-arrow-up display-4 text-primary" aria-hidden="true"></span>
                                 <h3 class="mt-3 fw-bold">Trascina qui l'immagine o clicca</h3>
                                 <p class="small text-muted">PNG, JPG fino a 10MB</p>
-                                <input type="file" id="fileElem" name="event_image" accept="image/*" class="d-none">
+                                <label for="fileElem" class="visually-hidden">Seleziona immagine evento (PNG, JPG fino a 10MB)</label>
+                                <input type="file" id="fileElem" name="event_image" accept="image/*" class="d-none" title="Seleziona immagine evento (PNG, JPG fino a 10MB)">
                                 <button type="button" class="btn btn-primary btn-sm px-4" onclick="document.getElementById('fileElem').click()">Seleziona File</button>
                             </div>
                         </div>

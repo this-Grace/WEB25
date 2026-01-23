@@ -4,14 +4,14 @@
             <div class="col-md-8 col-lg-6">
                 <form action="register.php" method="POST">
                     <div class="text-center mb-4">
-                        <i class="bi bi-calendar-check-fill fs-1 text-primary"></i>
+                        <span class="bi bi-calendar-check-fill fs-1 text-primary" aria-hidden="true"></span>
                         <h1 class="h3 mb-3 fw-normal">Crea il tuo Account</h1>
                         <p class="text-muted">Entra a far parte della community di UniEvents.</p>
                     </div>
 
                     <?php if (isset($_GET['error'])): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?php 
+                            <?php
                             switch ($_GET['error']) {
                                 case 'missing':
                                     echo 'Tutti i campi sono obbligatori.';
@@ -58,7 +58,7 @@
                         <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
                         <label for="floatingPassword">Password</label>
                     </div>
-                    
+
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="Conferma Password" required>
                         <label for="confirmPassword">Conferma Password</label>
