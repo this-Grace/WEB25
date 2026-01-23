@@ -9,7 +9,7 @@ $templateParams['js'] = ['assets/js/filters.js'];
 $templateParams['content'] = "partials/homepage.php";
 
 $templateParams['categories'] = [
-    ['href' => '#filter-tutti', 'class' => 'btn-cate active', 'label' => 'Tutti'],
+    ['href' => '#filter-tutti', 'class' => 'btn-cate active', 'label' => 'Tutti', 'id' => 'tutti'],
 ];
 
 try {
@@ -18,7 +18,6 @@ try {
         $templateParams['categories'][] = [
             'href'  => '#filter-' . strtolower($c['name']),
             'class' => 'btn-cate btn-cate-' . strtolower($c['name']),
-            'label' => strtolower($c['name']),
             'label' => ucfirst(strtolower($c['name'])),
             'id'    => (string)$c['id']
         ];
@@ -32,6 +31,7 @@ $templateParams['featured_events'] = [
         'img_alt' => "Audience listening to a speaker at an artificial intelligence conference presentation",
         'badge_class' => 'badge badge-cate-conferenze position-absolute top-0 start-0 m-3',
         'category_label' => 'Conferenze',
+        'category_id' => 1,
         'title' => "Conferenza sull'Intelligenza Artificiale",
         'date' => '25 Gennaio 2026 - 14:30',
         'location' => 'Aula Magna - Edificio A',
