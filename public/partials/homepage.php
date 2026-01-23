@@ -74,7 +74,7 @@
                             <img src="<?php echo EVENTS_IMG_DIR . htmlspecialchars($ev['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                 class="card-img-top"
                                 alt="Immagine evento: <?php echo htmlspecialchars($ev['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                            <span class="<?php echo htmlspecialchars($ev['badge_class'] ?? 'badge badge-cate-default position-absolute top-0 start-0 m-3', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ev['category_label'] ?? 'Evento', ENT_QUOTES, 'UTF-8'); ?></span>
+                            <span class="badge position-absolute top-0 start-0 m-3 badge-cate-<?php echo htmlspecialchars(strtolower($ev['category_label']), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars(ucfirst(strtolower($ev['category_label'])) ?? 'Evento', ENT_QUOTES, 'UTF-8'); ?></span>
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h3 class="card-title"><?php echo htmlspecialchars($ev['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
@@ -93,7 +93,14 @@
                                 echo $displayDate;
                                 ?><br>
                                 <span class="bi bi-geo-alt text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-people text-success" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['available_seats'] . '/' . $ev['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                <span class="bi bi-people text-success" aria-hidden="true"></span>
+                                <?php
+                                $seatsText = '';
+                                if (isset($ev['available_seats']) && isset($ev['total_seats'])) {
+                                    $seatsText = $ev['available_seats'] . '/' . $ev['total_seats'] . ' iscritti';
+                                }
+                                echo htmlspecialchars($seatsText, ENT_QUOTES, 'UTF-8');
+                                ?>
                             </p>
 
                             <?php if (isset($_SESSION['user'])) : ?>

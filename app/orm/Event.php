@@ -45,7 +45,13 @@ class Event
      */
     public function findAll(int $limit = 100, int $offset = 0): array
     {
-        $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT ORDER BY event_date LIMIT ? OFFSET ?';
+        // Join with CATEGORY to include the category name as `category_label`.
+        $sql = 'SELECT e.id, e.title, e.description, e.event_date, e.location, e.total_seats, e.available_seats, e.status, e.created_at, e.image, e.user_email, e.category_id, c.name AS category_label'
+            . ' FROM EVENT e'
+            . ' LEFT JOIN CATEGORY c ON e.category_id = c.id'
+            . ' ORDER BY e.event_date'
+            . ' LIMIT ? OFFSET ?';
+
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->bind_param('ii', $limit, $offset);
@@ -53,6 +59,9 @@ class Event
         $res = $stmt->get_result();
         $rows = [];
         while ($row = $res->fetch_assoc()) {
+            if (!isset($row['category_label'])) {
+                $row['category_label'] = 'Evento';
+            }
             $rows[] = $row;
         }
         $stmt->close();
@@ -110,15 +119,7 @@ class Event
         $sql = 'INSERT INTO EVENT (title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
-        // types: title(s), description(s), event_date(s), location(s), total_seats(i), available_seats(i), status(s), image(s|null), user_email(s), category_id(i)
-        $stmt->bind_param('ssssii ss si', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id);
-        // Compact type string without spaces:
-        // 'ssssiisssi'
-        $stmt->close();
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('ssssiisssi', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id);
-        $ok = $stmt->execute();
+        $ok = $stmt->bind_param('ssssiisssi', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id) && $stmt->execute();
         $stmt->close();
         return (bool)$ok;
     }
@@ -132,14 +133,7 @@ class Event
         $sql = 'UPDATE EVENT SET title = ?, description = ?, event_date = ?, location = ?, total_seats = ?, available_seats = ?, status = ?, image = ?, category_id = ? WHERE id = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
-        // types: title(s), description(s), event_date(s), location(s), total_seats(i), available_seats(i), status(s), image(s|null), category_id(i), id(i)
-        $stmt->bind_param('ssssii ss ii', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $category_id, $id);
-        // Compact form without spaces:
-        $stmt->close();
-        $stmt = $this->conn->prepare($sql);
-        if (!$stmt) return false;
-        $stmt->bind_param('ssssiissii', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $category_id, $id);
-        $ok = $stmt->execute();
+        $ok = $stmt->bind_param('ssssiissii', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $category_id, $id) && $stmt->execute();
         $stmt->close();
         return (bool)$ok;
     }
