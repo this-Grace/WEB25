@@ -18,7 +18,8 @@ CREATE TABLE USERS (
 -- -- CATEGORIA
 -- -- =====================================
 CREATE TABLE CATEGORIA (
-    name VARCHAR(50) PRIMARY KEY
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- -- =====================================
