@@ -1,144 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const categoryFilterButtonsContainer = document.querySelector('section.py-4 .d-flex.justify-content-center');
-    const activeFiltersSection = document.getElementById('active-filters-section');
-    const activeFiltersList = document.getElementById('active-filters-list');
-    const clearFiltersBtn = document.getElementById('clear-filters-btn');
+    const buttons = document.querySelectorAll('.btn-cate');
+    const cards = document.querySelectorAll('[data-category-id]');
+    const activeSection = document.getElementById('active-filters-section');
+    const activeList = document.getElementById('active-filters-list');
+    const clearBtn = document.getElementById('clear-filters-btn');
 
-    if (!categoryFilterButtonsContainer || !activeFiltersSection || !activeFiltersList) {
-        return;
-    }
+    if (!buttons.length || !activeSection || !activeList) return;
 
-    const categoryClassMap = {
-        'Conferenze': 'badge-cate-conferenze',
-        'Workshop': 'badge-cate-workshop',
-        'Seminari': 'badge-cate-seminari',
-        'Networking': 'badge-cate-networking',
-        'Sport': 'badge-cate-sport',
-        'Social': 'badge-cate-social'
-    };
+    const active = new Set();
 
-    function resetToDefault() {
-        const categoryFilters = categoryFilterButtonsContainer.querySelectorAll('.btn-cate');
-        categoryFilters.forEach(btn => btn.classList.remove('active'));
+    function render() {
+        activeList.innerHTML = '';
+        const hasAny = active.size > 0;
+        activeSection.style.display = hasAny ? 'block' : 'none';
 
-        const tuttiButton = Array.from(categoryFilters).find(btn => btn.textContent.trim() === 'Tutti');
-        if (tuttiButton) {
-            tuttiButton.classList.add('active');
+        // render badges
+        active.forEach(id => {
+            const btn = document.querySelector('.btn-cate[data-id="' + id + '"]');
+            const label = btn ? btn.textContent.trim() : id;
+            const span = document.createElement('span');
+            span.className = 'badge rounded-pill d-flex align-items-center p-2';
+            span.innerHTML = '<span class="fw-medium">' + label + '</span>';
+            const rem = document.createElement('button');
+            rem.type = 'button';
+            rem.className = 'btn-close ms-2';
+            rem.setAttribute('aria-label', 'Rimuovi filtro');
+            rem.dataset.id = id;
+            span.appendChild(rem);
+            activeList.appendChild(span);
+        });
+
+        // filter cards
+        if (!hasAny) {
+            cards.forEach(c => c.style.display = '');
+        } else {
+            cards.forEach(c => {
+                const cid = (c.dataset.categoryId || '').toString();
+                c.style.display = active.has(cid) ? '' : 'none';
+            });
         }
-
-        updateActiveFilters();
     }
 
-    function updateActiveFilters() {
-        activeFiltersList.innerHTML = '';
-        const activeFilterButtons = categoryFilterButtonsContainer.querySelectorAll('.btn-cate.active');
-        let hasActiveFilters = false;
-        const activeCategories = [];
+    function reset() {
+        active.clear();
+        buttons.forEach(b => b.classList.remove('active'));
+        const tutti = document.querySelector('.btn-cate[data-id="tutti"]');
+        if (tutti) tutti.classList.add('active');
+        render();
+    }
 
-        activeFilterButtons.forEach(button => {
-            const filterLabel = button.textContent.trim();
-            if (filterLabel === 'Tutti') {
+    buttons.forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.preventDefault();
+            const id = (btn.dataset.id || '').toString();
+            if (id === 'tutti') {
+                reset();
                 return;
             }
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) active.add(id); else active.delete(id);
 
-            hasActiveFilters = true;
-            const badgeClass = categoryClassMap[filterLabel] || 'bg-secondary text-white';
-
-            // collect active categories for filtering
-            activeCategories.push(filterLabel);
-
-            const filterBadge = document.createElement('span');
-            filterBadge.className = `badge rounded-pill d-flex align-items-center p-2 ps-3 ${badgeClass}`;
-            filterBadge.innerHTML = `
-                <span class="fw-medium">${filterLabel}</span>
-                <button type="button" class="btn-close btn-close-white ms-2" style="font-size: 0.7em;" aria-label="Rimuovi filtro" data-filter="${filterLabel}"></button>
-            `;
-            activeFiltersList.appendChild(filterBadge);
+            const tutti = document.querySelector('.btn-cate[data-id="tutti"]');
+            if (tutti && active.size > 0) tutti.classList.remove('active');
+            if (active.size === 0 && tutti) tutti.classList.add('active');
+            render();
         });
-
-        activeFiltersSection.style.display = hasActiveFilters ? 'block' : 'none';
-
-        // Filter event cards on the page
-        const eventCards = document.querySelectorAll('[data-category]');
-        if (!eventCards) return;
-
-        if (activeCategories.length === 0) {
-            // show all
-            eventCards.forEach(card => {
-                card.style.display = '';
-            });
-        } else {
-            eventCards.forEach(card => {
-                const cat = (card.dataset.category || '').trim();
-                if (activeCategories.indexOf(cat) !== -1) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-    }
-
-    categoryFilterButtonsContainer.addEventListener('click', function (e) {
-        if (!e.target.matches('.btn-cate')) {
-            return;
-        }
-        e.preventDefault();
-
-        const clickedButton = e.target;
-        const isTutti = clickedButton.textContent.trim() === 'Tutti';
-        const categoryFilters = categoryFilterButtonsContainer.querySelectorAll('.btn-cate');
-        const tuttiButton = Array.from(categoryFilters).find(btn => btn.textContent.trim() === 'Tutti');
-
-        if (isTutti) {
-            if (!clickedButton.classList.contains('active')) {
-                resetToDefault();
-            }
-        } else {
-            clickedButton.classList.toggle('active');
-            if (tuttiButton) {
-                tuttiButton.classList.remove('active');
-            }
-        }
-
-        const anyActive = Array.from(categoryFilters).some(btn => btn.classList.contains('active') && btn.textContent.trim() !== 'Tutti');
-        if (!anyActive && tuttiButton && !tuttiButton.classList.contains('active')) {
-            tuttiButton.classList.add('active');
-        }
-
-        updateActiveFilters();
     });
 
-    activeFiltersList.addEventListener('click', function (e) {
-        if (!e.target.matches('button[data-filter]')) {
-            return;
-        }
-
-        const filterToRemove = e.target.dataset.filter;
-        const categoryFilters = categoryFilterButtonsContainer.querySelectorAll('.btn-cate');
-        const buttonToDeactivate = Array.from(categoryFilters).find(btn => btn.textContent.trim() === filterToRemove);
-
-        if (buttonToDeactivate) {
-            buttonToDeactivate.classList.remove('active');
-        }
-
-        const anyActive = Array.from(categoryFilters).some(btn => btn.classList.contains('active') && btn.textContent.trim() !== 'Tutti');
-        if (!anyActive) {
-            const tuttiButton = Array.from(categoryFilters).find(btn => btn.textContent.trim() === 'Tutti');
-            if (tuttiButton) {
-                tuttiButton.classList.add('active');
-            }
-        }
-
-        updateActiveFilters();
+    activeList.addEventListener('click', e => {
+        const remBtn = e.target.closest('button[data-id]');
+        if (!remBtn) return;
+        const id = remBtn.dataset.id;
+        active.delete(id);
+        const btn = document.querySelector('.btn-cate[data-id="' + id + '"]');
+        if (btn) btn.classList.remove('active');
+        const tutti = document.querySelector('.btn-cate[data-id="tutti"]');
+        if (active.size === 0 && tutti) tutti.classList.add('active');
+        render();
     });
 
-    if (clearFiltersBtn) {
-        clearFiltersBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            resetToDefault();
-        });
-    }
+    if (clearBtn) clearBtn.addEventListener('click', e => { e.preventDefault(); reset(); });
 
-    updateActiveFilters();
+    // initial render
+    render();
 });

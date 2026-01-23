@@ -20,10 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Connect to DB
-    $conn = $dbh->getConnection();
-
-    $userMapper = new User($conn);
     if ($userMapper->exists($email)) {
         header('Location: register.php?error=exists');
         exit;

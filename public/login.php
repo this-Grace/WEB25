@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once __DIR__ . '/../app/bootstrap.php';
-require_once __DIR__ . '/../app/orm/User.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -12,9 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $conn = $dbh->getConnection();
-
-    $userMapper = new User($conn);
     $user = $userMapper->authenticate($email, $password);
     if (!$user) {
         header('Location: login.php?error=invalid');

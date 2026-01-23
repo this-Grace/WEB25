@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../app/bootstrap.php';
+
 $templateParams['title'] = "Home";
 $templateParams['css'] = ['assets/css/home.css'];
 $templateParams['js'] = ['assets/js/filters.js'];
@@ -8,13 +10,21 @@ $templateParams['content'] = "partials/homepage.php";
 
 $templateParams['categories'] = [
     ['href' => '#filter-tutti', 'class' => 'btn-cate active', 'label' => 'Tutti'],
-    ['href' => '#filter-conferenze', 'class' => 'btn-cate btn-cate-conferenze', 'label' => 'Conferenze'],
-    ['href' => '#filter-workshop', 'class' => 'btn-cate btn-cate-workshop', 'label' => 'Workshop'],
-    ['href' => '#filter-seminari', 'class' => 'btn-cate btn-cate-seminari', 'label' => 'Seminari'],
-    ['href' => '#filter-networking', 'class' => 'btn-cate btn-cate-networking', 'label' => 'Networking'],
-    ['href' => '#filter-sport', 'class' => 'btn-cate btn-cate-sport', 'label' => 'Sport'],
-    ['href' => '#filter-sociali', 'class' => 'btn-cate btn-cate-social', 'label' => 'Social'],
 ];
+
+try {
+    $cats = $catMapper->findAll();
+    foreach ($cats as $c) {
+        $templateParams['categories'][] = [
+            'href'  => '#filter-' . strtolower($c['name']),
+            'class' => 'btn-cate btn-cate-' . strtolower($c['name']),
+            'label' => strtolower($c['name']),
+            'label' => ucfirst(strtolower($c['name'])),
+            'id'    => (string)$c['id']
+        ];
+    }
+} catch (Throwable $e) {
+}
 
 $templateParams['featured_events'] = [
     [

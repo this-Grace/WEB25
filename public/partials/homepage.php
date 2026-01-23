@@ -39,7 +39,8 @@
         <div class="d-flex justify-content-center flex-wrap gap-2">
             <?php foreach ($templateParams['categories'] as $cat) : ?>
                 <a href="<?php echo htmlspecialchars($cat['href'], ENT_QUOTES, 'UTF-8'); ?>"
-                    class="<?php echo htmlspecialchars($cat['class'], ENT_QUOTES, 'UTF-8'); ?>">
+                    class="<?php echo htmlspecialchars($cat['class'], ENT_QUOTES, 'UTF-8'); ?>"
+                    data-id="<?php echo htmlspecialchars($cat['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <?php echo htmlspecialchars($cat['label'], ENT_QUOTES, 'UTF-8'); ?>
                 </a>
             <?php endforeach; ?>
@@ -66,7 +67,7 @@
 
         <div class="row">
             <?php foreach ($templateParams['featured_events'] as $ev) : ?>
-                <div class="col-lg-4 col-md-6 mb-4" data-category="<?php echo htmlspecialchars($ev['category_label'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="col-lg-4 col-md-6 mb-4" data-category="<?php echo htmlspecialchars($ev['category_label'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-category-id="<?php echo isset($ev['category_id']) ? (int)$ev['category_id'] : ''; ?>">
                     <div class="card event-card h-100">
                         <div class="position-relative">
                             <img src="<?php echo htmlspecialchars($ev['img'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
