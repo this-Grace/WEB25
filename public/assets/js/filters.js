@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.btn-cate');
-    const cards = document.querySelectorAll('[data-category-id]');
+    function getCards() { return document.querySelectorAll('[data-category-id]'); }
     const activeSection = document.getElementById('active-filters-section');
     const activeList = document.getElementById('active-filters-list');
     const clearBtn = document.getElementById('clear-filters-btn');
@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // filter cards
         if (!hasAny) {
-            cards.forEach(c => c.style.display = '');
+            getCards().forEach(c => c.style.display = '');
         } else {
-            cards.forEach(c => {
+            getCards().forEach(c => {
                 const cid = (c.dataset.categoryId || '').toString();
                 c.style.display = active.has(cid) ? '' : 'none';
             });
@@ -94,4 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // initial render
     render();
+
+    // Re-apply filters when new cards are added (load-more emits an event)
+    document.addEventListener('events:cards-added', () => {
+        render();
+    });
 });

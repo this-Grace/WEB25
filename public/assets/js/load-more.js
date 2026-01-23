@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             container.appendChild(temp.firstChild);
                         }
                     }
+                    // notify other scripts (filters) that new cards were added
+                    try { document.dispatchEvent(new CustomEvent('events:cards-added')); } catch (e) { /* noop */ }
                     if (data.count < limit) {
                         btn.style.display = 'none';
                     } else {

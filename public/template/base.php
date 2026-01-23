@@ -78,24 +78,31 @@ $templateParams["footer"] = [
             <div class="row text-center text-md-start g-4 align-items-start">
 
                 <div class="col-12 col-md-4">
-                    <h2 class="h5 text-primary fw-bold mb-2"><?php echo htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8'); ?></h2>
-                    <p class="small text-white-50 mb-0"><?php echo htmlspecialchars($templateParams['tagline'], ENT_QUOTES, 'UTF-8'); ?></p>
+                    <h2 class="h5 text-primary fw-bold mb-2">UniEvents</h2>
+                    <p class="small text-white-50 mb-0">Il futuro dei tuoi eventi universitari, oggi.</p>
                 </div>
 
-                <?php foreach ($templateParams["footer"] as $item): ?>
-                    <div class="col-6 col-md-4">
-                        <h3 class="h6 text-uppercase mb-2 small fw-bold text-white"><?php echo $item['role']; ?></h3>
-                        <ul class="list-unstyled small mb-0">
-                            <li class="mb-2">
-                                <span class="bi bi-envelope text-primary me-2" aria-hidden="true"></span>
-                                <a href="mailto:<?php echo htmlspecialchars($item['email'], ENT_QUOTES, 'UTF-8'); ?>" class="text-white-50 text-decoration-none">
-                                    <?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                <?php endforeach; ?>
-
+                <div class="col-6 col-md-4">
+                    <h3 class="h6 text-uppercase mb-2 small fw-bold text-white">Developer</h3>
+                    <ul class="list-unstyled small mb-0">
+                        <li class="mb-2">
+                            <span class="bi bi-envelope text-primary me-2" aria-hidden="true"></span>
+                            <a href="mailto:alessandro.rebosio@studio.unibo.it" class="text-white-50 text-decoration-none">
+                                Alessandro Rebosio </a><br />
+                            <span class="bi bi-envelope text-primary me-2" aria-hidden="true"></span>
+                            <a href="mailto:grazia.bochdanovits@studio.unibo.it" class="text-white-50 text-decoration-none">
+                                Grazia Bochdanovits de Kavna </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4">
+                    <h3 class="h6 text-uppercase mb-2 small fw-bold text-white">Info</h3>
+                    <ul class="list-unstyled small mb-0">
+                        <li class="mb-2">
+                            <a href="#" class="text-white-50 text-decoration-none">Termini e Condizioni</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <hr class="my-4 border-secondary">
