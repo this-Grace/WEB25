@@ -122,7 +122,7 @@
     <div class="container border-bottom">
         <h2 class="text-center mb-4">Statistiche della Community</h2>
         <div class="row text-center">
-            <div class="col-md-4 col-6 mb-4">
+            <div class="col-12 col-md-4 col-6 mb-4">
                 <div class="stat-card stat-card-blue p-4">
                     <div class="stat-icon mb-3">
                         <span class="bi bi-calendar-event" aria-hidden="true"></span>
