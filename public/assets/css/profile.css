@@ -13,11 +13,11 @@
 
 #input-first-name,
 #input-last-name {
-    width: 160px;
+    width: 150px;
 }
 
 #input-email {
-    width: 350px;
+    width: 300px;
 }
 
 .edit-mode .form-control-inline {
@@ -87,14 +87,29 @@
     padding: 2px 12px !important;
     color: #6c757d;
     border: 1px solid #dee2e6 !important;
+}
+
+.btn-tiny:hover {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1 !important;
+}
+
+.badge-cate-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 14px;
+    border-radius: 50px;
+    text-transform: uppercase;
     transition: 0.2s;
 }
 
 .event-wide-card {
     transition: 0.2s;
     border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    display: flex;
-    flex-direction: column;
+    min-height: 200px;
 }
 
 .event-wide-card:hover {
@@ -102,37 +117,23 @@
     border-color: #6366f1 !important;
 }
 
-.category-icon-box {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
+.event-wide-card .img-fluid {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+    min-height: 160px;
 }
 
 .custom-progress {
     height: 4px !important;
     background-color: #e9ecef !important;
-    border-radius: 10px !important;
-    overflow: hidden;
-}
-
-.manage-btn-group {
-    border: 1px solid #e2e8f0;
     border-radius: 10px;
     overflow: hidden;
-    display: inline-flex;
 }
 
-.btn-manage {
-    background: transparent;
-    border: none;
-    padding: 6px 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #475569;
-    transition: 0.2s;
+.progress-bar {
+    border-radius: 10px;
+    transition: width 0.6s ease;
 }
 
 #profileTabs .nav-link {
@@ -147,15 +148,14 @@
 }
 
 @media (max-width: 768px) {
-
-    .edit-input-flex,
-    .manage-btn-group {
+    .edit-input-flex {
         justify-content: center;
-        width: 100%;
+        flex-direction: column;
+        gap: 8px;
     }
 
     .form-control-inline {
         text-align: center;
-        width: 100%;
+        width: 100% !important;
     }
 }
