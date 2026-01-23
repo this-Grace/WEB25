@@ -20,35 +20,20 @@ INSERT INTO CATEGORIES (name) VALUES
 ('Sport'),
 ('Social');
 
--- -- =====================================
--- -- EVENTI
--- -- =====================================
--- INSERT INTO EVENTO (
---     titolo, descrizione, data_evento, ora_evento, luogo,
---     posti_totali, posti_disponibili, stato,
---     data_pubblicazione, immagine, id_admin, id_categoria
--- ) VALUES
--- (
---     'Conferenza su Intelligenza Artificiale',
---     'Introduzione alle applicazioni dell’AI',
---     '2026-03-15', '10:00:00', 'Aula Magna',
---     200, 197, 'PUBBLICATO',
---     CURRENT_TIMESTAMP, 'img/ai_conference.jpg', 1, 1
--- ),
--- (
---     'Workshop di Cybersecurity',
---     'Laboratorio pratico sulla sicurezza informatica',
---     '2026-03-20', '14:00:00', 'Laboratorio 3',
---     30, 28, 'PUBBLICATO',
---     CURRENT_TIMESTAMP, 'img/cyber_workshop.png', 2, 2
--- ),
--- (
---     'Seminario di Basi di Dati',
---     'Normalizzazione e progettazione ER',
---     '2026-04-02', '09:30:00', 'Aula B1',
---     100, 100, 'BOZZA',
---     NULL, 'img/db_seminar.jpg', 1, 3
--- );
+-- =====================================
+-- EVENTS 
+-- =====================================
+INSERT INTO EVENT (title, description, event_date, event_time, location, total_seats, available_seats, status, created_at, image, user_email, category_id) VALUES
+('AI per Tutti', 'Introduzione alle applicazioni pratiche dell''IA per non esperti.', '2026-03-15', '10:00:00', 'Aula Magna', 200, 185, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/ai_for_everyone.jpg', 'mario.rossi@example.com', 1),
+('Workshop pratico di Cybersecurity', 'Esercizi pratici sulla sicurezza web e le difese.', '2026-03-20', '14:00:00', 'Laboratorio 3', 30, 5, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/cybersec_workshop.png', 'luisa.bianchi@example.com', 2),
+('Basi di Dati: progettazione e buone pratiche', 'Seminario su normalizzazione e progettazione ER.', '2026-04-02', '09:30:00', 'Aula B1', 100, 100, 'DRAFT', NULL, 'img/db_seminar.jpg', 'giulia.verdi@example.com', 3),
+('Corsa Comunitaria', 'Corsa sociale di 5 km nel campus aperta a tutti i livelli.', '2026-04-10', '08:00:00', 'Parco del Campus', 150, 140, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/community_run.jpg', 'paolo.neri@example.com', 4),
+('Passeggiata Fotografica', 'Passeggiata guidata per migliorare le abilità nella fotografia outdoor.', '2026-04-18', '16:30:00', 'Centro Storico', 40, 12, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/photo_walk.jpg', 'mario.rossi@example.com', 5),
+('Serata Pitch Startup', 'Startup locali presentano le loro idee a mentori e investitori.', '2026-05-05', '18:00:00', 'Hub dell''Innovazione', 120, 85, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/pitch_night.jpg', 'luisa.bianchi@example.com', 1),
+('Gruppo di Studio ML Avanzato', 'Incontri settimanali per discutere articoli recenti e implementazioni.', '2026-05-12', '17:00:00', 'Aula 210', 25, 20, 'APPROVED', CURRENT_TIMESTAMP, 'img/ml_study.jpg', 'giulia.verdi@example.com', 1),
+('Pulizia Volontaria della Spiaggia', 'Evento di volontariato per pulire la spiaggia locale.', '2026-06-01', '09:00:00', 'Spiaggia della Marina', 60, 60, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/beach_cleanup.jpg', 'paolo.neri@example.com', 5),
+('Incontro di Conversazione in Francese', 'Scambio linguistico informale per partecipanti di livello intermedio.', '2026-06-08', '19:30:00', 'Sala Caffetteria', 30, 18, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/lang_meetup.jpg', 'mario.rossi@example.com', 5),
+('Fiera Maker di Primavera', 'Esposizione di progetti studenteschi e dimostrazioni dei maker.', '2026-05-20', '11:00:00', 'Padiglione Espositivo', 300, 250, 'PUBLISHED', CURRENT_TIMESTAMP, 'img/maker_fair.jpg', 'admin@web25.com', 2);
 
 -- -- =====================================
 -- -- ISCRIZIONI

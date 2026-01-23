@@ -23,34 +23,33 @@ CREATE TABLE CATEGORIES (
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- -- =====================================
--- -- EVENTO
--- -- =====================================
--- CREATE TABLE EVENTO (
---     id_evento INT AUTO_INCREMENT PRIMARY KEY,
---     titolo VARCHAR(100) NOT NULL,
---     descrizione TEXT NOT NULL,
---     data_evento DATE NOT NULL,
---     ora_evento TIME NOT NULL,
---     luogo VARCHAR(100) NOT NULL,
---     posti_totali INT NOT NULL CHECK (posti_totali > 0),
---     posti_disponibili INT NOT NULL CHECK (posti_disponibili >= 0),
---     stato ENUM('BOZZA', 'PUBBLICATO', 'APPROVATO', 'ANNULLATO') NOT NULL,
---     data_creazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     data_pubblicazione TIMESTAMP NULL,
---     immagine VARCHAR(255) NULL,
+-- =====================================
+-- EVENT
+-- =====================================
+CREATE TABLE EVENT (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    event_date DATE NOT NULL,
+    event_time TIME NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    total_seats INT NOT NULL CHECK (total_seats > 0),
+    available_seats INT NOT NULL CHECK (available_seats >= 0),
+    status ENUM('DRAFT', 'PUBLISHED', 'APPROVED', 'CANCELLED') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    image VARCHAR(255) NULL,
 
---     id_admin INT NOT NULL,
---     id_categoria INT NOT NULL,
+    user_email VARCHAR(100) NOT NULL,
+    category_id INT NOT NULL,
 
---     CONSTRAINT fk_evento_admin
---         FOREIGN KEY (id_admin)
---         REFERENCES UTENTE(id_utente),
+    CONSTRAINT fk_event_user
+        FOREIGN KEY (user_email)
+        REFERENCES USERS(email),
 
---     CONSTRAINT fk_evento_categoria
---         FOREIGN KEY (id_categoria)
---         REFERENCES CATEGORIA(id_categoria)
--- );
+    CONSTRAINT fk_event_category
+        FOREIGN KEY (category_id)
+        REFERENCES CATEGORIES(id)
+);
 
 -- -- =====================================
 -- -- ISCRIZIONE
