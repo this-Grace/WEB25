@@ -13,7 +13,7 @@ INSERT INTO USERS (email, name, surname, password, role) VALUES
 -- =====================================
 -- CATEGORIE
 -- =====================================
-INSERT INTO CATEGORIA (name) VALUES
+INSERT INTO CATEGORIES (name) VALUES
 ('Conferenze'),
 ('Workshop'),
 ('Seminari'),

@@ -2,7 +2,7 @@
 
 /**
  * Categories Class
- * A data mapper for the CATEGORIA table providing CRUD operations.
+ * A data mapper for the CATEGORIES table providing CRUD operations.
  * Uses prepared statements to prevent SQL injection.
  */
 class Categories
@@ -29,7 +29,7 @@ class Categories
      */
     public function findAll(): array
     {
-        $sql = 'SELECT id, name FROM CATEGORIA ORDER BY id';
+        $sql = 'SELECT id, name FROM CATEGORIES ORDER BY id';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->execute();
@@ -50,7 +50,7 @@ class Categories
      */
     public function findByName(string $name): ?array
     {
-        $sql = 'SELECT id, name FROM CATEGORIA WHERE name = ? LIMIT 1';
+        $sql = 'SELECT id, name FROM CATEGORIES WHERE name = ? LIMIT 1';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return null;
         $stmt->bind_param('s', $name);
@@ -69,7 +69,7 @@ class Categories
      */
     public function findById(int $id): ?array
     {
-        $sql = 'SELECT id, name FROM CATEGORIA WHERE id = ? LIMIT 1';
+        $sql = 'SELECT id, name FROM CATEGORIES WHERE id = ? LIMIT 1';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return null;
         $stmt->bind_param('i', $id);
@@ -99,7 +99,7 @@ class Categories
      */
     public function create(string $name): bool
     {
-        $sql = 'INSERT INTO CATEGORIA (name) VALUES (?)';
+        $sql = 'INSERT INTO CATEGORIES (name) VALUES (?)';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('s', $name);
@@ -117,7 +117,7 @@ class Categories
      */
     public function updateName(int $id, string $newName): bool
     {
-        $sql = 'UPDATE CATEGORIA SET name = ? WHERE id = ?';
+        $sql = 'UPDATE CATEGORIES SET name = ? WHERE id = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('si', $newName, $id);
@@ -134,7 +134,7 @@ class Categories
      */
     public function deleteById(int $id): bool
     {
-        $sql = 'DELETE FROM CATEGORIA WHERE id = ?';
+        $sql = 'DELETE FROM CATEGORIES WHERE id = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
         $stmt->bind_param('i', $id);
