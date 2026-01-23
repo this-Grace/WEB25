@@ -17,7 +17,6 @@ INSERT INTO CATEGORIES (name) VALUES
 ('Conferenze'),
 ('Workshop'),
 ('Seminari'),
-('Party'),
 ('Sport'),
 ('Social');
 

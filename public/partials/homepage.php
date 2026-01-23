@@ -26,7 +26,7 @@
                 <small class="opacity-75">Organizzazioni</small>
             </div>
             <div class="col-6 col-md-2">
-                <div class="h3 fw-bold mb-0">6</div>
+                <div class="h3 fw-bold mb-0"><?php echo htmlspecialchars($templateParams["numCat"]) ?></div>
                 <small class="opacity-75">Categorie</small>
             </div>
         </div>

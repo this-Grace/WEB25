@@ -12,6 +12,7 @@ $templateParams['categories'] = [
     ['href' => '#filter-tutti', 'class' => 'btn-cate active', 'label' => 'Tutti', 'id' => 'tutti'],
 ];
 
+$cats = [];
 try {
     $cats = $catMapper->findAll();
     foreach ($cats as $c) {
@@ -24,6 +25,7 @@ try {
     }
 } catch (Throwable $e) {
 }
+$templateParams["numCat"] = count($cats);
 
 $templateParams['featured_events'] = [
     [
