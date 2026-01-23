@@ -196,7 +196,12 @@ class Event
     public function search(string $q, int $limit = 50, int $offset = 0): array
     {
         $like = '%' . $q . '%';
-        $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE title LIKE ? OR description LIKE ? ORDER BY event_date LIMIT ? OFFSET ?';
+        $sql = 'SELECT e.id, e.title, e.description, e.event_date, e.location, e.total_seats, e.available_seats, e.status, e.created_at, e.image, e.user_email, e.category_id, c.name AS category_label'
+            . ' FROM EVENT e'
+            . ' LEFT JOIN CATEGORY c ON e.category_id = c.id'
+            . ' WHERE e.title LIKE ? OR e.description LIKE ?'
+            . ' ORDER BY e.event_date'
+            . ' LIMIT ? OFFSET ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->bind_param('ssii', $like, $like, $limit, $offset);
@@ -204,6 +209,9 @@ class Event
         $res = $stmt->get_result();
         $rows = [];
         while ($row = $res->fetch_assoc()) {
+            if (!isset($row['category_label'])) {
+                $row['category_label'] = 'Evento';
+            }
             $rows[] = $row;
         }
         $stmt->close();

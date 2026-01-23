@@ -14,7 +14,12 @@ $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 6;
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 
-$events = $eventMapper->findAll($limit, $offset);
+$q = isset($_GET['q']) ? trim((string)$_GET['q']) : '';
+if ($q !== '') {
+    $events = $eventMapper->search($q, $limit, $offset);
+} else {
+    $events = $eventMapper->findAll($limit, $offset);
+}
 
 $html = '';
 foreach ($events as $ev) {

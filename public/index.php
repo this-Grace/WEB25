@@ -7,7 +7,6 @@ $templateParams['css'] = ['assets/css/home.css'];
 $templateParams['js'] = ['assets/js/filters.js', 'assets/js/load-more.js'];
 
 $templateParams['content'] = "partials/homepage.php";
-
 $templateParams['categories'] = $catMapper->findAll();
 $templateParams['featured_events'] = $eventMapper->findAll(6, 0);
 
