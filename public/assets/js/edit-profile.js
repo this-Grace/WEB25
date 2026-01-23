@@ -1,53 +1,53 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const profileContainer = document.getElementById('profile-container');
-    const btnSave = document.getElementById('btn-save');
+    const inlineInputs = document.querySelectorAll('.form-control-inline');
 
     if (!profileContainer) return;
+
+    const syncInputWidth = (input) => {
+        const tempSpan = document.createElement('span');
+        const style = window.getComputedStyle(input);
+        
+        Object.assign(tempSpan.style, {
+            visibility: 'hidden',
+            position: 'absolute',
+            whiteSpace: 'pre',
+            font: style.font,
+            letterSpacing: style.letterSpacing,
+            textTransform: style.textTransform
+        });
+
+        tempSpan.innerText = input.value || input.placeholder || " ";
+        document.body.appendChild(tempSpan);
+        input.style.width = `${tempSpan.offsetWidth + 2}px`;
+        document.body.removeChild(tempSpan);
+    };
+
+    inlineInputs.forEach(input => {
+        syncInputWidth(input);
+        input.addEventListener('input', () => syncInputWidth(input));
+    });
 
     /**
      * Toggles between view mode and edit mode
      * @param {boolean} isEditing - State of the editor
      */
-    window.toggleEdit = function (isEditing) {
+    window.toggleEdit = (isEditing) => {
         const viewModes = profileContainer.querySelectorAll('.view-mode');
         const editModes = profileContainer.querySelectorAll('.edit-mode');
 
-        if (isEditing) {
-            // Hide text, show inputs
-            viewModes.forEach(el => el.classList.add('d-none'));
-            editModes.forEach(el => {
-                el.classList.remove('d-none');
-                // Re-apply flex layout to the name row if necessary
-                if (el.id === 'wrapper-name-edit' || el.querySelector('.edit-input-flex')) {
-                    el.classList.add('d-flex');
-                }
-            });
+        viewModes.forEach(el => el.classList.toggle('d-none', isEditing));
+        editModes.forEach(el => {
+            el.classList.toggle('d-none', !isEditing);
+            el.classList.toggle('d-flex', isEditing);
 
-            // Auto-focus the first input field
-            const firstInput = document.getElementById('input-first-name');
-            if (firstInput) firstInput.focus();
-        } else {
-            // Show text, hide inputs
-            viewModes.forEach(el => el.classList.remove('d-none'));
-            editModes.forEach(el => {
-                el.classList.add('d-none');
-                el.classList.remove('d-flex');
-            });
+            const isTarget = el.id === 'wrapper-name-edit' || el.classList.contains('buttons-edit-wrapper');
+            el.classList.toggle('justify-content-center-mobile', isEditing && isTarget);
+        });
+
+        if (isEditing) {
+            setTimeout(() => inlineInputs.forEach(syncInputWidth), 0);
+            document.getElementById('input-first-name')?.focus();
         }
     };
 });
-
-/**
- * Global style injection for consistent interaction states
- */
-(function addInlineStyles() {
-    const id = 'edit-profile-js-styles';
-    if (document.getElementById(id)) return;
-    const style = document.createElement('style');
-    style.id = id;
-    style.innerHTML = `
-        .spinner-border-sm { width: 1rem; height: 1rem; border-width: 0.15em; }
-        .edit-mode.d-flex { align-items: baseline; }
-    `;
-    document.head.appendChild(style);
-})();
