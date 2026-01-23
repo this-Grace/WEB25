@@ -15,19 +15,19 @@
 
         <div class="row g-4 justify-content-center mt-4">
             <div class="col-6 col-md-2">
-                <div class="h3 fw-bold mb-0">250+</div>
+                <h2 class="fw-bold mb-0">250+</h2>
                 <small class="opacity-75">Eventi Totali</small>
             </div>
             <div class="col-6 col-md-2">
-                <div class="h3 fw-bold mb-0">5.000+</div>
+                <h2 class="fw-bold mb-0">5.000+</h2>
                 <small class="opacity-75">Studenti Attivi</small>
             </div>
             <div class="col-6 col-md-2">
-                <div class="h3 fw-bold mb-0">50+</div>
+                <h2 class="fw-bold mb-0">50+</h2>
                 <small class="opacity-75">Organizzazioni</small>
             </div>
             <div class="col-6 col-md-2">
-                <div class="h3 fw-bold mb-0"><?php echo htmlspecialchars($templateParams["numCat"]) ?></div>
+                <h2 class="fw-bold mb-0"><?php echo count($templateParams['categories'] ?? []); ?></h2>
                 <small class="opacity-75">Categorie</small>
             </div>
         </div>
@@ -39,10 +39,10 @@
         <h2 class="visually-hidden">Filtra eventi per categoria</h2>
         <div class="d-flex justify-content-center flex-wrap gap-2">
             <?php foreach ($templateParams['categories'] as $cat) : ?>
-                <a href="<?php echo htmlspecialchars($cat['href'], ENT_QUOTES, 'UTF-8'); ?>"
-                    class="<?php echo htmlspecialchars($cat['class'], ENT_QUOTES, 'UTF-8'); ?>"
+                <a href="<?php echo htmlspecialchars(strtolower($cat['name']), ENT_QUOTES, 'UTF-8'); ?>"
+                    class="btn-cate btn-cate-<?php echo htmlspecialchars(strtolower($cat['name']), ENT_QUOTES, 'UTF-8'); ?>"
                     data-id="<?php echo htmlspecialchars($cat['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                    <?php echo htmlspecialchars($cat['label'], ENT_QUOTES, 'UTF-8'); ?>
+                    <?php echo htmlspecialchars(ucfirst(strtolower($cat['name'])), ENT_QUOTES, 'UTF-8'); ?>
                 </a>
             <?php endforeach; ?>
         </div>
@@ -68,21 +68,32 @@
 
         <div class="row">
             <?php foreach ($templateParams['featured_events'] as $ev) : ?>
-                <div class="col-lg-4 col-md-6 mb-4" data-category="<?php echo htmlspecialchars($ev['category_label'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-category-id="<?php echo isset($ev['category_id']) ? (int)$ev['category_id'] : ''; ?>">
+                <div class="col-lg-4 col-md-6 mb-4" data-category-id="<?php echo htmlspecialchars($ev['category_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <div class="card event-card h-100">
                         <div class="position-relative">
-                            <img src="<?php echo htmlspecialchars($ev['img'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                            <img src="<?php echo EVENTS_IMG_DIR . htmlspecialchars($ev['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                                 class="card-img-top"
-                                alt="<?php echo htmlspecialchars($ev['img_alt'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                                alt="Immagine evento: <?php echo htmlspecialchars($ev['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                             <span class="<?php echo htmlspecialchars($ev['badge_class'] ?? 'badge badge-cate-default position-absolute top-0 start-0 m-3', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ev['category_label'] ?? 'Evento', ENT_QUOTES, 'UTF-8'); ?></span>
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h3 class="card-title"><?php echo htmlspecialchars($ev['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
-                            <p id="previewDescription" class="small text-muted mb-2">Breve descrizione dell'evento</p>
+                            <p id="previewDescription" class="small text-muted mb-2"><?php echo htmlspecialchars($ev['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
                             <p class="card-text text-muted small flex-grow-1">
-                                <span class="bi bi-calendar text-primary" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['date'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-calendar text-primary" aria-hidden="true"></span>
+                                <?php
+                                $rawDate = $ev['event_date'] ?? '';
+                                $displayDate = htmlspecialchars($rawDate, ENT_QUOTES, 'UTF-8');
+                                if (!empty($rawDate)) {
+                                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $rawDate);
+                                    if ($dt !== false) {
+                                        $displayDate = $dt->format('d/m/Y') . ' - ' . $dt->format('H:i');
+                                    }
+                                }
+                                echo $displayDate;
+                                ?><br>
                                 <span class="bi bi-geo-alt text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-people text-success" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['attendees'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                <span class="bi bi-people text-success" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['available_seats'] . '/' . $ev['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                             </p>
 
                             <?php if (isset($_SESSION['user'])) : ?>

@@ -11,6 +11,9 @@ require_once __DIR__ . '/orm/Category.php';
 require_once __DIR__ . '/orm/Event.php';
 require_once __DIR__ . '/orm/User.php';
 
+define("EVENTS_IMG_DIR", "/upload/img/events/");
+define("PROFILE_IMG_DIR", "/upload/img/profile/");
+
 $dbh = new DatabaseHelper("localhost", "root", "", "web25", 3306, 'utf8mb4');
 
 $userMapper = new User($dbh->getConnection());

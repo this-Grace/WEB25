@@ -26,7 +26,7 @@ class Event
      */
     public function findById(int $id): ?array
     {
-        $sql = 'SELECT id, title, description, event_date, event_time, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE id = ? LIMIT 1';
+        $sql = 'SELECT id, title, description, event_date,  location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE id = ? LIMIT 1';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return null;
         $stmt->bind_param('i', $id);
@@ -45,7 +45,7 @@ class Event
      */
     public function findAll(int $limit = 100, int $offset = 0): array
     {
-        $sql = 'SELECT id, title, description, event_date, event_time, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT ORDER BY event_date, event_time LIMIT ? OFFSET ?';
+        $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT ORDER BY event_date LIMIT ? OFFSET ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->bind_param('ii', $limit, $offset);
@@ -66,7 +66,7 @@ class Event
      */
     public function findByUser(string $email): array
     {
-        $sql = 'SELECT id, title, description, event_date, event_time, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE user_email = ? ORDER BY event_date, event_time';
+        $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE user_email = ? ORDER BY event_date';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->bind_param('s', $email);
@@ -87,7 +87,7 @@ class Event
      */
     public function findByCategory(int $categoryId): array
     {
-        $sql = 'SELECT id, title, description, event_date, event_time, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE category_id = ? ORDER BY event_date, event_time';
+        $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE category_id = ? ORDER BY event_date';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->bind_param('i', $categoryId);
@@ -105,12 +105,19 @@ class Event
      * Create a new event
      * @return bool
      */
-    public function create(string $title, string $description, string $event_date, string $event_time, string $location, int $total_seats, int $available_seats, string $status, ?string $image, string $user_email, int $category_id): bool
+    public function create(string $title, string $description, string $event_date, string $location, int $total_seats, int $available_seats, string $status, ?string $image, string $user_email, int $category_id): bool
     {
-        $sql = 'INSERT INTO EVENT (title, description, event_date, event_time, location, total_seats, available_seats, status, created_at, image, user_email, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)';
+        $sql = 'INSERT INTO EVENT (title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
-        $stmt->bind_param('ssssiiisssi', $title, $description, $event_date, $event_time, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id);
+        // types: title(s), description(s), event_date(s), location(s), total_seats(i), available_seats(i), status(s), image(s|null), user_email(s), category_id(i)
+        $stmt->bind_param('ssssii ss si', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id);
+        // Compact type string without spaces:
+        // 'ssssiisssi'
+        $stmt->close();
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return false;
+        $stmt->bind_param('ssssiisssi', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $user_email, $category_id);
         $ok = $stmt->execute();
         $stmt->close();
         return (bool)$ok;
@@ -120,12 +127,18 @@ class Event
      * Update an existing event
      * @return bool
      */
-    public function update(int $id, string $title, string $description, string $event_date, string $event_time, string $location, int $total_seats, int $available_seats, string $status, ?string $image, int $category_id): bool
+    public function update(int $id, string $title, string $description, string $event_date, string $location, int $total_seats, int $available_seats, string $status, ?string $image, int $category_id): bool
     {
-        $sql = 'UPDATE EVENT SET title = ?, description = ?, event_date = ?, event_time = ?, location = ?, total_seats = ?, available_seats = ?, status = ?, image = ?, category_id = ? WHERE id = ?';
+        $sql = 'UPDATE EVENT SET title = ?, description = ?, event_date = ?, location = ?, total_seats = ?, available_seats = ?, status = ?, image = ?, category_id = ? WHERE id = ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return false;
-        $stmt->bind_param('ssssiisssii', $title, $description, $event_date, $event_time, $location, $total_seats, $available_seats, $status, $image, $category_id, $id);
+        // types: title(s), description(s), event_date(s), location(s), total_seats(i), available_seats(i), status(s), image(s|null), category_id(i), id(i)
+        $stmt->bind_param('ssssii ss ii', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $category_id, $id);
+        // Compact form without spaces:
+        $stmt->close();
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return false;
+        $stmt->bind_param('ssssiissii', $title, $description, $event_date, $location, $total_seats, $available_seats, $status, $image, $category_id, $id);
         $ok = $stmt->execute();
         $stmt->close();
         return (bool)$ok;
@@ -190,7 +203,7 @@ class Event
     public function search(string $q, int $limit = 50, int $offset = 0): array
     {
         $like = '%' . $q . '%';
-        $sql = 'SELECT id, title, description, event_date, event_time, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE title LIKE ? OR description LIKE ? ORDER BY event_date, event_time LIMIT ? OFFSET ?';
+        $sql = 'SELECT id, title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id FROM EVENT WHERE title LIKE ? OR description LIKE ? ORDER BY event_date LIMIT ? OFFSET ?';
         $stmt = $this->conn->prepare($sql);
         if (!$stmt) return [];
         $stmt->bind_param('ssii', $like, $like, $limit, $offset);
