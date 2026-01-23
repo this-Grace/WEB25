@@ -76,6 +76,44 @@ class User
     }
 
     /**
+     * Update a user's profile information
+     * 
+     * @param string $email User's current email address
+     * @param string $name User's new first name
+     * @param string $surname User's new last name
+     * @param string $newEmail User's new email address
+     * @return bool True if update successful, false otherwise
+     */
+    public function updateProfile(string $email, string $name, string $surname, string $newEmail): bool
+    {
+        $sql = 'UPDATE USERS SET name = ?, surname = ?, email = ? WHERE email = ?';
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return false;
+        $stmt->bind_param('ssss', $name, $surname, $newEmail, $email);
+        $ok = $stmt->execute();
+        $stmt->close();
+        return (bool)$ok;
+    }
+
+    /**
+     * Update a user's avatar path
+     * 
+     * @param string $email User's email address
+     * @param string $avatarPath New avatar file path
+     * @return bool True if update successful, false otherwise
+     */
+    public function updateAvatar(string $email, ?string $avatarPath): bool
+    {
+        $sql = 'UPDATE USERS SET avatar = ? WHERE email = ?';
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return false;
+        $stmt->bind_param('ss', $avatarPath, $email);
+        $ok = $stmt->execute();
+        $stmt->close();
+        return (bool)$ok;
+    }
+
+    /**
      * Authenticate a user with email and password
      * 
      * @param string $email User's email address
