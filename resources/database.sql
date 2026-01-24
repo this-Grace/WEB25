@@ -10,7 +10,7 @@ CREATE TABLE USER (
     name VARCHAR(50) NOT NULL,
     surname VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    avatar VARCHAR(255) DEFAULT 'upload/img/profile/default-avatar.png',
+    avatar VARCHAR(255) DEFAULT 'default-avatar.png',
     role ENUM('USER', 'HOST', 'ADMINISTRATOR') NOT NULL,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -50,53 +50,26 @@ CREATE TABLE EVENT (
         REFERENCES CATEGORY(id)
 );
 
--- -- =====================================
--- -- ISCRIZIONE
--- -- =====================================
--- CREATE TABLE ISCRIZIONE (
---     id_iscrizione INT AUTO_INCREMENT PRIMARY KEY,
---     id_utente INT NOT NULL,
---     id_evento INT NOT NULL,
---     data_iscrizione TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     codice_partecipazione VARCHAR(20) NOT NULL UNIQUE,
---     stato ENUM('ISCRITTO', 'PRESENTE', 'ASSENTE', 'CANCELLATO') NOT NULL,
---     orario_checkin TIMESTAMP NULL,
+-- =====================================
+-- SUBSCRIPTION
+-- =====================================
+CREATE TABLE SUBSCRIPTION (
+    subscription_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(100) NOT NULL,
+    event_id INT NOT NULL,
+    subscription_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    participation_code VARCHAR(20) NOT NULL UNIQUE,
+    status ENUM('REGISTERED', 'PRESENT', 'ABSENT', 'CANCELLED') NOT NULL,
+    checkin_time TIMESTAMP NULL,
 
---     CONSTRAINT fk_iscrizione_utente
---         FOREIGN KEY (id_utente)
---         REFERENCES UTENTE(id_utente),
+    CONSTRAINT fk_subscription_user
+        FOREIGN KEY (user_email)
+        REFERENCES USER(email),
 
---     CONSTRAINT fk_iscrizione_evento
---         FOREIGN KEY (id_evento)
---         REFERENCES EVENTO(id_evento),
+    CONSTRAINT fk_subscription_event
+        FOREIGN KEY (event_id)
+        REFERENCES EVENT(id),
 
---     CONSTRAINT unica_iscrizione
---         UNIQUE (id_utente, id_evento)
--- );
-
--- -- =====================================
--- -- ATTIVITA UTENTE
--- -- =====================================
--- CREATE TABLE ATTIVITA_UTENTE (
---     id_attivita INT AUTO_INCREMENT PRIMARY KEY,
---     id_utente INT NOT NULL,
---     tipo_attivita ENUM(
---         'CREA_EVENTO',
---         'MODIFICA_EVENTO',
---         'PUBBLICA_EVENTO',
---         'ISCRIZIONE_EVENTO',
---         'PARTECIPAZIONE_EVENTO',
---         'CANCELLA_ISCRIZIONE'
---     ) NOT NULL,
---     id_evento INT NULL,
---     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     descrizione TEXT,
-
---     CONSTRAINT fk_attivita_utente
---         FOREIGN KEY (id_utente)
---         REFERENCES UTENTE(id_utente),
-
---     CONSTRAINT fk_attivita_evento
---         FOREIGN KEY (id_evento)
---         REFERENCES EVENTO(id_evento)
--- );
+    CONSTRAINT unique_subscription
+        UNIQUE (user_email, event_id)
+);
