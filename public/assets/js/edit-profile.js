@@ -1,53 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const profileContainer = document.getElementById('profile-container');
-    const inlineInputs = document.querySelectorAll('.form-control-inline');
-
-    if (!profileContainer) return;
-
+    const inputs = document.querySelectorAll('.form-control-inline');
     const syncInputWidth = (input) => {
-        const tempSpan = document.createElement('span');
+        const measure = document.createElement('span');
         const style = window.getComputedStyle(input);
         
-        Object.assign(tempSpan.style, {
+        Object.assign(measure.style, {
             visibility: 'hidden',
             position: 'absolute',
             whiteSpace: 'pre',
             font: style.font,
+            fontWeight: style.fontWeight,
+            fontSize: style.fontSize,
+            fontFamily: style.fontFamily,
             letterSpacing: style.letterSpacing,
-            textTransform: style.textTransform
+            textTransform: style.textTransform,
+            padding: '0',
+            boxSizing: 'content-box'
         });
 
-        tempSpan.innerText = input.value || input.placeholder || " ";
-        document.body.appendChild(tempSpan);
-        input.style.width = `${tempSpan.offsetWidth + 2}px`;
-        document.body.removeChild(tempSpan);
+        measure.textContent = input.value || input.placeholder || " ";
+        document.body.appendChild(measure);
+        
+        input.style.width = (measure.getBoundingClientRect().width + 2) + 'px';
+        
+        document.body.removeChild(measure);
     };
 
-    inlineInputs.forEach(input => {
+    inputs.forEach(input => {
         syncInputWidth(input);
         input.addEventListener('input', () => syncInputWidth(input));
     });
 
-    /**
-     * Toggles between view mode and edit mode
-     * @param {boolean} isEditing - State of the editor
-     */
     window.toggleEdit = (isEditing) => {
-        const viewModes = profileContainer.querySelectorAll('.view-mode');
-        const editModes = profileContainer.querySelectorAll('.edit-mode');
+        const views = document.querySelectorAll('.view-mode');
+        const edits = document.querySelectorAll('.edit-mode');
 
-        viewModes.forEach(el => el.classList.toggle('d-none', isEditing));
-        editModes.forEach(el => {
-            el.classList.toggle('d-none', !isEditing);
-            el.classList.toggle('d-flex', isEditing);
-
-            const isTarget = el.id === 'wrapper-name-edit' || el.classList.contains('buttons-edit-wrapper');
-            el.classList.toggle('justify-content-center-mobile', isEditing && isTarget);
+        views.forEach(v => v.classList.toggle('d-none', isEditing));
+        edits.forEach(e => {
+            e.classList.toggle('d-none', !isEditing);
+            if (isEditing) e.classList.add('d-flex');
         });
 
         if (isEditing) {
-            setTimeout(() => inlineInputs.forEach(syncInputWidth), 0);
-            document.getElementById('input-first-name')?.focus();
+            setTimeout(() => {
+                inputs.forEach(syncInputWidth);
+                document.getElementById('input-first-name')?.focus();
+            }, 50);
         }
     };
+
+    window.previewImage = (input) => {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('display-avatar').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    const unsubModal = document.getElementById('unsubEventModal');
+    if (unsubModal) {
+        unsubModal.addEventListener('show.bs.modal', (e) => {
+            const btn = e.relatedTarget;
+            unsubModal.querySelector('#modal-event-name').textContent = btn.dataset.eventTitle;
+            unsubModal.querySelector('#modal-event-id').value = btn.dataset.eventId;
+        });
+    }
 });
