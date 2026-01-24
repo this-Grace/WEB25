@@ -1,6 +1,6 @@
 <header class="text-white">
     <div class="container py-5 text-center">
-        <h1 class="display-4 fw-bold mb-3">Eventi Universitari 2026</h1>
+        <h1 class="display-4 fw-bold mb-3">Eventi Universitari <?php echo date('Y') ?></h1>
         <p class="lead mb-5 opacity-75">Scopri, partecipa e connettiti con la community universitaria</p>
 
         <div class="row justify-content-center">
@@ -15,19 +15,19 @@
 
         <div class="row g-4 justify-content-center mt-4">
             <div class="col-6 col-md-2">
-                <h2 class="fw-bold mb-0">250+</h2>
+                <h2 class="fw-bold mb-0"><?php echo htmlspecialchars($templateParams["total_events"] ?? '', ENT_QUOTES, 'UTF-8'); ?></h2>
                 <small class="opacity-75">Eventi Totali</small>
             </div>
             <div class="col-6 col-md-2">
-                <h2 class="fw-bold mb-0">5.000+</h2>
+                <h2 class="fw-bold mb-0"><?php echo htmlspecialchars($templateParams["active_student"] ?? '', ENT_QUOTES, 'UTF-8'); ?></h2>
                 <small class="opacity-75">Studenti Attivi</small>
             </div>
             <div class="col-6 col-md-2">
-                <h2 class="fw-bold mb-0">50+</h2>
+                <h2 class="fw-bold mb-0"><?php echo htmlspecialchars($templateParams["total_hoster"] ?? '', ENT_QUOTES, 'UTF-8'); ?></h2>
                 <small class="opacity-75">Organizzazioni</small>
             </div>
             <div class="col-6 col-md-2">
-                <h2 class="fw-bold mb-0"><?php echo count($templateParams['categories'] ?? []); ?></h2>
+                <h2 class="fw-bold mb-0"><?php echo htmlspecialchars($templateParams["total_categories"] ?? '', ENT_QUOTES, 'UTF-8'); ?></h2>
                 <small class="opacity-75">Categorie</small>
             </div>
         </div>
@@ -67,7 +67,7 @@
         </p>
 
         <div id="events-grid" class="row">
-            <?php foreach ($templateParams['featured_events'] as $ev) : ?>
+            <?php foreach ($templateParams['featured_events'] ?? [] as $ev) : ?>
                 <div class="col-lg-4 col-md-6 mb-4" data-category-id="<?php echo htmlspecialchars($ev['category_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <div class="card event-card h-100">
                         <div class="position-relative">
@@ -112,9 +112,9 @@
                 </div>
             <?php endforeach; ?>
 
-            <div class="text-center m-4 w-100">
+            <!-- <div class="text-center m-4 w-100">
                 <button id="load-more-btn" data-page="1" data-limit="6" class="btn btn-light border border-dark">Carica altri eventi</button>
-            </div>
+            </div> -->
         </div>
 </main>
 
@@ -122,12 +122,12 @@
     <div class="container border-bottom">
         <h2 class="text-center mb-4">Statistiche della Community</h2>
         <div class="row text-center">
-            <div class="col-md-4 col-6 mb-4">
+            <div class="col-12 col-md-4 col-6 mb-4">
                 <div class="stat-card stat-card-blue p-4">
                     <div class="stat-icon mb-3">
                         <span class="bi bi-calendar-event" aria-hidden="true"></span>
                     </div>
-                    <h3 class="fw-bold">28</h3>
+                    <h3 class="fw-bold"><?php echo htmlspecialchars($templateParams["event_this_month"] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
                     <p class="small">Eventi Questo Mese</p>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                     <div class="stat-icon mb-3">
                         <span class="bi bi-percent" aria-hidden="true"></span>
                     </div>
-                    <h3 class="fw-bold">89%</h3>
+                    <h3 class="fw-bold"><?php echo htmlspecialchars($templateParams["avg_participation"] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
                     <p class="small">Partecipazione Media</p>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                     <div class="stat-icon mb-3">
                         <span class="bi bi-check-circle" aria-hidden="true"></span>
                     </div>
-                    <h3 class="fw-bold">188</h3>
+                    <h3 class="fw-bold"><?php echo htmlspecialchars($templateParams["completed_events"] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
                     <p class="small">Eventi Completati</p>
                 </div>
             </div>
