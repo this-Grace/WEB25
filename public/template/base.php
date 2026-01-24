@@ -51,18 +51,20 @@ $navClass = function (string $label) use ($templateParams): string {
                     <li class="nav-item">
                         <a href="create.php" class="<?php echo $navClass('Crea Evento'); ?>">Crea Evento</a>
                     </li>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['user'])): ?>
                     <li class="nav-item">
                         <a href="profile.php" class="<?php echo $navClass('Profilo'); ?>">Profilo</a>
                     </li>
-                <?php endif; ?>
-
-                <li class="nav-item">
-                    <?php if (isset($_SESSION['user'])): ?>
+                    <li class="nav-item">
                         <a href="logout.php" class="nav-link text-danger px-3">Logout</a>
-                    <?php else: ?>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
                         <a href="login.php" class="nav-link text-primary px-3">Login</a>
-                    <?php endif; ?>
-                </li>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
