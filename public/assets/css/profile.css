@@ -8,17 +8,12 @@
     --text-light: #94a3b8;
 }
 
-#profile-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 140px;
-}
-
+#profile-container,
 .profile-info-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 100%;
 }
 
 .name-group,
@@ -27,14 +22,64 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .name-group {
-    margin-bottom: 0.1rem !important;
+    margin-bottom: 0.2rem !important;
 }
 
 .email-group {
     margin-bottom: 1.5rem !important;
+}
+
+.name-group .edit-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    width: 100%;
+}
+
+.input-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    padding: 0 4px 4px 4px;
+}
+
+.input-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.form-control-inline {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 2px dashed var(--input-border) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    outline: none !important;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    text-align: center;
+    display: inline-block;
+    min-width: 40px;
+    white-space: nowrap;
+    border-radius: 0 !important;
+    transition: border-color 0.2s ease;
+}
+
+.form-control-inline:focus {
+    border-bottom: 2px solid var(--primary) !important;
+    border-bottom-style: solid !important;
+}
+
+.profile-title-edit {
+    font-size: calc(1.325rem + 0.9vw) !important;
+    font-weight: 700;
 }
 
 @media (min-width: 768px) {
@@ -43,6 +88,17 @@
     .email-group,
     .profile-actions-wrapper {
         align-items: flex-start;
+    }
+
+    .name-group .edit-mode {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 0.75rem;
+    }
+
+    .form-control-inline {
+        text-align: left;
     }
 }
 
@@ -77,6 +133,7 @@
     border: 3px solid white;
     cursor: pointer;
     transition: var(--transition);
+    z-index: 2;
 }
 
 .nav-tabs-container {
@@ -98,59 +155,8 @@
     font-weight: 700;
 }
 
-#profileTabs .nav-item {
-    margin-bottom: -1px;
-}
-
-.form-control-inline {
-    background: transparent !important;
-    border: none !important;
-    border-bottom: 2px dashed var(--input-border) !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    outline: none !important;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    color: inherit;
-    text-align: inherit;
-    width: auto;
-    min-width: 10px;
-    max-width: 100%; 
-    transition: border-color 0.2s ease;
-    border-radius: 0 !important;
-}
-
-.form-control-inline:focus {
-    border-bottom: 2px solid var(--primary) !important;
-    background: transparent !important;
-}
-
-.profile-title-edit {
-    font-size: calc(1.325rem + 0.9vw) !important;
-    font-weight: 700;
-}
-
-.profile-sub-edit {
-    font-size: 1rem !important;
-    color: var(--text-muted);
-}
-
-.custom-progress {
-    height: 4px !important;
-    border-radius: 2px;
-    background-color: #f1f5f9;
-    overflow: hidden;
-    margin-top: 4px;
-}
-
-.custom-progress .progress-bar {
-    background-color: var(--primary) !important;
-}
-
 .event-wide-card {
     transition: var(--transition);
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
 
 .event-card-img {
@@ -160,9 +166,12 @@
     object-fit: cover;
 }
 
-@media (min-width: 768px) {
-    .event-wide-card:hover {
-        transform: translateX(8px);
-        border-color: var(--primary) !important;
-    }
+.custom-progress {
+    height: 4px !important;
+    border-radius: 2px;
+    background-color: #f1f5f9;
+}
+
+.custom-progress .progress-bar {
+    background-color: var(--primary) !important;
 }

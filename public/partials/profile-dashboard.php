@@ -45,7 +45,7 @@ $eventi_archivio = [
 
 $tabs = [
     ['id' => 'iscritti-pane', 'label' => 'Iscrizioni', 'data' => $eventi_iscritti, 'active' => true, 'is_organizer' => false],
-    ['id' => 'organizzati-pane', 'label' => 'Gestione Eventi', 'data' => $eventi_organizzati, 'active' => false, 'is_organizer' => true],
+    ['id' => 'organizzati-pane', 'label' => 'I Miei Eventi', 'data' => $eventi_organizzati, 'active' => false, 'is_organizer' => true],
     ['id' => 'bozze-pane', 'label' => 'Bozze', 'data' => $eventi_bozze, 'active' => false, 'is_organizer' => true, 'is_draft' => true],
     ['id' => 'storico-pane', 'label' => 'Storico', 'data' => $eventi_archivio, 'active' => false, 'is_organizer' => true]
 ];
@@ -53,17 +53,15 @@ $tabs = [
 
 <main class="py-4 py-md-5 bg-light flex-grow-1">
     <div class="container">
-
-        <section class="card border-0 shadow-sm rounded-4 mb-4 mb-md-5 overflow-hidden" aria-label="Informazioni Profilo">
+        <section class="card border-0 shadow-sm rounded-4 mb-4 mb-md-5 overflow-hidden">
             <div class="card-body p-4 p-md-5">
                 <form id="profileForm" action="update-profile.php" method="POST" enctype="multipart/form-data">
                     <div class="d-flex flex-column flex-md-row align-items-center gap-4">
-
+                        
                         <div class="avatar-container">
-                            <img src="<?= $user['avatar']; ?>" id="display-avatar" class="profile-img shadow-sm" alt="Foto profilo di <?= htmlspecialchars($user['first_name']); ?>">
+                            <img src="<?= $user['avatar']; ?>" id="display-avatar" class="profile-img shadow-sm" alt="Foto profilo">
                             <label for="avatarUpload" class="avatar-edit-btn shadow-sm" title="Modifica foto">
-                                <span class="bi bi-camera" aria-hidden="true"></span>
-                                <span class="visually-hidden">Carica una nuova foto profilo</span>
+                                <span class="bi bi-camera"></span>
                                 <input type="file" id="avatarUpload" name="avatar" class="d-none" onchange="previewImage(this)" accept="image/*">
                             </label>
                         </div>
@@ -75,29 +73,26 @@ $tabs = [
                                     <div class="view-mode">
                                         <h1 class="fw-bold h2 mb-0"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h1>
                                     </div>
-                                    <div class="edit-mode d-none gap-2">
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <div class="input-wrapper">
-                                                <label for="input-first-name" class="visually-hidden">Nome</label>
-                                                <input type="text" id="input-first-name" name="first_name" class="form-control-inline profile-title-edit" value="<?= $user['first_name']; ?>" placeholder="Nome" maxlength="50" required>
-                                            </div>
-                                            <div class="input-wrapper">
-                                                <label for="input-last-name" class="visually-hidden">Cognome</label>
-                                                <input type="text" id="input-last-name" name="last_name" class="form-control-inline profile-title-edit" value="<?= $user['last_name']; ?>" placeholder="Cognome" maxlength="50" required>
-                                            </div>
+                                    <div class="edit-mode d-none">
+                                        <div class="input-wrapper">
+                                            <input type="text" name="first_name" id="input-first-name" class="form-control-inline profile-title-edit" value="<?= htmlspecialchars($user['first_name']); ?>" placeholder="Nome" maxlength="50" required>
+                                        </div>
+                                        <div class="input-wrapper">
+                                            <input type="text" name="last_name" class="form-control-inline profile-title-edit" value="<?= htmlspecialchars($user['last_name']); ?>" placeholder="Cognome" maxlength="50" required>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="email-group mb-3 text-muted">
                                     <div class="view-mode d-flex align-items-center">
-                                        <span class="bi bi-envelope me-2" aria-hidden="true"></span>
+                                        <span class="bi bi-envelope me-2"></span>
                                         <span><?= htmlspecialchars($user['email']); ?></span>
                                     </div>
-                                    <div class="edit-mode d-none align-items-center w-100">
-                                        <span class="bi bi-envelope me-2" aria-hidden="true"></span>
-                                        <label for="input-email" class="visually-hidden">Email</label>
-                                        <input type="email" id="input-email" name="email" class="form-control-inline profile-sub-edit" value="<?= $user['email']; ?>" required>
+                                    <div class="edit-mode d-none align-items-center">
+                                        <span class="bi bi-envelope me-2"></span>
+                                        <div class="input-wrapper">
+                                            <input type="email" id="input-email" name="email" class="form-control-inline profile-sub-edit" value="<?= htmlspecialchars($user['email']); ?>" required>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -193,8 +188,6 @@ $tabs = [
                                                             <button class="btn btn-primary btn-sm rounded-3 px-3 fw-bold">Pubblica</button>
                                                             <button class="btn btn-outline-dark btn-sm rounded-3 px-2"><span class="bi bi-pencil"></span></button>
                                                         </div>
-                                                    <?php elseif ($ev['status'] === 'APPROVED' || $ev['status'] === 'PUBLISHED'): ?>
-                                                        <button class="btn btn-dark btn-sm rounded-3 px-3 fw-bold shadow-sm">Gestisci</button>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>
