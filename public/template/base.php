@@ -6,10 +6,9 @@ if (session_status() == PHP_SESSION_NONE) {
 $templateParams["brand"] = "UniEvents";
 $templateParams["tagline"] = "Il futuro dei tuoi eventi universitari, oggi.";
 
-$templateParams["footer"] = [
-    ['role' => 'Developer', 'name' => 'Alessandro Rebosio', 'email' => 'alessandro.rebosio@studio.unibo.it'],
-    ['role' => 'Developer', 'name' => 'Grazia Bochdanovits de Kavna', 'email' => 'grazia.bochdanovits@studio.unibo.it']
-];
+$navClass = function (string $label) use ($templateParams): string {
+    return 'nav-link px-3 ' . (($templateParams['title'] ?? '') === $label ? 'active bg-dark text-white' : 'link-dark');
+};
 ?>
 
 <!DOCTYPE html>
@@ -37,34 +36,33 @@ $templateParams["footer"] = [
 
 <body class="d-flex flex-column vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-2">
-        <div class="container flex-column flex-lg-row"> <a class="navbar-brand d-flex align-items-center mx-auto mx-lg-0 mb-2 mb-lg-0" href="index.php">
+        <div class="container flex-column flex-lg-row">
+            <a class="navbar-brand d-flex align-items-center mx-auto mx-lg-0 mb-2 mb-lg-0" href="index.php">
                 <span class="bi bi-calendar-check-fill fs-3 text-primary me-2" aria-hidden="true"></span>
-                <span class="fs-4 fw-bold tracking-tight"><?php echo $templateParams['brand']; ?></span>
+                <span class="fs-4 fw-bold tracking-tight"><?php echo htmlspecialchars($templateParams['brand'] ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
             </a>
 
             <ul class="nav nav-pills justify-content-center mt-md-2">
                 <li class="nav-item">
-                    <a href="index.php"
-                        class="nav-link px-3 <?php echo ($templateParams['title'] === 'Home' ? 'active bg-dark text-white' : 'link-dark'); ?>">
-                        Home
-                    </a>
+                    <a href="index.php" class="<?php echo $navClass('Home'); ?>">Home</a>
                 </li>
 
-                <?php if (isset($_SESSION['user'])): ?>
+                <?php if (isset($_SESSION['user']['role']) && in_array(strtolower($_SESSION['user']['role']), ['admin', 'host'], true)): ?>
                     <li class="nav-item">
-                        <a href="logout.php"
-                            class="nav-link text-danger px-3 <?php echo ($templateParams['title'] === 'Logout' ? 'active bg-dark text-white' : 'link-dark'); ?>">
-                            Logout
-                        </a>
+                        <a href="create.php" class="<?php echo $navClass('Crea Evento'); ?>">Crea Evento</a>
                     </li>
-                <?php else: ?>
                     <li class="nav-item">
-                        <a href="login.php"
-                            class="nav-link text-primary px-3 <?php echo ($templateParams['title'] === 'Login' ? 'active bg-dark text-white' : 'link-dark'); ?>">
-                            Login
-                        </a>
+                        <a href="profile.php" class="<?php echo $navClass('Profilo'); ?>">Profilo</a>
                     </li>
                 <?php endif; ?>
+
+                <li class="nav-item">
+                    <?php if (isset($_SESSION['user'])): ?>
+                        <a href="logout.php" class="nav-link text-danger px-3">Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="nav-link text-primary px-3">Login</a>
+                    <?php endif; ?>
+                </li>
             </ul>
         </div>
     </nav>

@@ -8,7 +8,7 @@ INSERT INTO USER (email, name, surname, password, role) VALUES
 ('luisa.bianchi@example.com', 'Luisa', 'Bianchi', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'USER'),
 ('giulia.verdi@example.com', 'Giulia', 'Verdi', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'HOST'),
 ('paolo.neri@example.com', 'Paolo', 'Neri', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'HOST'),
-('admin@web25.com', 'Admin', 'System', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'ADMINISTRATOR');
+('admin@web25.com', 'Admin', 'System', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'ADMIN');
 
 -- =====================================
 -- CATEGORY
@@ -24,38 +24,31 @@ INSERT INTO CATEGORY (name) VALUES
 -- EVENTS 
 -- =====================================
 INSERT INTO EVENT (title, description, event_date, location, total_seats, available_seats, status, created_at, image, user_email, category_id) VALUES
-('AI per Tutti', 'Introduzione alle applicazioni pratiche dell''IA per non esperti.', '2026-03-15 10:00:00', 'Aula Magna - Edificio A', 200, 185, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 1),
-('Workshop pratico di Cybersecurity', 'Esercizi pratici sulla sicurezza web e le difese.', '2026-03-20 14:00:00', 'Laboratorio 3 - Edificio B', 30, 5, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo3.jpeg', 'luisa.bianchi@example.com', 2),
+('AI per Tutti', 'Introduzione alle applicazioni pratiche dell''IA per non esperti.', '2026-03-15 10:00:00', 'Aula Magna - Edificio A', 200, 185, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 1),
+('Workshop pratico di Cybersecurity', 'Esercizi pratici sulla sicurezza web e le difese.', '2026-03-20 14:00:00', 'Laboratorio 3 - Edificio B', 30, 5, 'WAITING', CURRENT_TIMESTAMP, 'photo3.jpeg', 'luisa.bianchi@example.com', 2),
 ('Basi di Dati: progettazione e buone pratiche', 'Seminario su normalizzazione e progettazione ER.', '2026-04-02 09:30:00', 'Aula B1 - Edificio B', 100, 100, 'DRAFT', NULL, 'photo3.jpeg', 'giulia.verdi@example.com', 3),
-('Corsa Comunitaria', 'Corsa sociale di 5 km nel campus aperta a tutti i livelli.', '2026-04-10 08:00:00', 'Parco del Campus - Edificio B', 150, 140, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo2.jpeg', 'paolo.neri@example.com', 4),
-('Passeggiata Fotografica', 'Passeggiata guidata per migliorare le abilità nella fotografia outdoor.', '2026-04-18 16:30:00', 'Centro Storico - Edificio B', 40, 12, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 5),
-('Serata Pitch Startup', 'Startup locali presentano le loro idee a mentori e investitori.', '2026-05-05 18:00:00', 'Hub dell''Innovazione - Edificio B', 120, 85, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'luisa.bianchi@example.com', 1),
+('Corsa Comunitaria', 'Corsa sociale di 5 km nel campus aperta a tutti i livelli.', '2026-01-30 08:00:00', 'Parco del Campus - Edificio B', 150, 140, 'APPROVED', CURRENT_TIMESTAMP, 'photo2.jpeg', 'paolo.neri@example.com', 4),
+('Passeggiata Fotografica', 'Passeggiata guidata per migliorare le abilità nella fotografia outdoor.', '2026-04-18 16:30:00', 'Centro Storico - Edificio B', 40, 12, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 5),
+('Serata Pitch Startup', 'Startup locali presentano le loro idee a mentori e investitori.', '2026-05-05 18:00:00', 'Hub dell''Innovazione - Edificio B', 120, 85, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'luisa.bianchi@example.com', 1),
 ('Gruppo di Studio ML Avanzato', 'Incontri settimanali per discutere articoli recenti e implementazioni.', '2026-05-12 17:00:00', 'Aula 210 - Edificio B', 25, 20, 'APPROVED', CURRENT_TIMESTAMP, 'photo2.jpeg', 'giulia.verdi@example.com', 1),
-('Pulizia Volontaria della Spiaggia', 'Evento di volontariato per pulire la spiaggia locale.', '2026-06-01 09:00:00', 'Spiaggia della Marina - Edificio B', 60, 60, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'paolo.neri@example.com', 5),
-('Incontro di Conversazione in Francese', 'Scambio linguistico informale per partecipanti di livello intermedio.', '2026-06-08 19:30:00', 'Sala Caffetteria - Edificio B', 30, 18, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 5),
-('Fiera Maker di Primavera', 'Esposizione di progetti studenteschi e dimostrazioni dei maker.', '2026-05-20 11:00:00', 'Padiglione Espositivo - Edificio B', 300, 250, 'PUBLISHED', CURRENT_TIMESTAMP, 'photo3.jpeg', 'admin@web25.com', 2);
+('Pulizia Volontaria della Spiaggia', 'Evento di volontariato per pulire la spiaggia locale.', '2026-06-01 09:00:00', 'Spiaggia della Marina - Edificio B', 60, 60, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'paolo.neri@example.com', 5),
+('Incontro di Conversazione in Francese', 'Scambio linguistico informale per partecipanti di livello intermedio.', '2025-06-08 19:30:00', 'Sala Caffetteria - Edificio B', 30, 0, 'APPROVED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 5),
+('Fiera Maker di Primavera', 'Esposizione di progetti studenteschi e dimostrazioni dei maker.', '2026-05-20 11:00:00', 'Padiglione Espositivo - Edificio B', 300, 250, 'APPROVED', CURRENT_TIMESTAMP, 'photo3.jpeg', 'admin@web25.com', 2);
 
--- -- =====================================
--- -- ISCRIZIONI
--- -- =====================================
--- INSERT INTO ISCRIZIONE (
---     id_utente, id_evento, codice_partecipazione, stato
--- ) VALUES
--- (3, 1, 'AI2026LUC', 'ISCRITTO'),
--- (4, 1, 'AI2026GIU', 'PRESENTE'),
--- (5, 1, 'AI2026PAO', 'ASSENTE'),
--- (3, 2, 'CYB2026LUC', 'PRESENTE'),
--- (4, 2, 'CYB2026GIU', 'ISCRITTO');
-
--- -- =====================================
--- -- ATTIVITÀ UTENTE
--- -- =====================================
--- INSERT INTO ATTIVITA_UTENTE (
---     id_utente, tipo_attivita, id_evento, descrizione
--- ) VALUES
--- (1, 'CREA_EVENTO', 1, 'Creazione evento AI'),
--- (1, 'PUBBLICA_EVENTO', 1, 'Pubblicazione evento AI'),
--- (2, 'CREA_EVENTO', 2, 'Creazione workshop cybersecurity'),
--- (3, 'ISCRIZIONE_EVENTO', 1, 'Iscrizione alla conferenza AI'),
--- (4, 'PARTECIPAZIONE_EVENTO', 1, 'Partecipazione conferenza AI'),
--- (3, 'PARTECIPAZIONE_EVENTO', 2, 'Partecipazione workshop cybersecurity');
+-- =====================================
+-- SUBSCRIPTION
+-- =====================================
+INSERT INTO SUBSCRIPTION (user_email, event_id, participation_code, status, checkin_time) VALUES
+('mario.rossi@example.com', 1, 'SUB1001', 'REGISTERED', NULL),
+('luisa.bianchi@example.com', 1, 'SUB1002', 'REGISTERED', NULL),
+('giulia.verdi@example.com', 1, 'SUB1003', 'CANCELLED', NULL),
+('paolo.neri@example.com', 4, 'SUB1004', 'PRESENT', '2026-04-10 08:05:00'),
+('mario.rossi@example.com', 5, 'SUB1005', 'REGISTERED', NULL),
+('luisa.bianchi@example.com', 2, 'SUB1006', 'PRESENT', '2026-03-20 14:10:00'),
+('giulia.verdi@example.com', 3, 'SUB1007', 'REGISTERED', NULL),
+('paolo.neri@example.com', 8, 'SUB1009', 'REGISTERED', NULL),
+('mario.rossi@example.com', 9, 'SUB1010', 'PRESENT', '2026-06-08 19:35:00'),
+('luisa.bianchi@example.com', 7, 'SUB1011', 'PRESENT', '2026-05-12 17:05:00'),
+('giulia.verdi@example.com', 7, 'SUB1012', 'REGISTERED', NULL),
+('admin@web25.com', 10, 'SUB1013', 'PRESENT', '2026-05-20 11:05:00'),
+('luisa.bianchi@example.com', 4, 'SUB1014', 'CANCELLED', NULL);

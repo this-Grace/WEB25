@@ -1,102 +1,124 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.btn-cate');
-    function getCards() { return document.querySelectorAll('[data-category-id]'); }
-    const activeSection = document.getElementById('active-filters-section');
-    const activeList = document.getElementById('active-filters-list');
-    const clearBtn = document.getElementById('clear-filters-btn');
+    const ALL_FILTERS_ID = 'all';
 
-    if (!buttons.length || !activeSection || !activeList) return;
+    const filterButtons = document.querySelectorAll('.btn-cate');
+    const getCards = () => document.querySelectorAll('[data-category-id]');
+    const activeFiltersSection = document.getElementById('active-filters-section');
+    const activeFiltersList = document.getElementById('active-filters-list');
+    const clearFiltersButton = document.getElementById('clear-filters-btn');
 
-    const active = new Set();
+    const activeFilters = new Set();
 
-    function render() {
-        activeList.innerHTML = '';
-        const hasAny = active.size > 0;
-        activeSection.style.display = hasAny ? 'block' : 'none';
-
-        // render badges
-        active.forEach(id => {
-            const btn = document.querySelector('.btn-cate[data-id="' + id + '"]');
-            const label = btn ? btn.textContent.trim() : id;
-            const span = document.createElement('span');
-
-            let badgeClasses = 'badge d-flex align-items-center p-2 btn-cate';
-
-            if (btn) {
-                btn.classList.forEach(cls => {
-                    if (cls.startsWith('btn-cate-')) {
-                        badgeClasses += ' ' + cls;
-                    }
-                });
-            }
-
-            span.className = badgeClasses;
-            span.innerHTML = '<span class="fw-medium">' + label + '</span>';
-            const rem = document.createElement('button');
-            rem.type = 'button';
-            rem.className = 'btn-close ms-2';
-            rem.setAttribute('aria-label', 'Rimuovi filtro');
-            rem.dataset.id = id;
-            span.appendChild(rem);
-            activeList.appendChild(span);
-        });
-
-        // filter cards
-        if (!hasAny) {
-            getCards().forEach(c => c.style.display = '');
-        } else {
-            getCards().forEach(c => {
-                const cid = (c.dataset.categoryId || '').toString();
-                c.style.display = active.has(cid) ? '' : 'none';
-            });
-        }
+    if (!filterButtons.length || !activeFiltersSection || !activeFiltersList) {
+        console.warn('Filter script cannot run: one or more essential elements are missing from the DOM.');
+        return;
     }
 
-    function reset() {
-        active.clear();
-        buttons.forEach(b => b.classList.remove('active'));
-        const tutti = document.querySelector('.btn-cate[data-id="tutti"]');
-        if (tutti) tutti.classList.add('active');
-        render();
-    }
+    const applyFiltersToCards = () => {
+        const cards = getCards();
+        const hasActiveFilters = activeFilters.size > 0;
 
-    buttons.forEach(btn => {
-        btn.addEventListener('click', e => {
-            e.preventDefault();
-            const id = (btn.dataset.id || '').toString();
-            if (id === 'tutti') {
-                reset();
+        cards.forEach(card => {
+            if (!hasActiveFilters) {
+                card.style.display = '';
                 return;
             }
-            btn.classList.toggle('active');
-            if (btn.classList.contains('active')) active.add(id); else active.delete(id);
 
-            const tutti = document.querySelector('.btn-cate[data-id="tutti"]');
-            if (tutti && active.size > 0) tutti.classList.remove('active');
-            if (active.size === 0 && tutti) tutti.classList.add('active');
-            render();
+            const categoryId = card.dataset.categoryId || '';
+            const userEmail = card.dataset.userEmail || '';
+            const status = card.dataset.status || '';
+
+            const isVisible = [...activeFilters].some(id =>
+                id === categoryId ||
+                id === userEmail ||
+                (id === 'waiting' && status === 'WAITING')
+            );
+
+            card.style.display = isVisible ? '' : 'none';
         });
-    });
+    };
 
-    activeList.addEventListener('click', e => {
-        const remBtn = e.target.closest('button[data-id]');
-        if (!remBtn) return;
-        const id = remBtn.dataset.id;
-        active.delete(id);
-        const btn = document.querySelector('.btn-cate[data-id="' + id + '"]');
-        if (btn) btn.classList.remove('active');
-        const tutti = document.querySelector('.btn-cate[data-id="tutti"]');
-        if (active.size === 0 && tutti) tutti.classList.add('active');
+    /**
+     * Re-renders the entire filter UI based on the current state.
+     */
+    const render = () => {
+        const hasActiveFilters = activeFilters.size > 0;
+
+        activeFiltersSection.style.display = hasActiveFilters ? 'block' : 'none';
+
+        activeFiltersList.innerHTML = '';
+        activeFilters.forEach(id => {
+            const filterButton = document.querySelector(`.btn-cate[data-id="${id}"]`);
+            const label = filterButton ? filterButton.textContent.trim() : id;
+
+            const badgeHTML = `
+                <span class="badge d-flex align-items-center p-2 btn-cate ${[...filterButton?.classList].filter(c => c.startsWith('btn-cate-')).join(' ')}">
+                    <span class="fw-medium">${label}</span>
+                    <button type="button" class="btn-close ms-2" data-id="${id}" aria-label="Remove filter"></button>
+                </span>
+            `;
+            activeFiltersList.insertAdjacentHTML('beforeend', badgeHTML);
+        });
+
+        applyFiltersToCards();
+
+        const allButton = document.querySelector(`.btn-cate[data-id="${ALL_FILTERS_ID}"]`);
+        if (allButton) {
+            allButton.classList.toggle('active', !hasActiveFilters);
+        }
+    };
+
+    /**
+     * Deactivates all filters and resets the UI.
+     */
+    const resetFilters = () => {
+        activeFilters.clear();
+        filterButtons.forEach(button => button.classList.remove('active'));
         render();
-    });
+    };
 
-    if (clearBtn) clearBtn.addEventListener('click', e => { e.preventDefault(); reset(); });
+    const handleFilterButtonClick = (e) => {
+        e.preventDefault();
+        const button = e.currentTarget;
+        const id = button.dataset.id || '';
 
-    // initial render
+        if (id === ALL_FILTERS_ID) {
+            resetFilters();
+            return;
+        }
+
+        button.classList.toggle('active');
+        if (button.classList.contains('active')) {
+            activeFilters.add(id);
+        } else {
+            activeFilters.delete(id);
+        }
+        render();
+    };
+
+    const handleBadgeRemoveClick = (e) => {
+        const removeButton = e.target.closest('button[data-id]');
+        if (!removeButton) return;
+
+        const id = removeButton.dataset.id;
+        activeFilters.delete(id);
+
+        const filterButton = document.querySelector(`.btn-cate[data-id="${id}"]`);
+        if (filterButton) {
+            filterButton.classList.remove('active');
+        }
+        render();
+    };
+
+    filterButtons.forEach(button => button.addEventListener('click', handleFilterButtonClick));
+    activeFiltersList.addEventListener('click', handleBadgeRemoveClick);
+    if (clearFiltersButton) {
+        clearFiltersButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetFilters();
+        });
+    }
+    document.addEventListener('events:cards-added', () => applyFiltersToCards());
+
     render();
-
-    // Re-apply filters when new cards are added (load-more emits an event)
-    document.addEventListener('events:cards-added', () => {
-        render();
-    });
 });

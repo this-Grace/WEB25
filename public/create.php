@@ -1,6 +1,6 @@
 <?php
 
-$templateParams['title'] = "Create Event";
+$templateParams['title'] = "Crea Evento";
 $templateParams['css'] = ['assets/css/create-event.css'];
 $templateParams['js'] = ['assets/js/drag-and-drop.js', 'assets/js/event-preview.js'];
 
