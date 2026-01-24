@@ -44,8 +44,9 @@
 
             <?php if (isset($_SESSION['user']['role']) && strtolower($_SESSION['user']['role']) === 'admin') : ?>
                 <a href="#" class="btn-cate btn-cate-waiting" data-id="waiting">Waiting</a>
-                <div class="vr mx-2" role="separator" aria-orientation="vertical" aria-hidden="true"></div>
             <?php endif; ?>
+
+            <div class="vr mx-2" role="separator" aria-orientation="vertical" aria-hidden="true"></div>
 
             <?php foreach ($templateParams['categories'] as $cat) : ?>
                 <a href="<?php echo htmlspecialchars(strtolower($cat['name']), ENT_QUOTES, 'UTF-8'); ?>"
