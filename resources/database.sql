@@ -11,7 +11,7 @@ CREATE TABLE USER (
     surname VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     avatar VARCHAR(255) DEFAULT 'default-avatar.png',
-    role ENUM('USER', 'HOST', 'ADMINISTRATOR') NOT NULL,
+    role ENUM('USER', 'HOST', 'ADMIN') NOT NULL,
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -34,7 +34,7 @@ CREATE TABLE EVENT (
     location VARCHAR(100) NOT NULL,
     total_seats INT NOT NULL CHECK (total_seats > 0),
     available_seats INT NOT NULL CHECK (available_seats >= 0),
-    status ENUM('DRAFT', 'PUBLISHED', 'APPROVED', 'CANCELLED') NOT NULL,
+    status ENUM('DRAFT', 'WAITING', 'APPROVED', 'CANCELLED') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     image VARCHAR(255) NULL,
 

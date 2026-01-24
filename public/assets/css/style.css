@@ -40,6 +40,12 @@
     border: none;
 }
 
+.btn-cate-waiting,
+.badge-cate-waiting {
+    background-color: #fff7ed;
+    color: #b45309 !important;
+}
+
 .btn-cate:hover {
     transform: translateY(-2px);
     opacity: 0.8;

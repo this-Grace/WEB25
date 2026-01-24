@@ -40,6 +40,10 @@
         <div class="d-flex justify-content-center flex-wrap gap-2">
             <?php if (isset($_SESSION['user']['role']) && in_array(strtolower($_SESSION['user']['role']), ['host', 'admin'], true)) : ?>
                 <a href="#" class="btn-cate btn-cate-miei" data-id="<?php echo htmlspecialchars($_SESSION['user']['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">Miei</a>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['user']['role']) && strtolower($_SESSION['user']['role']) === 'admin') : ?>
+                <a href="#" class="btn-cate btn-cate-waiting" data-id="waiting">Waiting</a>
                 <div class="vr mx-2" role="separator" aria-orientation="vertical" aria-hidden="true"></div>
             <?php endif; ?>
 
@@ -73,7 +77,7 @@
 
         <div id="events-grid" class="row">
             <?php foreach ($templateParams['featured_events'] ?? [] as $ev) : ?>
-                <div class="col-lg-4 col-md-6 mb-4" data-category-id="<?php echo htmlspecialchars($ev['category_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="col-lg-4 col-md-6 mb-4" data-category-id="<?php echo htmlspecialchars($ev['category_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-user-email="<?php echo htmlspecialchars($ev['user_email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-status="<?php echo htmlspecialchars($ev['status'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                     <div class="card event-card h-100">
                         <div class="position-relative">
                             <img src="<?php echo EVENTS_IMG_DIR . htmlspecialchars($ev['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"

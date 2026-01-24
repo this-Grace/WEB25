@@ -51,6 +51,9 @@ $navClass = function (string $label) use ($templateParams): string {
                     <li class="nav-item">
                         <a href="create.php" class="<?php echo $navClass('Crea Evento'); ?>">Crea Evento</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="profile.php" class="<?php echo $navClass('Profilo'); ?>">Profilo</a>
+                    </li>
                 <?php endif; ?>
 
                 <li class="nav-item">
