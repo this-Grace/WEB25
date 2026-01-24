@@ -38,6 +38,11 @@
     <div class="container">
         <h2 class="visually-hidden">Filtra eventi per categoria</h2>
         <div class="d-flex justify-content-center flex-wrap gap-2">
+            <?php if (isset($_SESSION['user']['role']) && in_array(strtolower($_SESSION['user']['role']), ['host', 'admin'], true)) : ?>
+                <a href="#" class="btn-cate btn-cate-miei" data-id="<?php echo htmlspecialchars($_SESSION['user']['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">Miei</a>
+                <div class="vr mx-2" role="separator" aria-orientation="vertical" aria-hidden="true"></div>
+            <?php endif; ?>
+
             <?php foreach ($templateParams['categories'] as $cat) : ?>
                 <a href="<?php echo htmlspecialchars(strtolower($cat['name']), ENT_QUOTES, 'UTF-8'); ?>"
                     class="btn-cate btn-cate-<?php echo htmlspecialchars(strtolower($cat['name']), ENT_QUOTES, 'UTF-8'); ?>"

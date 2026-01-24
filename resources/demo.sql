@@ -8,7 +8,7 @@ INSERT INTO USER (email, name, surname, password, role) VALUES
 ('luisa.bianchi@example.com', 'Luisa', 'Bianchi', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'USER'),
 ('giulia.verdi@example.com', 'Giulia', 'Verdi', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'HOST'),
 ('paolo.neri@example.com', 'Paolo', 'Neri', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'HOST'),
-('admin@web25.com', 'Admin', 'System', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'ADMINISTRATOR');
+('admin@web25.com', 'Admin', 'System', '$2y$12$B4gnmTKlRqJyGy1UYSGuIug7Vj3O7FwaRs.VeLY6PN3.SK.KkGSaa', 'ADMIN');
 
 -- =====================================
 -- CATEGORY
