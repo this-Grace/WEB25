@@ -123,9 +123,9 @@
                                 $sessionEmail = $_SESSION['user']['email'] ?? '';
                                 $isOwner = ($sessionEmail !== '' && $sessionEmail === ($event['user_email'] ?? ''));
                                 $isSubscribed = false;
-                                if ($isLogged && isset($subscriptionMapper)) {
-                                    $sub = $subscriptionMapper->findByUserAndEvent($sessionEmail, (int)($event['id'] ?? 0));
-                                    $isSubscribed = !empty($sub);
+                                $userSubs = $templateParams['user_subscriptions'] ?? [];
+                                if (!empty($userSubs)) {
+                                    $isSubscribed = in_array((int)($event['id'] ?? 0), array_map('intval', $userSubs), true);
                                 }
                                 ?>
 
