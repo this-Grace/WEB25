@@ -8,7 +8,7 @@ $isCancelled    = ($event['status'] === 'CANCELLED');
 
 $avatar         = EVENTS_IMG_DIR . htmlspecialchars($event["image"], ENT_QUOTES, 'UTF-8');
 $cleanTitle     = htmlspecialchars($event["title"] ?? 'Evento senza titolo', ENT_QUOTES, 'UTF-8');
-$category   = htmlspecialchars($event["category"] ?? 'Evento', ENT_QUOTES, 'UTF-8');
+$category       = htmlspecialchars($event["category"] ?? 'Evento', ENT_QUOTES, 'UTF-8');
 ?>
 
 <article class="card event-card h-100 shadow-sm border-0 rounded-4 overflow-hidden <?php echo ($isPast || $isCancelled) ? 'opacity-75' : ''; ?>">
@@ -19,7 +19,7 @@ $category   = htmlspecialchars($event["category"] ?? 'Evento', ENT_QUOTES, 'UTF-
             <?php echo $category; ?>
         </span>
 
-        <?php if ($tabId !== 'iscritti-pane' && !$isPast && !$isCancelled): ?>
+        <?php if ($tabId !== 'subscriber-pane' && !$isPast && !$isCancelled): ?>
             <span class="badge <?php echo $statusInfo['class']; ?> position-absolute top-0 end-0 m-3">
                 <?php echo $statusInfo['label']; ?>
             </span>
@@ -50,7 +50,7 @@ $category   = htmlspecialchars($event["category"] ?? 'Evento', ENT_QUOTES, 'UTF-
             </div>
         </div>
 
-        <?php if ($tabId === 'organizzati-pane' && !$isPast && !$isCancelled): ?>
+        <?php if ($tabId === 'organized-pane' && !$isPast && !$isCancelled): ?>
             <div class="mb-3">
                 <div class="d-flex justify-content-between mb-1 text-muted" style="font-size: 0.7rem;">
                     <span id="prog-label-<?php echo $event['id']; ?>">Capacità: <?php echo $occupiedSeats; ?>/<?php echo $totalSeats; ?></span>
@@ -68,7 +68,7 @@ $category   = htmlspecialchars($event["category"] ?? 'Evento', ENT_QUOTES, 'UTF-
         <?php endif; ?>
 
         <div class="mt-auto pt-2 border-top">
-            <?php if ($tabId === 'iscritti-pane' && !$isPast && !$isCancelled): ?>
+            <?php if ($tabId === 'subscriber-pane' && !$isPast && !$isCancelled): ?>
                 <button type="button" class="btn btn-outline-danger btn-sm w-100 rounded-3 fw-bold"
                     data-bs-toggle="modal" data-bs-target="#unsubEventModal"
                     data-event-title="<?php echo $cleanTitle; ?>"
@@ -76,11 +76,11 @@ $category   = htmlspecialchars($event["category"] ?? 'Evento', ENT_QUOTES, 'UTF-
                     <span class="bi bi-x-circle me-1" aria-hidden="true"></span> Disiscriviti
                 </button>
 
-            <?php elseif (($tabId === 'organizzati-pane' || $tabId === 'bozze-pane') && !$isPast): ?>
+            <?php elseif (($tabId === 'organized-pane' || $tabId === 'draft-pane') && !$isPast): ?>
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <?php if (($event['status'] ?? '') === 'DRAFT'): ?>
-                            <a href="profile.php?action=publish_event&id=<?php echo $event['id']; ?>" class="btn btn-primary btn-sm fw-bold">Pubblica</a>
+                            <a href="api/approve_event.php?id=<?php echo $event['id']; ?>" class="btn btn-primary btn-sm fw-bold">Pubblica</a>
                         <?php endif; ?>
                     </div>
                     <div class="d-flex gap-2">
