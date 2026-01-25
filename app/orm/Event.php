@@ -185,4 +185,105 @@ class Event
     {
         return $this->getAllEvents($limit);
     }
+
+    /**
+     * Get event by its ID
+     * 
+     * @param int $id Event ID
+     * @return array|null Event data as associative array or null if not found
+     */
+    public function getEventById(int $id): ?array
+    {
+        $sql = $this->baseEventSelect() .
+            "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
+            "WHERE e.id = ? LIMIT 1";
+        $res = $this->fetchEvents($sql, [$id]);
+        return count($res) > 0 ? $res[0] : null;
+    }
+
+    /**
+     * Get events a user is subscribed to
+     * @param int $userId User ID
+     * @return array Array of events the user is subscribed to
+     */
+    public function getEventsSubscribedByUser(int $userId): array
+    {
+        $sql = $this->baseEventSelect() .
+            " FROM EVENT e 
+          JOIN SUBSCRIPTION s ON e.id = s.event_id 
+          LEFT JOIN USER u ON e.user_id = u.id
+          LEFT JOIN CATEGORY c ON e.category_id = c.id
+          WHERE s.user_id = ? AND e.event_date >= CURRENT_DATE()
+          ORDER BY e.event_date ASC";
+        return $this->fetchEvents($sql, [$userId]);
+    }
+
+    /**
+     * Get events organized by a user with specific statuses
+     * @param int $userId User ID
+     * @param array $statuses Array of statuses to filter by (e.g. ['DRAFT', 'WAITING'])
+     * @return array Array of events organized by the user with the specified statuses
+     */
+    public function getEventsOrganizedByUser(int $userId, array $statuses): array
+    {
+        $placeholders = implode(',', array_fill(0, count($statuses), '?'));
+        $sql = $this->baseEventSelect() .
+            " FROM EVENT e 
+          LEFT JOIN USER u ON e.user_id = u.id
+          LEFT JOIN CATEGORY c ON e.category_id = c.id
+          WHERE e.user_id = ? AND e.status IN ($placeholders)
+          AND e.event_date >= CURRENT_DATE()
+          ORDER BY e.event_date ASC";
+        return $this->fetchEvents($sql, array_merge([$userId], $statuses));
+    }
+
+    /**
+     * Get user's event history (past events or cancelled) 
+     * @param int $userId User ID
+     * @return array Array of past or cancelled events organized by or subscribed to by the user
+     */
+    public function getUserEventHistory(int $userId): array
+    {
+        $sql = $this->baseEventSelect() .
+            " FROM EVENT e 
+          LEFT JOIN USER u ON e.user_id = u.id
+          LEFT JOIN CATEGORY c ON e.category_id = c.id
+          WHERE (e.user_id = ? OR e.id IN (SELECT event_id FROM SUBSCRIPTION WHERE user_id = ?))
+          AND (e.event_date < CURRENT_DATE() OR e.status = 'CANCELLED')
+          ORDER BY e.event_date DESC";
+        return $this->fetchEvents($sql, [$userId, $userId]);
+    }
+
+    /**
+     * Delete an event smartly based on its current status
+     * 
+     * If the event is in DRAFT or WAITING status, it is deleted from the database.
+     * If the event is APPROVED or CANCELLED, its status is updated to CANCELLED.   
+     * 
+     * @param int $eventId Event ID
+     * @param string $currentStatus Current status of the event
+     * @return bool True on success, false on failure
+     */
+    public function delete(int $eventId, string $currentStatus): bool
+    {
+        if ($currentStatus === 'DRAFT' || $currentStatus === 'WAITING') {
+            $sql = "DELETE FROM EVENT WHERE id = ?";
+        } else {
+            $sql = "UPDATE EVENT SET status = 'CANCELLED' WHERE id = ?";
+        }
+        return (bool)$this->db->prepareAndExecute($sql, [$eventId]);
+    }
+
+    /**
+     * Update the status of an event
+     * 
+     * @param int $eventId Event ID
+     * @param string $newStatus New status to set
+     * @return bool True on success, false on failure
+     */
+    public function updateStatus(int $eventId, string $newStatus): bool
+    {
+        $sql = "UPDATE EVENT SET status = ? WHERE id = ?";
+        return (bool)$this->db->prepareAndExecute($sql, [$newStatus, $eventId]);
+    }
 }
