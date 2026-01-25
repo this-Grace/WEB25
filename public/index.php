@@ -33,17 +33,17 @@ $roleHandlers = [
         return $eventMapper->getEventsForAdmin(6);
     },
     'host' => function () use ($eventMapper, $userEmail) {
-        return $userEmail ? $eventMapper->getEventsForHost($userEmail, 6) : $eventMapper->getApprovedEvents(6);
+        return $userEmail ? $eventMapper->getEventsForHost($userEmail, 6) : $eventMapper->getApprovedOrCancelledEvents(6);
     },
 ];
 
 if (isset($roleHandlers[$role])) {
     $templateParams['featured_events'] = $roleHandlers[$role]();
 } else {
-    $templateParams['featured_events'] = $eventMapper->getApprovedEvents(6);
+    $templateParams['featured_events'] = $eventMapper->getApprovedOrCancelledEvents(6);
 }
 
-$eventIds = array_map(function($event) {
+$eventIds = array_map(function ($event) {
     return $event['id'];
 }, $templateParams['featured_events']);
 

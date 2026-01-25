@@ -133,6 +133,7 @@ class Event
     {
         $sql = $this->baseEventSelect() .
             "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
+            "WHERE (e.status IS NULL OR e.status <> 'DRAFT') " .
             "ORDER BY e.event_date DESC, e.event_time DESC";
 
         $sql = $this->applyLimit($sql, $limit);
@@ -140,16 +141,16 @@ class Event
     }
 
     /**
-     * Events visible to normal users: only events with status = 'APPROVED'
+     * Events visible to normal users: only events with status = 'APPROVED' or 'CANCELLED'
      * 
      * @param int $limit Maximum number of events to return (0 = no limit)
-     * @return array Array of approved events with category and user information
+     * @return array Array of approved or cancelled events with category and user information
      */
-    public function getApprovedEvents(int $limit = 0): array
+    public function getApprovedOrCancelledEvents(int $limit = 0): array
     {
         $sql = $this->baseEventSelect() .
             "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
-            "WHERE e.status = 'APPROVED' " .
+            "WHERE e.status = 'APPROVED' OR e.status = 'CANCELLED' " .
             "ORDER BY e.event_date DESC, e.event_time DESC";
 
         $sql = $this->applyLimit($sql, $limit);
