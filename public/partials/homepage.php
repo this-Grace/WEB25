@@ -7,7 +7,7 @@
             <div class="col-12 col-md-8 col-lg-6">
                 <form id="homepage-search-form" class="d-flex" role="search" method="get" action="#">
                     <label for="searchInput" class="visually-hidden">Cerca eventi, organizzazioni o luoghi</label>
-                    <input id="searchInput" name="q" type="search" class="form-control rounded-0" placeholder="Cerca eventi..." aria-label="Cerca">
+                    <input id="searchInput" name="q" type="search" class="form-control" placeholder="Cerca eventi..." aria-label="Cerca">
                     <button class="btn btn-primary btn-lg visually-hidden" type="submit">Cerca</button>
                 </form>
             </div>
@@ -111,41 +111,70 @@
                                 <span class="bi bi-people text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($event['occupied_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>/<?php echo htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?> iscritti
                             </p>
 
-                            <!-- Subscribe / status button -->
                             <?php if (!$isLoggedIn): ?>
                                 <?php if ($isFull): ?>
-                                    <button class="btn btn-secondary w-100 mt-auto" disabled>Evento pieno</button>
-                                <?php else: ?>
-                                    <div class="mb-2"></div>
+                                    <a class="btn btn-secondary w-100 mt-auto disabled" href="#" tabindex="-1" aria-disabled="true">Evento pieno</a>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <?php if ($isFull): ?>
-                                    <button class="btn btn-secondary w-100 mt-auto" disabled>Evento pieno</button>
-                                <?php elseif (!$isOwner): ?>
-                                    <button class="btn btn-light w-100 mt-auto subscribe-btn" data-event-id="<?php echo htmlspecialchars($event['id'], ENT_QUOTES, 'UTF-8'); ?>">Iscriviti all'evento</button>
+                                    <a class="btn btn-secondary w-100 mt-auto disabled" href="#" tabindex="-1" aria-disabled="true">Evento pieno</a>
+                                <?php elseif (!$isOwner && strtolower($event['status'] ?? '') !== 'waiting'): ?>
+                                    <a href="subscribe_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-dark w-100 mt-auto">Iscriviti all'evento</a>
                                 <?php else: ?>
                                     <div class="mb-2"></div>
                                 <?php endif; ?>
                             <?php endif; ?>
 
-                            <div class="mt-3">
+                            <div class="mt-2">
                                 <?php if ($isLoggedIn && $isOwner): ?>
                                     <div class="d-flex gap-2 mb-2">
                                         <?php if (in_array($currentRole, ['host', 'admin'], true)): ?>
-                                            <a href="edit_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary flex-fill">Modifica</a>
+                                            <?php if (strtolower($event['status'] ?? '') === 'waiting'): ?>
+                                                <a href="approve_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-success d-flex align-items-center justify-content-center flex-fill">
+                                                    <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-none d-md-inline">Approva</span>
+                                                </a>
+                                            <?php else: ?>
+                                                <a href="edit_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center flex-fill">
+                                                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-none d-md-inline">Modifica</span>
+                                                </a>
+                                            <?php endif; ?>
+
+                                            <?php if (($event['status'] ?? '') !== 'CANCELLED'): ?>
+                                                <a href="cancel_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning d-flex align-items-center justify-content-center flex-fill">
+                                                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-none d-md-inline">Annulla</span>
+                                                </a>
+                                            <?php else: ?>
+                                                <a class="btn btn-secondary d-flex align-items-center justify-content-center flex-fill disabled" href="#" tabindex="-1" aria-disabled="true">
+                                                    <i class="bi bi-slash-circle" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-none d-md-inline">Annullato</span>
+                                                </a>
+                                            <?php endif; ?>
                                         <?php endif; ?>
-                                        <a href="delete_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger flex-fill">Cancella</a>
+
+                                        <?php if (strtolower($event['status'] ?? '') === 'waiting'): ?>
+                                            <a href="delete_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger d-flex align-items-center justify-content-center flex-fill">
+                                                <i class="bi bi-trash" aria-hidden="true"></i>
+                                                <span class="ms-2 d-none d-md-inline">Cancella</span>
+                                            </a>
+                                        <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if ($isAdmin): ?>
-                                    <?php if (($event['status'] ?? '') !== 'CANCELLED'): ?>
-                                        <button class="btn btn-warning btn-cancel-event w-100 mb-2" data-event-id="<?php echo htmlspecialchars($event['id'], ENT_QUOTES, 'UTF-8'); ?>">Annulla evento</button>
-                                    <?php else: ?>
-                                        <span class="btn btn-secondary w-100 d-block mb-2" aria-disabled="true">Annullato</span>
-                                    <?php endif; ?>
-                                    <?php if (!($isLoggedIn && $isOwner)): ?>
-                                        <a href="delete_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger w-100">Cancella</a>
+                                <?php if ($isAdmin && !($isLoggedIn && $isOwner)): ?>
+                                    <?php if (strtolower($event['status'] ?? '') === 'waiting'): ?>
+                                        <div class="d-flex gap-2">
+                                            <a href="approve_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-success d-flex align-items-center justify-content-center flex-fill">
+                                                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                                                <span class="ms-2 d-none d-md-inline">Approva</span>
+                                            </a>
+                                            <a href="delete_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger d-flex align-items-center justify-content-center flex-fill">
+                                                <i class="bi bi-trash" aria-hidden="true"></i>
+                                                <span class="ms-2 d-none d-md-inline">Cancella</span>
+                                            </a>
+                                        </div>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </div>

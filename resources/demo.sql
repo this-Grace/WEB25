@@ -30,10 +30,10 @@ INSERT INTO EVENT (title, description, event_date, event_time, location, total_s
 ('Corsa Comunitaria', 'Corsa sociale di 5 km nel campus aperta a tutti i livelli.', '2026-01-30', '08:00:00', 'Parco del Campus - Edificio B', 150, 10, 'APPROVED', CURRENT_TIMESTAMP, 'photo2.jpeg', 'paolo.neri@example.com', 4),
 ('Passeggiata Fotografica', 'Passeggiata guidata per migliorare le abilità nella fotografia outdoor.', '2026-04-18', '16:30:00', 'Centro Storico - Edificio B', 40, 28, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 5),
 ('Serata Pitch Startup', 'Startup locali presentano le loro idee a mentori e investitori.', '2026-05-05', '18:00:00', 'Hub dell''Innovazione - Edificio B', 120, 35, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'luisa.bianchi@example.com', 1),
-('Gruppo di Studio ML Avanzato', 'Incontri settimanali per discutere articoli recenti e implementazioni.', '2026-05-12', '17:00:00', 'Aula 210 - Edificio B', 25, 5, 'APPROVED', CURRENT_TIMESTAMP, 'photo2.jpeg', 'giulia.verdi@example.com', 1),
+('Gruppo di Studio ML Avanzato', 'Incontri settimanali per discutere articoli recenti e implementazioni.', '2026-05-12', '17:00:00', 'Aula 210 - Edificio B', 25, 5, 'APPROVED', CURRENT_TIMESTAMP, 'photo2.jpeg', 'admin@web25.com', 1),
 ('Pulizia Volontaria della Spiaggia', 'Evento di volontariato per pulire la spiaggia locale.', '2026-06-01', '09:00:00', 'Spiaggia della Marina - Edificio B', 60, 0, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'paolo.neri@example.com', 5),
-('Incontro di Conversazione in Francese', 'Scambio linguistico informale per partecipanti di livello intermedio.', '2025-06-08', '19:30:00', 'Sala Caffetteria - Edificio B', 30, 30, 'APPROVED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 5),
-('Fiera Maker di Primavera', 'Esposizione di progetti studenteschi e dimostrazioni dei maker.', '2026-05-20', '11:00:00', 'Padiglione Espositivo - Edificio B', 300, 50, 'APPROVED', CURRENT_TIMESTAMP, 'photo3.jpeg', 'admin@web25.com', 2);
+('Incontro di Conversazione in Francese', 'Scambio linguistico informale per partecipanti di livello intermedio.', '2025-06-08', '19:30:00', 'Sala Caffetteria - Edificio B', 30, 30, 'APPROVED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'giulia.verdi@example.com', 5),
+('Fiera Maker di Primavera', 'Esposizione di progetti studenteschi e dimostrazioni dei maker.', '2026-05-20', '11:00:00', 'Padiglione Espositivo - Edificio B', 300, 300, 'APPROVED', CURRENT_TIMESTAMP, 'photo3.jpeg', 'admin@web25.com', 2);
 
 -- =====================================
 -- SUBSCRIPTION
