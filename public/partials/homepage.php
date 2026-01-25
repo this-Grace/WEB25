@@ -116,57 +116,69 @@
                                     <?= (int)($event['occupied_seats'] ?? 0) ?>/<?= (int)($event['total_seats'] ?? 0) ?> iscritti
                                 </p>
 
-                                <?php if (true): ?> <!-- visibile se solo se evento non pieno -->
-                                    <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-secondary w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
-                                        <i class="bi bi-x-octagon" aria-hidden="true"></i>
-                                        <span class="ms-2 d-md-inline">Evento pieno</span>
-                                    </a>
-                                <?php endif; ?>
+                                <?php
+                                $occupied = (int)($event['occupied_seats'] ?? 0);
+                                $total = (int)($event['total_seats'] ?? 0);
+                                $isFull = ($total > 0 && $occupied >= $total);
+                                $status = strtolower($event['status'] ?? '');
+                                $isCancelled = ($status === 'cancelled');
+                                $isLogged = !empty($_SESSION['user']['email']);
+                                $sessionEmail = $_SESSION['user']['email'] ?? '';
+                                $isOwner = ($sessionEmail !== '' && $sessionEmail === ($event['user_email'] ?? ''));
+                                $isSubscribed = !empty($event['is_subscribed']);
+                                ?>
 
-                                <?php if (true): ?> <!-- visibile se solo se evento è in stato di "cancelled" -->
+                                <?php if ($isCancelled): ?>
                                     <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
                                         <i class="bi bi-slash-circle" aria-hidden="true"></i>
                                         <span class="ms-2 d-md-inline">Annullato</span>
                                     </a>
-                                <?php endif; ?>
-
-                                <?php if (true): ?> <!-- visibile se solo se loggato -->
-                                    <?php if (true): ?> <!-- visibile se solo se non iscritto e l'evento non è il tuo -->
-                                        <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-dark w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
-                                            <i class="bi bi-person-plus" aria-hidden="true"></i>
-                                            <span class="ms-2 d-md-inline">Iscriviti all'evento</span>
+                                <?php else: ?>
+                                    <?php if ($isFull): ?>
+                                        <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-secondary w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
+                                            <i class="bi bi-x-octagon" aria-hidden="true"></i>
+                                            <span class="ms-2 d-md-inline">Evento pieno</span>
                                         </a>
                                     <?php else: ?>
-                                        <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
-                                            <i class="bi bi-person-x" aria-hidden="true"></i>
-                                            <span class="ms-2 d-md-inline">Disiscriviti</span>
-                                        </a>
-                                    <?php endif; ?>
+                                        <?php if ($isLogged && $status === 'approved'): ?>
+                                            <?php if (!$isOwner && !$isSubscribed): ?>
+                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-dark w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
+                                                    <i class="bi bi-person-plus" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-md-inline">Iscriviti all'evento</span>
+                                                </a>
+                                            <?php elseif (!$isOwner && $isSubscribed): ?>
+                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
+                                                    <i class="bi bi-person-x" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-md-inline">Disiscriviti</span>
+                                                </a>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
 
-                                    <?php if (true): ?> <!-- visibile se solo se admin su eventi con stato "waiting" -->
-                                        <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
-                                            <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-success d-flex align-items-center justify-content-center flex-fill col-6">
-                                                <i class="bi bi-check2-circle" aria-hidden="true"></i>
-                                                <span class="ms-2 d-md-inline">Approva</span>
-                                            </a>
-                                            <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger d-flex align-items-center justify-content-center flex-fill col-6">
-                                                <i class="bi bi-trash" aria-hidden="true"></i>
-                                                <span class="ms-2 d-md-inline">Cancella</span>
-                                            </a>
-                                        </div>
-                                    <?php endif; ?>
+                                        <?php if ($userRole === 'admin' && $status === 'waiting'): ?>
+                                            <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
+                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-success d-flex align-items-center justify-content-center flex-fill col-6">
+                                                    <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-md-inline">Approva</span>
+                                                </a>
+                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger d-flex align-items-center justify-content-center flex-fill col-6">
+                                                    <i class="bi bi-trash" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-md-inline">Cancella</span>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
 
-                                    <?php if (true): ?> <!-- visibile se solo se il post è tuo  -->
-                                        <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
-                                            <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center flex-fill col-6">
-                                                <i class="bi bi-pencil" aria-hidden="true"></i>
-                                                <span class="ms-2 d-md-inline">Modifica</span>
-                                            </a>
-                                            <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning d-flex align-items-center justify-content-center flex-fill col-6">
-                                                <i class="bi bi-x-circle" aria-hidden="true"></i>
-                                                <span class="ms-2 d-md-inline">Annulla</span>
-                                            </a>
-                                        </div>
+                                        <?php if ($isOwner): ?>
+                                            <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
+                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center flex-fill col-6">
+                                                    <i class="bi bi-pencil" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-md-inline">Modifica</span>
+                                                </a>
+                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning d-flex align-items-center justify-content-center flex-fill col-6">
+                                                    <i class="bi bi-x-circle" aria-hidden="true"></i>
+                                                    <span class="ms-2 d-md-inline">Annulla</span>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </div>

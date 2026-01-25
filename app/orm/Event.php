@@ -133,6 +133,7 @@ class Event
     {
         $sql = $this->baseEventSelect() .
             "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
+            "WHERE (e.status IS NULL OR e.status <> 'DRAFT') " .
             "ORDER BY e.event_date DESC, e.event_time DESC";
 
         $sql = $this->applyLimit($sql, $limit);
