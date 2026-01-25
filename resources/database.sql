@@ -83,3 +83,28 @@ CREATE TABLE SUBSCRIPTION (
     CONSTRAINT unique_subscription
         UNIQUE (user_id, event_id)
 );
+
+-- =====================================
+-- TRIGGERS
+-- =====================================
+DELIMITER $$
+
+CREATE TRIGGER trg_subscription_after_insert
+AFTER INSERT ON SUBSCRIPTION
+FOR EACH ROW
+BEGIN
+    UPDATE EVENT
+    SET occupied_seats = occupied_seats + 1
+    WHERE id = NEW.event_id;
+END$$
+
+CREATE TRIGGER trg_subscription_after_delete
+AFTER DELETE ON SUBSCRIPTION
+FOR EACH ROW
+BEGIN
+    UPDATE EVENT
+    SET occupied_seats = GREATEST(occupied_seats - 1, 0)
+    WHERE id = OLD.event_id;
+END$$
+
+DELIMITER ;

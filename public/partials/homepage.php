@@ -122,28 +122,33 @@
                                 $isLogged = !empty($_SESSION['user']['email']);
                                 $sessionEmail = $_SESSION['user']['email'] ?? '';
                                 $isOwner = ($sessionEmail !== '' && $sessionEmail === ($event['user_email'] ?? ''));
+                                $isSubscribed = false;
+                                if ($isLogged && isset($subscriptionMapper)) {
+                                    $sub = $subscriptionMapper->findByUserAndEvent($sessionEmail, (int)($event['id'] ?? 0));
+                                    $isSubscribed = !empty($sub);
+                                }
                                 ?>
 
                                 <?php if ($status === 'cancelled'): ?>
-                                    <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
+                                    <a class="btn btn-warning w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
                                         <i class="bi bi-slash-circle" aria-hidden="true"></i>
                                         <span class="ms-2 d-md-inline">Annullato</span>
                                     </a>
                                 <?php else: ?>
                                     <?php if ($isFull): ?>
-                                        <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-secondary w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
+                                        <a class="btn btn-secondary w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
                                             <i class="bi bi-x-octagon" aria-hidden="true"></i>
                                             <span class="ms-2 d-md-inline">Evento pieno</span>
                                         </a>
                                     <?php else: ?>
                                         <?php if ($isLogged && $status === 'approved'): ?>
-                                            <?php if (!$isOwner && empty($event['is_subscribed'])): ?>
-                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-dark w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
+                                            <?php if (!$isOwner && !$isSubscribed): ?>
+                                                <a href="api/subscribe.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-dark w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
                                                     <i class="bi bi-person-plus" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Iscriviti all'evento</span>
                                                 </a>
-                                            <?php elseif (!$isOwner && !empty($event['is_subscribed'])): ?>
-                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
+                                            <?php elseif (!$isOwner && $isSubscribed): ?>
+                                                <a href="api/unsubscribe.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
                                                     <i class="bi bi-person-x" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Disiscriviti</span>
                                                 </a>
@@ -152,11 +157,11 @@
 
                                         <?php if ($userRole === 'admin' && $status === 'waiting'): ?>
                                             <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
-                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-success d-flex align-items-center justify-content-center flex-fill col-6">
+                                                <a href="api/approve_event.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-success d-flex align-items-center justify-content-center flex-fill col-6">
                                                     <i class="bi bi-check2-circle" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Approva</span>
                                                 </a>
-                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger d-flex align-items-center justify-content-center flex-fill col-6">
+                                                <a href="api/delete_event.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger d-flex align-items-center justify-content-center flex-fill col-6">
                                                     <i class="bi bi-trash" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Cancella</span>
                                                 </a>
@@ -165,11 +170,11 @@
 
                                         <?php if ($isOwner): ?>
                                             <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
-                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center flex-fill col-6">
+                                                <a href="api/edit_event.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center flex-fill col-6">
                                                     <i class="bi bi-pencil" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Modifica</span>
                                                 </a>
-                                                <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning d-flex align-items-center justify-content-center flex-fill col-6">
+                                                <a href="api/cancel_event.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning d-flex align-items-center justify-content-center flex-fill col-6">
                                                     <i class="bi bi-x-circle" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Annulla</span>
                                                 </a>
