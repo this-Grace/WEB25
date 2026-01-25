@@ -39,7 +39,8 @@ class Event
      */
     public function getAvgParticipationPercent(): float
     {
-        $sql = "SELECT AVG((total_seats - available_seats) / NULLIF(total_seats,0)) * 100 AS avgp FROM EVENT WHERE status = 'APPROVED' AND event_date < NOW()";
+        // Use occupied_seats and DATE comparison for event_date
+        $sql = "SELECT AVG(NULLIF(occupied_seats,0) / NULLIF(total_seats,0)) * 100 AS avgp FROM EVENT WHERE status = 'APPROVED' AND event_date < CURRENT_DATE()";
         $res = $this->db->prepareAndExecute($sql, []);
         if (!$res || !($res instanceof mysqli_result)) return 0.0;
         $row = $res->fetch_assoc();
@@ -52,7 +53,8 @@ class Event
      */
     public function getCompletedEventsCount(): int
     {
-        $sql = "SELECT COUNT(*) AS cnt FROM EVENT WHERE event_date < NOW() AND status = 'APPROVED'";
+        // event_date is DATE; compare with CURRENT_DATE()
+        $sql = "SELECT COUNT(*) AS cnt FROM EVENT WHERE event_date < CURRENT_DATE() AND status = 'APPROVED'";
         $res = $this->db->prepareAndExecute($sql, []);
         if (!$res || !($res instanceof mysqli_result)) return 0;
         $row = $res->fetch_assoc();
