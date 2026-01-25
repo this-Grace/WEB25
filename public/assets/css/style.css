@@ -6,21 +6,6 @@
     z-index: 1040;
 }
 
-.form-control,
-.form-select {
-    border: 1px solid #e9ecef;
-    padding: 0.75rem;
-    border-radius: 8px;
-    transition: all 0.2s ease-in-out;
-}
-
-.form-control:focus,
-.form-select:focus {
-    background-color: #fff;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.1);
-}
-
 #previewImageSidebar,
 .event-card .card-img-top {
     width: 100%;

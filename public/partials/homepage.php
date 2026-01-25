@@ -7,7 +7,7 @@
             <div class="col-12 col-md-8 col-lg-6">
                 <form id="homepage-search-form" class="d-flex" role="search" method="get" action="#">
                     <label for="searchInput" class="visually-hidden">Cerca eventi, organizzazioni o luoghi</label>
-                    <input id="searchInput" name="q" type="search" class="form-control form-control-lg rounded-3 me-2" placeholder="Cerca eventi, organizzazioni o luoghi" aria-label="Cerca">
+                    <input id="searchInput" name="q" type="search" class="form-control rounded-0" placeholder="Cerca eventi..." aria-label="Cerca">
                     <button class="btn btn-primary btn-lg visually-hidden" type="submit">Cerca</button>
                 </form>
             </div>
@@ -77,54 +77,36 @@
         </p>
 
         <div id="events-grid" class="row">
-            <?php foreach ($templateParams['featured_events'] ?? [] as $ev) : ?>
-                <div class="col-lg-4 col-md-6 mb-4" data-category-id="<?php echo htmlspecialchars($ev['category_id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-user-email="<?php echo htmlspecialchars($ev['user_email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" data-status="<?php echo htmlspecialchars($ev['status'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+            <?php foreach ($templateParams["featured_events"] ?? [] as $event): ?>
+                <div class="col-lg-4 col-md-6 mb-4"
+                    data-event-id="<?php echo htmlspecialchars($event["id"], ENT_QUOTES, 'UTF-8'); ?>"
+                    data-category-id="<?php echo htmlspecialchars($event["category_id"], ENT_QUOTES, 'UTF-8'); ?>"
+                    data-user-email="<?php echo htmlspecialchars($event["user_email"], ENT_QUOTES, 'UTF-8'); ?>"
+                    data-status="<?php echo htmlspecialchars($event["status"], ENT_QUOTES, 'UTF-8'); ?>">
                     <div class="card event-card h-100">
                         <div class="position-relative">
-                            <img src="<?php echo EVENTS_IMG_DIR . htmlspecialchars($ev['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                            <img src="<?php echo EVENTS_IMG_DIR .  htmlspecialchars($event["image"], ENT_QUOTES, 'UTF-8'); ?>"
                                 class="card-img-top"
-                                alt="Immagine evento: <?php echo htmlspecialchars($ev['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                            <span class="badge position-absolute top-0 start-0 m-3 badge-cate-<?php echo htmlspecialchars(strtolower($ev['category_label']), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars(ucfirst(strtolower($ev['category_label'])) ?? 'Evento', ENT_QUOTES, 'UTF-8'); ?></span>
+                                alt="Immagine relativa all'evento: <?php echo htmlspecialchars($event["title"], ENT_QUOTES, 'UTF-8'); ?>">
+                            <span class="badge badge-cate-<?php echo htmlspecialchars(strtolower($event["category"]), ENT_QUOTES, 'UTF-8'); ?> position-absolute top-0 start-0 m-3"><?php echo htmlspecialchars($event["category"], ENT_QUOTES, 'UTF-8'); ?></span>
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <h3 class="card-title"><?php echo htmlspecialchars($ev['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h3>
-                            <p class="preview-description small text-muted mb-2"><?php echo htmlspecialchars($ev['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
+                            <h3 class="card-title"><?php echo htmlspecialchars($event["title"], ENT_QUOTES, 'UTF-8'); ?></h3>
+                            <p class="preview-description small text-muted mb-2"><?php echo htmlspecialchars($event['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
                             <p class="card-text text-muted small flex-grow-1">
-                                <span class="bi bi-calendar text-primary" aria-hidden="true"></span>
-                                <?php
-                                $rawDate = $ev['event_date'] ?? '';
-                                $displayDate = htmlspecialchars($rawDate, ENT_QUOTES, 'UTF-8');
-                                if (!empty($rawDate)) {
-                                    $dt = DateTime::createFromFormat('Y-m-d H:i:s', $rawDate);
-                                    if ($dt !== false) {
-                                        $displayDate = $dt->format('d/m/Y') . ' - ' . $dt->format('H:i');
-                                    }
-                                }
-                                echo $displayDate;
-                                ?><br>
-                                <span class="bi bi-geo-alt text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($ev['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-people text-success" aria-hidden="true"></span>
-                                <?php
-                                $seatsText = '';
-                                if (isset($ev['available_seats']) && isset($ev['total_seats'])) {
-                                    $seatsText = $ev['available_seats'] . '/' . $ev['total_seats'] . ' iscritti';
-                                }
-                                echo htmlspecialchars($seatsText, ENT_QUOTES, 'UTF-8');
-                                ?>
+                                <span class="bi bi-calendar" aria-hidden="true"></span> <?php echo htmlspecialchars($event['event_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars($event['event_time'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-geo-alt" aria-hidden="true"></span> <?php echo htmlspecialchars($event['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-people" aria-hidden="true"></span> <?php echo htmlspecialchars($event['occupied_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>/<?php echo htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?> iscritti
                             </p>
-
-                            <?php if (isset($_SESSION['user'])) : ?>
-                                <a href="<?php echo htmlspecialchars($ev['cta_href'] ?? '#', ENT_QUOTES, 'UTF-8'); ?>" class="btn btn-dark w-100 mt-auto"
-                                    aria-label="<?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ev['cta_label'] ?? 'Iscriviti', ENT_QUOTES, 'UTF-8'); ?></a>
-                            <?php endif; ?>
+                            <a href="#" class="btn btn-light w-100 mt-auto" aria-label="Iscriviti alla conferenza sull'Intelligenza Artificiale">Iscriviti all'evento</a>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
 
-            <!-- <div class="text-center m-4 w-100">
-                <button id="load-more-btn" data-page="1" data-limit="6" class="btn btn-light border border-dark">Carica altri eventi</button>
-            </div> -->
+            <div class="text-center m-4">
+                <a href="#" class="btn btn-dark">Carica altri eventi</a>
+            </div>
         </div>
 </main>
 
