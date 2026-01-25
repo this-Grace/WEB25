@@ -2,6 +2,10 @@
 
 require_once __DIR__ . '/../app/bootstrap.php';
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 $templateParams['title'] = "Home";
 $templateParams['css'] = ['assets/css/home.css'];
 $templateParams['js'] = ['assets/js/filters.js'];
@@ -21,15 +25,22 @@ $templateParams["event_this_month"] = $eventMapper->getEventsThisMonth();
 $templateParams["avg_participation"] = (int) $eventMapper->getAvgParticipationPercent();
 $templateParams["completed_events"] = $eventMapper->getCompletedEventsCount();
 
-switch (isset($_SESSION['user']['role']) && strtolower($_SESSION['user']['role'])) {
-    case 'host':
-        break;
+$role = strtolower($_SESSION['user']['role'] ?? '');
+$userEmail = $_SESSION['user']['email'] ?? null;
 
-    case 'admin':
-        break;
+$roleHandlers = [
+    'admin' => function () use ($eventMapper) {
+        return $eventMapper->getEventsForAdmin(6);
+    },
+    'host' => function () use ($eventMapper, $userEmail) {
+        return $userEmail ? $eventMapper->getEventsForHost($userEmail, 6) : $eventMapper->getApprovedEvents(6);
+    },
+];
 
-    default:
-        break;
+if (isset($roleHandlers[$role])) {
+    $templateParams['featured_events'] = $roleHandlers[$role]();
+} else {
+    $templateParams['featured_events'] = $eventMapper->getApprovedEvents(6);
 }
 
 require 'template/base.php';

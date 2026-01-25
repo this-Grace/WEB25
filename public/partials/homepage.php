@@ -94,9 +94,9 @@
                             <h3 class="card-title"><?php echo htmlspecialchars($event["title"], ENT_QUOTES, 'UTF-8'); ?></h3>
                             <p class="preview-description small text-muted mb-2"><?php echo htmlspecialchars($event['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
                             <p class="card-text text-muted small flex-grow-1">
-                                <span class="bi bi-calendar" aria-hidden="true"></span> <?php echo htmlspecialchars($event['event_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars($event['event_time'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-geo-alt" aria-hidden="true"></span> <?php echo htmlspecialchars($event['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-people" aria-hidden="true"></span> <?php echo htmlspecialchars($event['occupied_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>/<?php echo htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?> iscritti
+                                <span class="bi bi-calendar text-primary" aria-hidden="true"></span> <?php echo htmlspecialchars($event['event_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars($event['event_time'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-geo-alt text-success" aria-hidden="true"></span> <?php echo htmlspecialchars($event['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-people text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($event['occupied_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>/<?php echo htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?> iscritti
                             </p>
                             <a href="#" class="btn btn-light w-100 mt-auto" aria-label="Iscriviti alla conferenza sull'Intelligenza Artificiale">Iscriviti all'evento</a>
                         </div>
