@@ -31,7 +31,7 @@ class User
      */
     public function findByEmail(string $email): ?array
     {
-        $sql = 'SELECT email, name, surname, password, role, registration_date FROM USER WHERE email = ? LIMIT 1';
+        $sql = 'SELECT email, name, surname, password, role, avatar, registration_date FROM USER WHERE email = ? LIMIT 1';
         $res = $this->db->prepareAndExecute($sql, [$email]);
         if (!$res || !($res instanceof mysqli_result)) return null;
         $row = $res->fetch_assoc();
@@ -76,10 +76,10 @@ class User
      * @param string $newEmail User's new email address
      * @return bool True if update successful, false otherwise
      */
-    public function updateProfile(string $email, string $name, string $surname, string $newEmail): bool
+    public function updateProfile(string $oldEmail, string $name, string $surname, string $newEmail): bool
     {
         $sql = 'UPDATE USER SET name = ?, surname = ?, email = ? WHERE email = ?';
-        $ok = $this->db->prepareAndExecute($sql, [$name, $surname, $newEmail, $email]);
+        $ok = $this->db->prepareAndExecute($sql, [$name, $surname, $newEmail, $oldEmail]);
         return (bool)$ok;
     }
 

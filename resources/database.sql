@@ -15,9 +15,9 @@ CREATE TABLE USER (
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- -- =====================================
--- -- CATEGORIY
--- -- =====================================
+-- =====================================
+-- CATEGORY
+-- =====================================
 CREATE TABLE CATEGORY (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE
@@ -44,11 +44,14 @@ CREATE TABLE EVENT (
 
     CONSTRAINT fk_event_user
         FOREIGN KEY (user_email)
-        REFERENCES USER(email),
+        REFERENCES USER(email)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_event_category
         FOREIGN KEY (category_id)
         REFERENCES CATEGORY(id)
+        ON UPDATE CASCADE
 );
 
 -- =====================================
@@ -65,11 +68,15 @@ CREATE TABLE SUBSCRIPTION (
 
     CONSTRAINT fk_subscription_user
         FOREIGN KEY (user_email)
-        REFERENCES USER(email),
+        REFERENCES USER(email)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_subscription_event
         FOREIGN KEY (event_id)
-        REFERENCES EVENT(id),
+        REFERENCES EVENT(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
 
     CONSTRAINT unique_subscription
         UNIQUE (user_email, event_id)
