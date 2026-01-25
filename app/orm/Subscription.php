@@ -77,6 +77,37 @@ class Subscription
     }
 
     /**
+     * Find all event IDs a user is subscribed to from a given list of event IDs.
+     * @param string $email
+     * @param array $eventIds
+     * @return array
+     */
+    public function findSubscribedEventsByUser(string $email, array $eventIds): array
+    {
+        if (empty($eventIds)) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($eventIds), '?'));
+        $sql = "SELECT DISTINCT event_id FROM SUBSCRIPTION WHERE user_email = ? AND event_id IN ($placeholders)";
+
+        $params = array_merge([$email], $eventIds);
+
+        $res = $this->db->prepareAndExecute($sql, $params);
+
+        if (!$res || !($res instanceof mysqli_result)) {
+            return [];
+        }
+
+        $subscribedEventIds = [];
+        while ($row = $res->fetch_assoc()) {
+            $subscribedEventIds[] = $row['event_id'];
+        }
+
+        return $subscribedEventIds;
+    }
+
+    /**
      * List subscriptions by user
      * @param string $email
      * @return array

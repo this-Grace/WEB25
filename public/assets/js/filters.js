@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const categoryId = card.dataset.categoryId || '';
             const userEmail = card.dataset.userEmail || '';
-            const status = card.dataset.status || '';
+            const status = (card.dataset.status || '').toLowerCase();
 
             const selected = [...activeFilters];
             const selectedCategoryIds = selected.filter(id => id !== 'waiting' && id.indexOf('@') === -1);
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (waitingSelected && status !== 'WAITING') {
+            if (waitingSelected && status !== 'waiting') {
                 card.style.display = 'none';
                 return;
             }

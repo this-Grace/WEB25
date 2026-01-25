@@ -24,7 +24,7 @@ INSERT INTO CATEGORY (name) VALUES
 -- EVENTS 
 -- =====================================
 INSERT INTO EVENT (title, description, event_date, event_time, location, total_seats, occupied_seats, status, created_at, image, user_email, category_id) VALUES
-('AI per Tutti', 'Introduzione alle applicazioni pratiche dell''IA per non esperti.', '2026-03-15', '10:00:00', 'Aula Magna - Edificio A', 200, 15, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 1),
+('AI per Tutti', 'Introduzione alle applicazioni pratiche dell''IA per non esperti.', '2026-03-15', '10:00:00', 'Aula Magna - Edificio A', 200, 15, 'APPROVED', CURRENT_TIMESTAMP, 'photo1.jpeg', 'mario.rossi@example.com', 1),
 ('Workshop pratico di Cybersecurity', 'Esercizi pratici sulla sicurezza web e le difese.', '2026-03-20', '14:00:00', 'Laboratorio 3 - Edificio B', 30, 25, 'WAITING', CURRENT_TIMESTAMP, 'photo3.jpeg', 'luisa.bianchi@example.com', 2),
 ('Basi di Dati: progettazione e buone pratiche', 'Seminario su normalizzazione e progettazione ER.', '2026-04-02', '09:30:00', 'Aula B1 - Edificio B', 100, 0, 'DRAFT', NULL, 'photo3.jpeg', 'giulia.verdi@example.com', 3),
 ('Corsa Comunitaria', 'Corsa sociale di 5 km nel campus aperta a tutti i livelli.', '2026-01-30', '08:00:00', 'Parco del Campus - Edificio B', 150, 10, 'APPROVED', CURRENT_TIMESTAMP, 'photo2.jpeg', 'paolo.neri@example.com', 4),
