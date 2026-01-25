@@ -6,7 +6,8 @@ USE web25;
 -- USER
 -- =====================================
 CREATE TABLE USER (
-    email VARCHAR(100) PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
     name VARCHAR(50) NOT NULL,
     surname VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -39,12 +40,12 @@ CREATE TABLE EVENT (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     image VARCHAR(255) NULL,
 
-    user_email VARCHAR(100) NOT NULL,
+    user_id INT NOT NULL,
     category_id INT NOT NULL,
 
     CONSTRAINT fk_event_user
-        FOREIGN KEY (user_email)
-        REFERENCES USER(email)
+        FOREIGN KEY (user_id)
+        REFERENCES USER(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
 
@@ -52,6 +53,7 @@ CREATE TABLE EVENT (
         FOREIGN KEY (category_id)
         REFERENCES CATEGORY(id)
         ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
 
 -- =====================================
@@ -59,7 +61,7 @@ CREATE TABLE EVENT (
 -- =====================================
 CREATE TABLE SUBSCRIPTION (
     subscription_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_email VARCHAR(100) NOT NULL,
+    user_id INT NOT NULL,
     event_id INT NOT NULL,
     subscription_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     participation_code VARCHAR(20) NOT NULL UNIQUE,
@@ -67,8 +69,8 @@ CREATE TABLE SUBSCRIPTION (
     checkin_time TIMESTAMP NULL,
 
     CONSTRAINT fk_subscription_user
-        FOREIGN KEY (user_email)
-        REFERENCES USER(email)
+        FOREIGN KEY (user_id)
+        REFERENCES USER(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
 
@@ -79,5 +81,5 @@ CREATE TABLE SUBSCRIPTION (
         ON DELETE CASCADE,
 
     CONSTRAINT unique_subscription
-        UNIQUE (user_email, event_id)
+        UNIQUE (user_id, event_id)
 );
