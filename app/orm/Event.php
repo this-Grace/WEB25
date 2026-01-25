@@ -8,7 +8,7 @@
  * Uses prepared statements to prevent SQL injection.
  * 
  * @package DataMappers
- * @author Your Name
+ * @author Alessandro Rebosio
  * @version 1.0
  */
 class Event
