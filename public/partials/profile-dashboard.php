@@ -1,5 +1,14 @@
 <main class="py-4 py-md-5 bg-light flex-grow-1">
     <div class="container">
+
+        <?php if (!empty($templateParams["feedback_msg"])): ?>
+            <div class="alert alert-<?= $templateParams["feedback_type"] ?> alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4" role="alert">
+                <span class="bi <?= $templateParams["feedback_type"] === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' ?> me-2"></span>
+                <?= $templateParams["feedback_msg"] ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
+            </div>
+        <?php endif; ?>
+
         <section class="card border-0 shadow-sm rounded-4 mb-4 mb-md-5 overflow-hidden">
             <div class="card-body p-4 p-md-5">
                 <form id="profileForm" action="profile.php" method="POST" enctype="multipart/form-data">
@@ -22,8 +31,8 @@
                                             <h1 class="fw-bold h3 mb-0"><?= htmlspecialchars($templateParams['user']['name'] . ' ' . $templateParams['user']['surname']); ?></h1>
                                         </div>
                                         <div class="edit-mode d-none">
-                                            <input type="text" name="name" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['name']); ?>" required>
-                                            <input type="text" name="surname" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['surname']); ?>" required>
+                                            <input type="text" name="name" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['name']); ?>" maxlength="50"  placeholder="Nome">
+                                            <input type="text" name="surname" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['surname']); ?>" maxlength="50" placeholder="Cognome">
                                         </div>
                                     </div>
                                     <div class="email-group text-muted">
