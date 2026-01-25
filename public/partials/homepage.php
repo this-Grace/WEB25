@@ -117,18 +117,14 @@
                                 </p>
 
                                 <?php
-                                $occupied = (int)($event['occupied_seats'] ?? 0);
-                                $total = (int)($event['total_seats'] ?? 0);
-                                $isFull = ($total > 0 && $occupied >= $total);
+                                $isFull = ((int)($event['total_seats'] ?? 0) > 0 && (int)($event['occupied_seats'] ?? 0) >= (int)($event['total_seats'] ?? 0));
                                 $status = strtolower($event['status'] ?? '');
-                                $isCancelled = ($status === 'cancelled');
                                 $isLogged = !empty($_SESSION['user']['email']);
                                 $sessionEmail = $_SESSION['user']['email'] ?? '';
                                 $isOwner = ($sessionEmail !== '' && $sessionEmail === ($event['user_email'] ?? ''));
-                                $isSubscribed = !empty($event['is_subscribed']);
                                 ?>
 
-                                <?php if ($isCancelled): ?>
+                                <?php if ($status === 'cancelled'): ?>
                                     <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
                                         <i class="bi bi-slash-circle" aria-hidden="true"></i>
                                         <span class="ms-2 d-md-inline">Annullato</span>
@@ -141,12 +137,12 @@
                                         </a>
                                     <?php else: ?>
                                         <?php if ($isLogged && $status === 'approved'): ?>
-                                            <?php if (!$isOwner && !$isSubscribed): ?>
+                                            <?php if (!$isOwner && empty($event['is_subscribed'])): ?>
                                                 <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-dark w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
                                                     <i class="bi bi-person-plus" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Iscriviti all'evento</span>
                                                 </a>
-                                            <?php elseif (!$isOwner && $isSubscribed): ?>
+                                            <?php elseif (!$isOwner && !empty($event['is_subscribed'])): ?>
                                                 <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
                                                     <i class="bi bi-person-x" aria-hidden="true"></i>
                                                     <span class="ms-2 d-md-inline">Disiscriviti</span>
