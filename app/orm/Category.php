@@ -1,14 +1,20 @@
 <?php
 
 /**
- * CATEGORY Class
+ * Category Class
+ * 
  * A data mapper for the CATEGORY table providing CRUD operations.
  * Uses prepared statements to prevent SQL injection.
+ * 
+ * @package DataMappers
+ * @author Alessandro Rebosio
+ * @version 1.0
  */
 class Category
 {
     /**
-     * @var DatabaseHelper $db Database helper instance
+     * Database helper instance
+     * @var DatabaseHelper $db
      */
     private $db;
 
@@ -23,9 +29,10 @@ class Category
     }
 
     /**
-     * Retrieve all CATEGORY
+     * Retrieve all categories from the CATEGORY table
      *
      * @return array An array of associative arrays with keys `id` and `name`
+     *               Returns empty array if no categories found or on error
      */
     public function findAll(): array
     {
@@ -42,7 +49,7 @@ class Category
     /**
      * Find a category by its name
      *
-     * @param string $name Category name
+     * @param string $name Category name to search for
      * @return array|null Associative array with `id` and `name` or null if not found
      */
     public function findByName(string $name): ?array
@@ -57,7 +64,7 @@ class Category
     /**
      * Find a category by its id
      *
-     * @param int $id Category id
+     * @param int $id Category id to search for
      * @return array|null Associative array with `id` and `name` or null if not found
      */
     public function findById(int $id): ?array
@@ -72,8 +79,8 @@ class Category
     /**
      * Check if a category exists by name
      *
-     * @param string $name Category name
-     * @return bool True if exists, false otherwise
+     * @param string $name Category name to check
+     * @return bool True if category exists, false otherwise
      */
     public function exists(string $name): bool
     {
@@ -96,7 +103,7 @@ class Category
     /**
      * Update a category name by id
      *
-     * @param int $id Category id
+     * @param int $id Category id to update
      * @param string $newName New category name
      * @return bool True on success, false on failure
      */
@@ -110,7 +117,7 @@ class Category
     /**
      * Delete a category by id
      *
-     * @param int $id Category id
+     * @param int $id Category id to delete
      * @return bool True on success, false on failure
      */
     public function deleteById(int $id): bool

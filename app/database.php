@@ -25,11 +25,15 @@ class DatabaseHelper
      */
     public function __construct($servername, $username, $password, $dbname, $port, $charset)
     {
-        $this->db = new mysqli($servername, $username, $password, $dbname, $port);
-        if ($this->db->connect_error) {
-            die("Connection failed: " . $this->db->connect_error);
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        try {
+            $this->db = new mysqli($servername, $username, $password, $dbname, $port);
+            $this->db->set_charset($charset);
+        } catch (mysqli_sql_exception $e) {
+            // Log error or handle it gracefully
+            // For now, re-throw the exception to be caught by a global error handler
+            throw new mysqli_sql_exception($e->getMessage(), $e->getCode());
         }
-        $this->db->set_charset($charset);
     }
 
     /**

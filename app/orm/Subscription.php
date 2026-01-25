@@ -1,17 +1,28 @@
 <?php
 
 /**
- * SUBSCRIPTION Class
+ * Subscription Class
+ * 
  * Data mapper for the SUBSCRIPTION table.
+ * Handles user event subscriptions, check-ins, and status management.
+ * Uses prepared statements to prevent SQL injection.
+ * 
+ * @package DataMappers
+ * @author Alessandro Rebosio
+ * @version 1.0
  */
 class Subscription
 {
-    /** @var DatabaseHelper $db */
+    /**
+     * Database helper instance
+     * @var DatabaseHelper $db
+     */
     private $db;
 
     /**
      * Constructor
-     * @param DatabaseHelper $db
+     * 
+     * @param DatabaseHelper $db Database helper instance
      */
     public function __construct(DatabaseHelper $db)
     {
@@ -20,23 +31,27 @@ class Subscription
 
     /**
      * Create a new subscription
-     * @param string $userEmail
-     * @param int $eventId
-     * @param string $participationCode
-     * @param string $status
-     * @return bool
+     * 
+     * @param mixed $user User identifier (email or numeric id)
+     * @param int $eventId Event ID to subscribe to
+     * @param string $participationCode Unique participation code
+     * @param string $status Initial subscription status (default: 'REGISTERED')
+     * @return bool True on success, false on failure
      */
-    public function create(string $userEmail, int $eventId, string $participationCode, string $status = 'REGISTERED'): bool
+    public function create($user, int $eventId, string $participationCode, string $status = 'REGISTERED'): bool
     {
-        $sql = 'INSERT INTO SUBSCRIPTION (user_email, event_id, participation_code, status) VALUES (?, ?, ?, ?)';
-        $ok = $this->db->prepareAndExecute($sql, [$userEmail, $eventId, $participationCode, $status]);
+        $userId = $this->resolveUserId($user);
+        if ($userId === null) return false;
+        $sql = 'INSERT INTO SUBSCRIPTION (user_id, event_id, participation_code, status) VALUES (?, ?, ?, ?)';
+        $ok = $this->db->prepareAndExecute($sql, [$userId, $eventId, $participationCode, $status]);
         return (bool)$ok;
     }
 
     /**
      * Find subscription by id
-     * @param int $id
-     * @return array|null
+     * 
+     * @param int $id Subscription ID
+     * @return array|null Subscription data or null if not found
      */
     public function findById(int $id): ?array
     {
@@ -49,8 +64,9 @@ class Subscription
 
     /**
      * Find subscription by participation code
-     * @param string $code
-     * @return array|null
+     * 
+     * @param string $code Participation code
+     * @return array|null Subscription data or null if not found
      */
     public function findByCode(string $code): ?array
     {
@@ -63,28 +79,69 @@ class Subscription
 
     /**
      * Find a subscription by user and event
-     * @param string $email
-     * @param int $eventId
-     * @return array|null
+     * 
+     * @param mixed $user User identifier (email or numeric id)
+     * @param int $eventId Event ID
+     * @return array|null Subscription data or null if not found
      */
-    public function findByUserAndEvent(string $email, int $eventId): ?array
+    public function findByUserAndEvent($user, int $eventId): ?array
     {
-        $sql = 'SELECT * FROM SUBSCRIPTION WHERE user_email = ? AND event_id = ? LIMIT 1';
-        $res = $this->db->prepareAndExecute($sql, [$email, $eventId]);
+        $userId = $this->resolveUserId($user);
+        if ($userId === null) return null;
+        $sql = 'SELECT * FROM SUBSCRIPTION WHERE user_id = ? AND event_id = ? LIMIT 1';
+        $res = $this->db->prepareAndExecute($sql, [$userId, $eventId]);
         if (!$res || !($res instanceof mysqli_result)) return null;
         $row = $res->fetch_assoc();
         return $row ?: null;
     }
 
     /**
-     * List subscriptions by user
-     * @param string $email
-     * @return array
+     * Find all event IDs a user is subscribed to from a given list of event IDs.
+     * 
+     * @param mixed $user User identifier (email or numeric id)
+     * @param array $eventIds Array of event IDs to check
+     * @return array Array of event IDs that the user is subscribed to
      */
-    public function findByUser(string $email): array
+    public function findSubscribedEventsByUser($user, array $eventIds): array
     {
-        $sql = 'SELECT * FROM SUBSCRIPTION WHERE user_email = ? ORDER BY subscription_date DESC';
-        $res = $this->db->prepareAndExecute($sql, [$email]);
+        if (empty($eventIds)) {
+            return [];
+        }
+
+        $userId = $this->resolveUserId($user);
+        if ($userId === null) return [];
+
+        $placeholders = implode(',', array_fill(0, count($eventIds), '?'));
+        $sql = "SELECT DISTINCT event_id FROM SUBSCRIPTION WHERE user_id = ? AND event_id IN ($placeholders)";
+
+        $params = array_merge([$userId], $eventIds);
+
+        $res = $this->db->prepareAndExecute($sql, $params);
+
+        if (!$res || !($res instanceof mysqli_result)) {
+            return [];
+        }
+
+        $subscribedEventIds = [];
+        while ($row = $res->fetch_assoc()) {
+            $subscribedEventIds[] = $row['event_id'];
+        }
+
+        return $subscribedEventIds;
+    }
+
+    /**
+     * List subscriptions by user
+     * 
+     * @param mixed $user User identifier (email or numeric id)
+     * @return array Array of subscription records for the user
+     */
+    public function findByUser($user): array
+    {
+        $userId = $this->resolveUserId($user);
+        if ($userId === null) return [];
+        $sql = 'SELECT * FROM SUBSCRIPTION WHERE user_id = ? ORDER BY subscription_date DESC';
+        $res = $this->db->prepareAndExecute($sql, [$userId]);
         if (!$res || !($res instanceof mysqli_result)) return [];
         $rows = [];
         while ($r = $res->fetch_assoc()) {
@@ -94,9 +151,30 @@ class Subscription
     }
 
     /**
+     * Resolve a user identifier (email or numeric id) to a numeric user id.
+     * 
+     * @param mixed $user User identifier (email or numeric id)
+     * @return int|null Numeric user ID or null if not found
+     */
+    private function resolveUserId($user): ?int
+    {
+        if (is_int($user) || ctype_digit((string)$user)) {
+            return (int)$user;
+        }
+        if (!is_string($user)) return null;
+
+        $sql = 'SELECT id FROM USER WHERE email = ? LIMIT 1';
+        $res = $this->db->prepareAndExecute($sql, [$user]);
+        if (!$res || !($res instanceof mysqli_result)) return null;
+        $row = $res->fetch_assoc();
+        return $row ? (int)$row['id'] : null;
+    }
+
+    /**
      * List subscriptions by event
-     * @param int $eventId
-     * @return array
+     * 
+     * @param int $eventId Event ID
+     * @return array Array of subscription records for the event
      */
     public function findByEvent(int $eventId): array
     {
@@ -112,10 +190,11 @@ class Subscription
 
     /**
      * Update status of a subscription
-     * @param int $id
-     * @param string $status
+     * 
+     * @param int $id Subscription ID
+     * @param string $status New status
      * @param bool $setCheckin If true set checkin_time to NOW(), if false leave unchanged
-     * @return bool
+     * @return bool True on success, false on failure
      */
     public function updateStatus(int $id, string $status, bool $setCheckin = false): bool
     {
@@ -129,8 +208,9 @@ class Subscription
 
     /**
      * Mark a subscription as PRESENT and set checkin time
-     * @param int $id
-     * @return bool
+     * 
+     * @param int $id Subscription ID
+     * @return bool True on success, false on failure
      */
     public function markPresent(int $id): bool
     {
@@ -139,8 +219,9 @@ class Subscription
 
     /**
      * Mark a subscription as ABSENT
-     * @param int $id
-     * @return bool
+     * 
+     * @param int $id Subscription ID
+     * @return bool True on success, false on failure
      */
     public function markAbsent(int $id): bool
     {
@@ -149,8 +230,9 @@ class Subscription
 
     /**
      * Cancel a subscription
-     * @param int $id
-     * @return bool
+     * 
+     * @param int $id Subscription ID
+     * @return bool True on success, false on failure
      */
     public function cancel(int $id): bool
     {
@@ -159,8 +241,9 @@ class Subscription
 
     /**
      * Delete subscription
-     * @param int $id
-     * @return bool
+     * 
+     * @param int $id Subscription ID
+     * @return bool True on success, false on failure
      */
     public function delete(int $id): bool
     {

@@ -43,4 +43,13 @@ if (isset($roleHandlers[$role])) {
     $templateParams['featured_events'] = $eventMapper->getApprovedEvents(6);
 }
 
+$eventIds = array_map(function($event) {
+    return $event['id'];
+}, $templateParams['featured_events']);
+
+$templateParams['user_subscriptions'] = [];
+if ($userEmail && !empty($eventIds)) {
+    $templateParams['user_subscriptions'] = $subscriptionMapper->findSubscribedEventsByUser($userEmail, $eventIds);
+}
+
 require 'template/base.php';
