@@ -118,44 +118,44 @@
 
                                 <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-secondary w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
                                     <i class="bi bi-x-octagon" aria-hidden="true"></i>
-                                    <span class="ms-2 d-none d-md-inline">Evento pieno</span>
+                                    <span class="ms-2 d-md-inline">Evento pieno</span>
                                 </a>
 
                                 <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-dark w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
                                     <i class="bi bi-person-plus" aria-hidden="true"></i>
-                                    <span class="ms-2 d-none d-md-inline">Iscriviti all'evento</span>
+                                    <span class="ms-2 d-md-inline">Iscriviti all'evento</span>
                                 </a>
 
                                 <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger w-100 mt-auto d-flex align-items-center justify-content-center mb-1">
                                     <i class="bi bi-person-x" aria-hidden="true"></i>
-                                    <span class="ms-2 d-none d-md-inline">Disiscriviti</span>
+                                    <span class="ms-2 d-md-inline">Disiscriviti</span>
                                 </a>
 
                                 <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
                                     <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-success d-flex align-items-center justify-content-center flex-fill col-6">
                                         <i class="bi bi-check2-circle" aria-hidden="true"></i>
-                                        <span class="ms-2 d-none d-md-inline">Approva</span>
+                                        <span class="ms-2 d-md-inline">Approva</span>
                                     </a>
                                     <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger d-flex align-items-center justify-content-center flex-fill col-6">
                                         <i class="bi bi-trash" aria-hidden="true"></i>
-                                        <span class="ms-2 d-none d-md-inline">Cancella</span>
+                                        <span class="ms-2 d-md-inline">Cancella</span>
                                     </a>
                                 </div>
 
                                 <div class="d-flex gap-2 w-100 align-items-stretch mb-1">
                                     <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary d-flex align-items-center justify-content-center flex-fill col-6">
                                         <i class="bi bi-pencil" aria-hidden="true"></i>
-                                        <span class="ms-2 d-none d-md-inline">Modifica</span>
+                                        <span class="ms-2 d-md-inline">Modifica</span>
                                     </a>
                                     <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning d-flex align-items-center justify-content-center flex-fill col-6">
                                         <i class="bi bi-x-circle" aria-hidden="true"></i>
-                                        <span class="ms-2 d-none d-md-inline">Annulla</span>
+                                        <span class="ms-2 d-md-inline">Annulla</span>
                                     </a>
                                 </div>
 
                                 <a href="?id=<?php echo urlencode($event['id']); ?>" class="btn btn-secondary w-100 mt-auto disabled d-flex align-items-center justify-content-center mb-1">
                                     <i class="bi bi-slash-circle" aria-hidden="true"></i>
-                                    <span class="ms-2 d-none d-md-inline">Annullato</span>
+                                    <span class="ms-2 d-md-inline">Annullato</span>
                                 </a>
 
                             </div>
