@@ -188,21 +188,6 @@ class Event
     }
 
     /**
-     * Get event by its ID
-     * 
-     * @param int $id Event ID
-     * @return array|null Event data as associative array or null if not found
-     */
-    public function getEventById(int $id): ?array
-    {
-        $sql = $this->baseEventSelect() .
-            "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
-            "WHERE e.id = ? LIMIT 1";
-        $res = $this->fetchEvents($sql, [$id]);
-        return count($res) > 0 ? $res[0] : null;
-    }
-
-    /**
      * Get events a user is subscribed to
      * @param int $userId User ID
      * @return array Array of events the user is subscribed to
@@ -253,38 +238,5 @@ class Event
           AND (e.event_date < CURRENT_DATE() OR e.status = 'CANCELLED')
           ORDER BY e.event_date DESC";
         return $this->fetchEvents($sql, [$userId, $userId]);
-    }
-
-    /**
-     * Delete an event smartly based on its current status
-     * 
-     * If the event is in DRAFT or WAITING status, it is deleted from the database.
-     * If the event is APPROVED or CANCELLED, its status is updated to CANCELLED.   
-     * 
-     * @param int $eventId Event ID
-     * @param string $currentStatus Current status of the event
-     * @return bool True on success, false on failure
-     */
-    public function delete(int $eventId, string $currentStatus): bool
-    {
-        if ($currentStatus === 'DRAFT' || $currentStatus === 'WAITING') {
-            $sql = "DELETE FROM EVENT WHERE id = ?";
-        } else {
-            $sql = "UPDATE EVENT SET status = 'CANCELLED' WHERE id = ?";
-        }
-        return (bool)$this->db->prepareAndExecute($sql, [$eventId]);
-    }
-
-    /**
-     * Update the status of an event
-     * 
-     * @param int $eventId Event ID
-     * @param string $newStatus New status to set
-     * @return bool True on success, false on failure
-     */
-    public function updateStatus(int $eventId, string $newStatus): bool
-    {
-        $sql = "UPDATE EVENT SET status = ? WHERE id = ?";
-        return (bool)$this->db->prepareAndExecute($sql, [$newStatus, $eventId]);
     }
 }
