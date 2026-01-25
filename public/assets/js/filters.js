@@ -51,8 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const filterButton = document.querySelector(`.btn-cate[data-id="${id}"]`);
             const label = filterButton ? filterButton.textContent.trim() : id;
 
+            let cateClasses = '';
+            if (filterButton) {
+                const cls = Array.from(filterButton.classList).filter(c => c.startsWith('btn-cate-'));
+                if (cls.length) cateClasses = ' ' + cls.join(' ');
+            }
+
             const badgeHTML = `
-                <span class="badge d-flex align-items-center p-2 btn-cate ${[...filterButton?.classList].filter(c => c.startsWith('btn-cate-')).join(' ')}">
+                <span class="badge d-flex align-items-center p-2 btn-cate${cateClasses}">
                     <span class="fw-medium">${label}</span>
                     <button type="button" class="btn-close ms-2" data-id="${id}" aria-label="Remove filter"></button>
                 </span>
