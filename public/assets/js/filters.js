@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyFiltersToCards = () => {
         const cards = getCards();
         const hasActiveFilters = activeFilters.size > 0;
-
         cards.forEach(card => {
             if (!hasActiveFilters) {
                 card.style.display = '';
@@ -28,13 +27,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const userEmail = card.dataset.userEmail || '';
             const status = card.dataset.status || '';
 
-            const isVisible = [...activeFilters].some(id =>
-                id === categoryId ||
-                id === userEmail ||
-                (id === 'waiting' && status === 'WAITING')
-            );
+            const selected = [...activeFilters];
+            const selectedCategoryIds = selected.filter(id => id !== 'waiting' && id.indexOf('@') === -1);
+            const selectedUserEmails = selected.filter(id => id.indexOf('@') !== -1);
+            const waitingSelected = selected.includes('waiting');
 
-            card.style.display = isVisible ? '' : 'none';
+            if (selectedCategoryIds.length > 0 && !selectedCategoryIds.includes(categoryId)) {
+                card.style.display = 'none';
+                return;
+            }
+
+            if (selectedUserEmails.length > 0 && !selectedUserEmails.includes(userEmail)) {
+                card.style.display = 'none';
+                return;
+            }
+
+            if (waitingSelected && status !== 'WAITING') {
+                card.style.display = 'none';
+                return;
+            }
+
+            card.style.display = '';
         });
     };
 
@@ -51,8 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const filterButton = document.querySelector(`.btn-cate[data-id="${id}"]`);
             const label = filterButton ? filterButton.textContent.trim() : id;
 
+            let cateClasses = '';
+            if (filterButton) {
+                const cls = Array.from(filterButton.classList).filter(c => c.startsWith('btn-cate-'));
+                if (cls.length) cateClasses = ' ' + cls.join(' ');
+            }
+
             const badgeHTML = `
-                <span class="badge d-flex align-items-center p-2 btn-cate ${[...filterButton?.classList].filter(c => c.startsWith('btn-cate-')).join(' ')}">
+                <span class="badge d-flex align-items-center p-2 btn-cate${cateClasses}">
                     <span class="fw-medium">${label}</span>
                     <button type="button" class="btn-close ms-2" data-id="${id}" aria-label="Remove filter"></button>
                 </span>

@@ -77,6 +77,11 @@
         </p>
 
         <div id="events-grid" class="row">
+            <?php
+            $currentUserEmail = $_SESSION['user']['email'] ?? null;
+            $currentRole = strtolower($_SESSION['user']['role'] ?? '');
+            $isLoggedIn = !empty($currentUserEmail);
+            ?>
             <?php foreach ($templateParams["featured_events"] ?? [] as $event): ?>
                 <div class="col-lg-4 col-md-6 mb-4"
                     data-event-id="<?php echo htmlspecialchars($event["id"], ENT_QUOTES, 'UTF-8'); ?>"
@@ -91,14 +96,60 @@
                             <span class="badge badge-cate-<?php echo htmlspecialchars(strtolower($event["category"]), ENT_QUOTES, 'UTF-8'); ?> position-absolute top-0 start-0 m-3"><?php echo htmlspecialchars($event["category"], ENT_QUOTES, 'UTF-8'); ?></span>
                         </div>
                         <div class="card-body d-flex flex-column">
+                            <?php
+                            $totalSeats = (int)($event['total_seats'] ?? 0);
+                            $occupiedSeats = (int)($event['occupied_seats'] ?? 0);
+                            $isFull = $totalSeats > 0 && $occupiedSeats >= $totalSeats;
+                            $isOwner = $isLoggedIn && $currentUserEmail === ($event['user_email'] ?? '');
+                            $isAdmin = $currentRole === 'admin';
+                            ?>
                             <h3 class="card-title"><?php echo htmlspecialchars($event["title"], ENT_QUOTES, 'UTF-8'); ?></h3>
                             <p class="preview-description small text-muted mb-2"><?php echo htmlspecialchars($event['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
                             <p class="card-text text-muted small flex-grow-1">
-                                <span class="bi bi-calendar" aria-hidden="true"></span> <?php echo htmlspecialchars($event['event_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars($event['event_time'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-geo-alt" aria-hidden="true"></span> <?php echo htmlspecialchars($event['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
-                                <span class="bi bi-people" aria-hidden="true"></span> <?php echo htmlspecialchars($event['occupied_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>/<?php echo htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?> iscritti
+                                <span class="bi bi-calendar text-primary" aria-hidden="true"></span> <?php echo htmlspecialchars($event['event_date'] ?? '', ENT_QUOTES, 'UTF-8'); ?> - <?php echo htmlspecialchars($event['event_time'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-geo-alt text-success" aria-hidden="true"></span> <?php echo htmlspecialchars($event['location'] ?? '', ENT_QUOTES, 'UTF-8'); ?><br>
+                                <span class="bi bi-people text-danger" aria-hidden="true"></span> <?php echo htmlspecialchars($event['occupied_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?>/<?php echo htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8'); ?> iscritti
                             </p>
-                            <a href="#" class="btn btn-light w-100 mt-auto" aria-label="Iscriviti alla conferenza sull'Intelligenza Artificiale">Iscriviti all'evento</a>
+
+                            <!-- Subscribe / status button -->
+                            <?php if (!$isLoggedIn): ?>
+                                <?php if ($isFull): ?>
+                                    <button class="btn btn-secondary w-100 mt-auto" disabled>Evento pieno</button>
+                                <?php else: ?>
+                                    <div class="mb-2"></div>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <?php if ($isFull): ?>
+                                    <button class="btn btn-secondary w-100 mt-auto" disabled>Evento pieno</button>
+                                <?php elseif (!$isOwner): ?>
+                                    <button class="btn btn-light w-100 mt-auto subscribe-btn" data-event-id="<?php echo htmlspecialchars($event['id'], ENT_QUOTES, 'UTF-8'); ?>">Iscriviti all'evento</button>
+                                <?php else: ?>
+                                    <div class="mb-2"></div>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            <div class="mt-3">
+                                <?php if ($isLoggedIn && $isOwner): ?>
+                                    <div class="d-flex gap-2 mb-2">
+                                        <?php if (in_array($currentRole, ['host', 'admin'], true)): ?>
+                                            <a href="edit_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-primary flex-fill">Modifica</a>
+                                        <?php endif; ?>
+                                        <a href="delete_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger flex-fill">Cancella</a>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if ($isAdmin): ?>
+                                    <?php if (($event['status'] ?? '') !== 'CANCELLED'): ?>
+                                        <button class="btn btn-warning btn-cancel-event w-100 mb-2" data-event-id="<?php echo htmlspecialchars($event['id'], ENT_QUOTES, 'UTF-8'); ?>">Annulla evento</button>
+                                    <?php else: ?>
+                                        <span class="btn btn-secondary w-100 d-block mb-2" aria-disabled="true">Annullato</span>
+                                    <?php endif; ?>
+                                    <?php if (!($isLoggedIn && $isOwner)): ?>
+                                        <a href="delete_event.php?id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-danger w-100">Cancella</a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+
                         </div>
                     </div>
                 </div>
