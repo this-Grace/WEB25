@@ -18,10 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $_SESSION['user'] = [
-        'email' => $user['email'],
-        'name' => $user['name'],
+        'id'      => $user['id'],
+        'email'   => $user['email'],
+        'name'    => $user['name'],
         'surname' => $user['surname'],
-        'role' => $user['role']
+        'role'    => $user['role'],
     ];
 
     header('Location: index.php');
