@@ -2,13 +2,20 @@
 
 /**
  * User Class
+ * 
  * A data mapper for the USER table providing CRUD operations and authentication.
+ * Handles user management, authentication, and profile updates.
  * Uses prepared statements to prevent SQL injection.
+ * 
+ * @package DataMappers
+ * @author Alessandro Rebosio
+ * @version 1.0
  */
 class User
 {
     /**
-     * @var DatabaseHelper $db Database helper instance
+     * Database helper instance
+     * @var DatabaseHelper $db
      */
     private $db;
 
@@ -27,11 +34,11 @@ class User
      * 
      * @param string $email User's email address
      * @return array|null Associative array with user data or null if not found
-     *                    Returns: email, name, surname, password, role, registration_date
+     *                    Returns: id, email, name, surname, password, role, avatar, registration_date
      */
     public function findByEmail(string $email): ?array
     {
-        $sql = 'SELECT email, name, surname, password, role, avatar, registration_date FROM USER WHERE email = ? LIMIT 1';
+        $sql = 'SELECT id, email, name, surname, password, role, avatar, registration_date FROM USER WHERE email = ? LIMIT 1';
         $res = $this->db->prepareAndExecute($sql, [$email]);
         if (!$res || !($res instanceof mysqli_result)) return null;
         $row = $res->fetch_assoc();
@@ -70,7 +77,7 @@ class User
     /**
      * Update a user's profile information
      * 
-     * @param string $email User's current email address
+     * @param string $oldEmail User's current email address
      * @param string $name User's new first name
      * @param string $surname User's new last name
      * @param string $newEmail User's new email address
@@ -87,7 +94,7 @@ class User
      * Update a user's avatar path
      * 
      * @param string $email User's email address
-     * @param string $avatarPath New avatar file path
+     * @param string|null $avatarPath New avatar file path (null to remove avatar)
      * @return bool True if update successful, false otherwise
      */
     public function updateAvatar(string $email, ?string $avatarPath): bool
@@ -103,7 +110,7 @@ class User
      * @param string $email User's email address
      * @param string $password Plain text password to verify
      * @return array|null User data without password on success, null on failure
-     *                    Returns: email, name, surname, role, registration_date
+     *                    Returns: id, email, name, surname, role, avatar, registration_date
      */
     public function authenticate(string $email, string $password): ?array
     {
