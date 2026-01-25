@@ -8,7 +8,7 @@ $templateParams['js'] = ['assets/js/filters.js'];
 
 $templateParams['content'] = "partials/homepage.php";
 
-$allCategories = $catMapper->findAll();
+$allCategories = $categoryMapper->findAll();
 
 $templateParams["total_events"] = "250+";
 $templateParams["active_student"] = "5000+";
