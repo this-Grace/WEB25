@@ -49,7 +49,7 @@ $navClass = function (string $label) use ($templateParams): string {
 
                 <?php if (isset($_SESSION['user']['role']) && in_array(strtolower($_SESSION['user']['role']), ['admin', 'host'], true)): ?>
                     <li class="nav-item">
-                        <a href="create.php" class="<?php echo $navClass('Crea Evento'); ?>">Crea Evento</a>
+                        <a href="event.php" class="<?php echo $navClass('Crea Evento'); ?>">Crea Evento</a>
                     </li>
                 <?php endif; ?>
 

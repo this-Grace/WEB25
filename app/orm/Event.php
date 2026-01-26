@@ -188,6 +188,68 @@ class Event
     }
 
     /**
+     * Flexible paginated event fetcher that supports role-based visibility, category filtering,
+     * and special filters like 'miei' (host's own events) or 'waiting' (admin review queue).
+     *
+     * @param string $role User role (admin|host|other)
+     * @param string|null $userEmail Current user's email
+     * @param int $limit Number of records to return
+     * @param int $offset Offset for pagination
+     * @param int|null $categoryId Optional category id to filter
+     * @param string|null $specialFilter Optional special filter ('miei'|'waiting')
+     * @return array Array of event rows
+     */
+    public function getEventsWithFilters(string $role, ?string $userEmail, int $limit = 6, int $offset = 0, ?int $categoryId = null, ?string $specialFilter = null, ?string $search = null): array
+    {
+        $params = [];
+        $sql = $this->baseEventSelect() .
+            "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id WHERE 1=1 ";
+
+        // Role-based visibility
+        if ($role === 'host') {
+            $sql .= "AND ((e.status = 'APPROVED') OR (u.email = ? AND e.status = 'WAITING')) ";
+            $params[] = $userEmail;
+        } elseif ($role === 'admin') {
+            // admins see everything, no extra condition
+        } else {
+            $sql .= "AND (e.status = 'APPROVED' OR e.status = 'CANCELLED') ";
+        }
+
+        // Special filters from client
+        if (!empty($specialFilter)) {
+            if ($specialFilter === 'miei' && $userEmail) {
+                $sql .= "AND u.email = ? ";
+                $params[] = $userEmail;
+            }
+            if ($specialFilter === 'waiting' && $role === 'admin') {
+                $sql .= "AND e.status = 'WAITING' ";
+            }
+        }
+
+        if (!empty($categoryId)) {
+            $sql .= "AND e.category_id = ? ";
+            $params[] = (int)$categoryId;
+        }
+
+        // Full text-ish search across title, description, location, category name and user email
+        if (!empty($search)) {
+            $s = '%' . (string)$search . '%';
+            $sql .= "AND (e.title LIKE ? OR e.description LIKE ? OR e.location LIKE ? OR c.name LIKE ? OR u.email LIKE ?) ";
+            $params[] = $s;
+            $params[] = $s;
+            $params[] = $s;
+            $params[] = $s;
+            $params[] = $s;
+        }
+
+        $sql .= "ORDER BY e.event_date DESC, e.event_time DESC LIMIT ?, ?";
+        $params[] = (int)$offset;
+        $params[] = (int)$limit;
+
+        return $this->fetchEvents($sql, $params);
+    }
+
+    /**
      * Get events a user is subscribed to
      * @param int $userId User ID
      * @return array Array of events the user is subscribed to

@@ -17,7 +17,7 @@ if ($event && $event instanceof mysqli_result) {
     $row = $event->fetch_assoc();
     $ownerEmail = $row['user_email'] ?? '';
     if ($sessionEmail !== '' && $sessionEmail === $ownerEmail) {
-        $target = '/edit_event.php?id=' . $eventId;
+        $target = '/event.php?event_id=' . $eventId;
         header('Location: ' . $target);
         exit;
     }
