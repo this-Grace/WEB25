@@ -33,13 +33,13 @@
                                     <div class="edit-mode d-none">
                                         <label for="edit-name" class="visually-hidden">Nome</label>
                                         <input type="text" id="edit-name" name="name" class="form-control-inline h3 fw-bold"
-                                                value="<?= htmlspecialchars($templateParams['user']['name']); ?>"
-                                                maxlength="50" placeholder="Nome" title="Inserisci il tuo nome">
+                                            value="<?= htmlspecialchars($templateParams['user']['name']); ?>"
+                                            maxlength="50" placeholder="Nome" title="Inserisci il tuo nome">
 
                                         <label for="edit-surname" class="visually-hidden">Cognome</label>
                                         <input type="text" id="edit-surname" name="surname" class="form-control-inline h3 fw-bold"
-                                                value="<?= htmlspecialchars($templateParams['user']['surname']); ?>"
-                                                maxlength="50" placeholder="Cognome" title="Inserisci il tuo cognome">
+                                            value="<?= htmlspecialchars($templateParams['user']['surname']); ?>"
+                                            maxlength="50" placeholder="Cognome" title="Inserisci il tuo cognome">
                                     </div>
                                 </div>
                                 <div class="email-group text-muted">
@@ -49,8 +49,8 @@
                                     <div class="edit-mode d-none small">
                                         <label for="edit-email" class="visually-hidden">Indirizzo Email (Sola lettura)</label>
                                         <input type="email" id="edit-email" class="form-control-inline"
-                                                value="<?= htmlspecialchars($templateParams['user']['email']); ?>"
-                                                readonly title="L'indirizzo email non può essere modificato">
+                                            value="<?= htmlspecialchars($templateParams['user']['email']); ?>"
+                                            readonly title="L'indirizzo email non può essere modificato">
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +96,8 @@
                         <div class="row g-4">
                             <?php foreach ($tab['data'] as $event): ?>
                                 <div class="col-12 col-md-6 col-lg-4">
-                                    <?php $tabId = $tab['id']; include 'event-card.php'; ?>
+                                    <?php $tabId = $tab['id'];
+                                    include 'event-card.php'; ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -148,7 +149,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventTitle" aria-hidden="true">
+<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventTitle" aria-hidden="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow rounded-4">
             <div class="modal-header border-0 pb-0">

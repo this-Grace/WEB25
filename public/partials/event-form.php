@@ -51,6 +51,7 @@ if (!empty($event_time)) {
                                     <label for="eventTimeHour" class="form-label small fw-bold">Orario</label>
                                     <div class="input-group">
                                         <select id="eventTimeHour" name="event_time_hour" class="form-select bg-light" aria-label="Ora (24H)" required>
+                                            <option value="" <?= ($event_hour === '') ? 'selected' : 'disabled' ?>>Ora</option>
                                             <?php for ($h = 0; $h < 24; $h++): $hh = str_pad($h, 2, '0', STR_PAD_LEFT);
                                                 $sel = ($hh === $event_hour) ? 'selected' : ''; ?>
                                                 <option value="<?= $hh ?>" <?= $sel ?>><?= $hh ?></option>
@@ -58,6 +59,7 @@ if (!empty($event_time)) {
                                         </select>
                                         <label for="eventTimeMinute" class="visually-hidden">Minuti</label>
                                         <select id="eventTimeMinute" name="event_time_minute" class="form-select bg-light" aria-label="Minuti" required>
+                                            <option value="" <?= ($event_minute === '') ? 'selected' : 'disabled' ?>>Minuti</option>
                                             <?php for ($m = 0; $m < 60; $m += 15): $mm = str_pad($m, 2, '0', STR_PAD_LEFT);
                                                 $ms = ($mm === $event_minute) ? 'selected' : ''; ?>
                                                 <option value="<?= $mm ?>" <?= $ms ?>><?= $mm ?></option>
@@ -83,7 +85,7 @@ if (!empty($event_time)) {
                             <div class="mb-4">
                                 <label for="eventCategorySelector" class="form-label small fw-bold">Seleziona Tipologia <span class="text-danger">*</span></label>
                                 <select class="form-select bg-light" id="eventCategorySelector" name="category_id" required>
-                                    <option value="" selected disabled>Scegli una categoria...</option>
+                                    <option value="" <?= empty($event['category_id']) ? 'selected' : 'disabled' ?>>Scegli una categoria...</option>
                                     <?php foreach ($templateParams['categories'] ?? [] as $c):
                                         $catId = $c['id'] ?? $c['ID'] ?? null;
                                         $catName = $c['name'] ?? $c['nome'] ?? '';
