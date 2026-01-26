@@ -8,31 +8,6 @@
     --text-light: #94a3b8;
 }
 
-#profile-container,
-.profile-info-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-}
-
-.name-group,
-.email-group,
-.profile-actions-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.name-group {
-    margin-bottom: 0.2rem !important;
-}
-
-.email-group {
-    margin-bottom: 1.5rem !important;
-}
-
 .name-group .edit-mode {
     display: flex;
     flex-direction: column;
@@ -83,12 +58,6 @@
 }
 
 @media (min-width: 768px) {
-
-    .name-group,
-    .email-group,
-    .profile-actions-wrapper {
-        align-items: flex-start;
-    }
 
     .name-group .edit-mode {
         flex-direction: row;

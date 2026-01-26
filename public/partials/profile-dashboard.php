@@ -24,47 +24,45 @@
                             </label>
                         </div>
 
-                        <div class="flex-grow-1 w-100">
-                            <div class="profile-info-wrapper">
-                                <div class="profile-data-top">
-                                    <div class="name-group mb-1">
-                                        <div class="view-mode">
-                                            <h1 class="fw-bold h3 mb-0"><?= htmlspecialchars($templateParams['user']['name'] . ' ' . $templateParams['user']['surname']); ?></h1>
-                                        </div>
-                                        <div class="edit-mode d-none">
-                                            <label for="edit-name" class="visually-hidden">Nome</label>
-                                            <input type="text" id="edit-name" name="name" class="form-control-inline h3 fw-bold" 
-                                                   value="<?= htmlspecialchars($templateParams['user']['name']); ?>" 
-                                                   maxlength="50" placeholder="Nome" title="Inserisci il tuo nome">
-                                            
-                                            <label for="edit-surname" class="visually-hidden">Cognome</label>
-                                            <input type="text" id="edit-surname" name="surname" class="form-control-inline h3 fw-bold" 
-                                                   value="<?= htmlspecialchars($templateParams['user']['surname']); ?>" 
-                                                   maxlength="50" placeholder="Cognome" title="Inserisci il tuo cognome">
-                                        </div>
-                                    </div>
-                                    <div class="email-group text-muted">
-                                        <div class="view-mode small">
-                                            <span class="bi bi-envelope me-1"></span><?= htmlspecialchars($templateParams['user']['email']); ?>
-                                        </div>
-                                        <div class="edit-mode d-none small">
-                                            <label for="edit-email" class="visually-hidden">Indirizzo Email (Sola lettura)</label>
-                                            <input type="email" id="edit-email" class="form-control-inline" 
-                                                   value="<?= htmlspecialchars($templateParams['user']['email']); ?>" 
-                                                   readonly title="L'indirizzo email non può essere modificato">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="profile-actions-wrapper">
+                        <div class="flex-grow-1 w-100 d-flex flex-column text-center text-md-start">
+                            <div class="mb-4">
+                                <div class="name-group mb-1">
                                     <div class="view-mode">
-                                        <button type="button" onclick="toggleEdit(true)" class="btn btn-outline-primary fw-bold">Modifica Profilo</button>
-                                        <button type="button" class="btn btn-outline-danger fw-bold" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Elimina Account</button>
+                                        <h1 class="fw-bold h3 mb-0"><?= htmlspecialchars($templateParams['user']['name'] . ' ' . $templateParams['user']['surname']); ?></h1>
                                     </div>
                                     <div class="edit-mode d-none">
-                                        <button type="submit" class="btn btn-primary fw-bold shadow-sm">Salva Modifiche</button>
-                                        <button type="button" onclick="toggleEdit(false)" class="btn btn-outline-secondary fw-bold">Annulla</button>
+                                        <label for="edit-name" class="visually-hidden">Nome</label>
+                                        <input type="text" id="edit-name" name="name" class="form-control-inline h3 fw-bold"
+                                                value="<?= htmlspecialchars($templateParams['user']['name']); ?>"
+                                                maxlength="50" placeholder="Nome" title="Inserisci il tuo nome">
+
+                                        <label for="edit-surname" class="visually-hidden">Cognome</label>
+                                        <input type="text" id="edit-surname" name="surname" class="form-control-inline h3 fw-bold"
+                                                value="<?= htmlspecialchars($templateParams['user']['surname']); ?>"
+                                                maxlength="50" placeholder="Cognome" title="Inserisci il tuo cognome">
                                     </div>
+                                </div>
+                                <div class="email-group text-muted">
+                                    <div class="view-mode small">
+                                        <span class="bi bi-envelope me-1"></span><?= htmlspecialchars($templateParams['user']['email']); ?>
+                                    </div>
+                                    <div class="edit-mode d-none small">
+                                        <label for="edit-email" class="visually-hidden">Indirizzo Email (Sola lettura)</label>
+                                        <input type="email" id="edit-email" class="form-control-inline"
+                                                value="<?= htmlspecialchars($templateParams['user']['email']); ?>"
+                                                readonly title="L'indirizzo email non può essere modificato">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto d-grid d-md-flex gap-2">
+                                <div class="view-mode d-grid d-md-flex gap-2">
+                                    <button type="button" onclick="toggleEdit(true)" class="btn btn-outline-primary fw-bold">Modifica Profilo</button>
+                                    <button type="button" class="btn btn-outline-danger fw-bold" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Elimina Account</button>
+                                </div>
+                                <div class="edit-mode d-none gap-2">
+                                    <button type="submit" class="btn btn-primary fw-bold shadow-sm">Salva Modifiche</button>
+                                    <button type="button" onclick="toggleEdit(false)" class="btn btn-outline-secondary fw-bold">Annulla</button>
                                 </div>
                             </div>
                         </div>

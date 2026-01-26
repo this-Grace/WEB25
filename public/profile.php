@@ -1,15 +1,18 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/../app/bootstrap.php';
 
-if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id'])) {
+if (empty($_SESSION['user']['id'])) {
     header('Location: login.php?error=not_logged_in');
     exit;
 }
 
 $userId = $_SESSION['user']['id'];
-$userEmail = $_SESSION['user']['email'];
-$userRole = $_SESSION['user']['role'];
+$userEmail = $_SESSION['user']['email'] ?? '';
+$userRole = strtolower($_SESSION['user']['role'] ?? '');
 
 $msg = $_GET['msg'] ?? "";
 $msgType = isset($_GET['error']) ? "danger" : "success";
@@ -70,7 +73,7 @@ $activeTabs = [];
 
 $activeTabs[] = $allTabs['subscriber'];
 
-if ($userRole === 'HOST' || $userRole === 'ADMIN') {
+if (in_array(strtolower($userRole), ['host', 'admin'], true)) {
     $activeTabs[] = $allTabs['organized'];
     $activeTabs[] = $allTabs['draft'];
     $activeTabs[] = $allTabs['history'];

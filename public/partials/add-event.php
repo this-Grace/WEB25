@@ -102,7 +102,7 @@
                 </form>
             </div>
 
-            <div class="col-lg-4">
+            <aside class="col-lg-4">
                 <div class="sticky-top" style="top: 100px;">
                     <h2 class="text-muted small mb-3 text-uppercase fw-bold tracking-wider">Anteprima</h2>
 
@@ -151,7 +151,7 @@
                         <button type="button" class="btn btn-white py-3 fw-bold rounded-3 border shadow-sm">Salva come Bozza</button>
                     </div>
                 </div>
-            </div>
+            </aside>
         </div>
     </div>
 </main>
