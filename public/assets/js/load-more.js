@@ -41,12 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 // update offset
                 offset += (data.count || 0);
                 btn.dataset.offset = offset;
-                // If fewer results than limit, hide the button
-                if ((data.count || 0) < limit) {
+                // If fewer results than limit, or zero results, hide the button
+                const returned = (data.count || 0);
+                if (returned === 0 || returned < limit) {
+                    btn.style.display = 'none';
+                }
+                // If server provides a total, and we've loaded all items, hide the button
+                const total = parseInt(btn.dataset.total || btn.dataset.totalEvents || '0', 10);
+                if (total > 0 && offset >= total) {
                     btn.style.display = 'none';
                 }
                 // notify filter system that new cards were added
                 document.dispatchEvent(new CustomEvent('events:cards-added'));
+            }
+            else {
+                // no html returned -> hide button to avoid useless clicks
+                btn.style.display = 'none';
             }
         } catch (err) {
             console.error('Failed to load events', err);
