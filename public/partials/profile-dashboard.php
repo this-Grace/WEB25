@@ -1,3 +1,35 @@
+<?php
+$activeTabs = [];
+
+$activeTabs[] = [
+    'id' => 'subscriber-pane',
+    'label' => 'Iscrizioni',
+    'data' => $templateParams["events_subscribed"],
+    'active' => true
+];
+
+if (in_array($templateParams["user_role"], ['host', 'admin'])) {
+    $activeTabs[] = [
+        'id' => 'organized-pane',
+        'label' => 'Miei Eventi',
+        'data' => $templateParams["events_organized"],
+        'active' => false
+    ];
+    $activeTabs[] = [
+        'id' => 'draft-pane',
+        'label' => 'Bozze',
+        'data' => $templateParams["events_drafts"],
+        'active' => false
+    ];
+    $activeTabs[] = [
+        'id' => 'history-pane',
+        'label' => 'Storico',
+        'data' => $templateParams["events_history"],
+        'active' => false
+    ];
+}
+?>
+
 <main class="py-4 py-md-5 bg-light flex-grow-1">
     <div class="container">
 
@@ -19,7 +51,6 @@
                             <img src="<?= PROFILE_IMG_DIR . $templateParams['user']['avatar']; ?>" id="display-avatar" class="profile-img shadow-sm" alt="Foto profilo attuale">
                             <label for="avatarUpload" class="avatar-edit-btn shadow-sm" title="Modifica foto profilo">
                                 <span class="bi bi-camera" aria-hidden="true"></span>
-                                <span class="visually-hidden">Carica una nuova foto profilo</span>
                                 <input type="file" id="avatarUpload" name="avatar" class="d-none" onchange="previewImage(this)" accept="image/*">
                             </label>
                         </div>
@@ -73,11 +104,11 @@
 
         <nav class="nav-tabs-container mb-4">
             <ul class="nav nav-tabs border-0 gap-3 gap-md-4 flex-nowrap" id="profileTabs" role="tablist">
-                <?php foreach ($templateParams['tabs'] as $tab): ?>
+                <?php foreach ($activeTabs as $tab): ?>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link <?= $tab['active'] ? 'active' : '' ?> border-0 bg-transparent p-0 pb-2 fw-bold"
                             id="<?= $tab['id'] ?>-tab" data-bs-toggle="tab" data-bs-target="#<?= $tab['id'] ?>"
-                            type="button" role="tab" aria-controls="<?= $tab['id'] ?>" aria-selected="<?= $tab['active'] ? 'true' : 'false' ?>">
+                            type="button" role="tab" aria-selected="<?= $tab['active'] ? 'true' : 'false' ?>">
                             <?= $tab['label'] ?>
                         </button>
                     </li>
@@ -86,10 +117,11 @@
         </nav>
 
         <div class="tab-content" id="profileTabsContent">
-            <?php foreach ($templateParams['tabs'] as $tab): ?>
+            <?php foreach ($activeTabs as $tab): ?>
                 <div class="tab-pane fade <?= $tab['active'] ? 'show active' : '' ?>" id="<?= $tab['id'] ?>" role="tabpanel" aria-labelledby="<?= $tab['id'] ?>-tab">
                     <?php if (empty($tab['data'])): ?>
-                        <div class="text-center py-5 text-muted bg-white rounded-4 shadow-sm border">
+                        <div class="text-center py-5 text-muted bg-white rounded-4 shadow-sm border border-dashed">
+                            <span class="bi bi-calendar-x display-4 mb-3 d-block opacity-25"></span>
                             <p class="mb-0">Nessun evento presente in questa sezione.</p>
                         </div>
                     <?php else: ?>

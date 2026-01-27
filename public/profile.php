@@ -21,19 +21,24 @@ $feedbackMap = [
     'deleted' => 'Evento rimosso correttamente.',
     'unsubscribed' => 'Iscrizione annullata.',
     'published' => 'Evento inviato per la revisione.',
+    'created' => 'Evento creato correttamente.',
     'error' => 'Si è verificato un errore durante l\'operazione.'
 ];
-$displayMsg = $feedbackMap[$msg] ?? "";
 
-$user = $userMapper->findByEmail($userEmail);
-if (!$user) {
+$templateParams["user"] = $userMapper->findByEmail($userEmail);
+if (!$templateParams["user"]) {
     header('Location: login.php?error=user_not_found');
     exit;
 }
 
-$templateParams["user"] = $user;
-$templateParams["feedback_msg"] = $displayMsg;
+$templateParams["feedback_msg"] = $feedbackMap[$msg] ?? "";
 $templateParams["feedback_type"] = $msgType;
+$templateParams["user_role"] = $userRole;
+
+$templateParams["events_subscribed"] = $eventMapper->getEventsSubscribedByUser($userId);
+$templateParams["events_organized"] = $eventMapper->getEventsOrganizedByUser($userId, ['APPROVED', 'WAITING']);
+$templateParams["events_drafts"] = $eventMapper->getEventsOrganizedByUser($userId, ['DRAFT']);
+$templateParams["events_history"] = $eventMapper->getUserEventHistory($userId);
 
 $templateParams["status_map"] = [
     'DRAFT'     => ['class' => 'bg-secondary', 'label' => 'Bozza'],
@@ -41,45 +46,6 @@ $templateParams["status_map"] = [
     'APPROVED'  => ['class' => 'bg-success', 'label' => 'Approvato'],
     'CANCELLED' => ['class' => 'bg-danger', 'label' => 'Annullato']
 ];
-
-$allTabs = [
-    'subscriber' => [
-        'id' => 'subscriber-pane',
-        'label' => 'Iscrizioni',
-        'data' => $eventMapper->getEventsSubscribedByUser($userId),
-        'active' => true
-    ],
-    'organized' => [
-        'id' => 'organized-pane',
-        'label' => 'Miei Eventi',
-        'data' => $eventMapper->getEventsOrganizedByUser($userId, ['APPROVED', 'WAITING']),
-        'active' => false
-    ],
-    'draft' => [
-        'id' => 'draft-pane',
-        'label' => 'Bozze',
-        'data' => $eventMapper->getEventsOrganizedByUser($userId, ['DRAFT']),
-        'active' => false
-    ],
-    'history' => [
-        'id' => 'history-pane',
-        'label' => 'Storico',
-        'data' => $eventMapper->getUserEventHistory($userId),
-        'active' => false
-    ]
-];
-
-$activeTabs = [];
-
-$activeTabs[] = $allTabs['subscriber'];
-
-if (in_array(strtolower($userRole), ['host', 'admin'], true)) {
-    $activeTabs[] = $allTabs['organized'];
-    $activeTabs[] = $allTabs['draft'];
-    $activeTabs[] = $allTabs['history'];
-}
-
-$templateParams["tabs"] = $activeTabs;
 
 $templateParams["title"] = "Profilo";
 $templateParams['css'] = ['assets/css/profile.css'];
