@@ -46,59 +46,51 @@ if (in_array($templateParams["user_role"], ['host', 'admin'])) {
                 <form id="profileForm" action="api/edit_profile.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="update_profile">
 
-                    <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-4">
-                        <div class="avatar-container position-relative">
-                            <img src="<?= PROFILE_IMG_DIR . $templateParams['user']['avatar']; ?>" id="display-avatar" class="profile-img shadow-sm" alt="Foto profilo attuale">
-                            <label for="avatarUpload" class="avatar-edit-btn shadow-sm" title="Modifica foto profilo">
+                    <div class="d-flex flex-column flex-md-row align-items-center align-items-md-center gap-4">
+                        <div class="avatar-container">
+                            <img src="<?= PROFILE_IMG_DIR . $templateParams['user']['avatar']; ?>" id="display-avatar" class="profile-img" alt="Foto profilo di <?= htmlspecialchars($templateParams['user']['name']); ?>">
+                            <label for="avatarUpload" class="avatar-edit-btn" title="Cambia foto profilo">
                                 <span class="bi bi-camera" aria-hidden="true"></span>
+                                <span class="visually-hidden">Carica una nuova foto profilo</span>
                                 <input type="file" id="avatarUpload" name="avatar" class="d-none" onchange="previewImage(this)" accept="image/*">
                             </label>
                         </div>
 
-                        <div class="flex-grow-1 w-100 d-flex flex-column text-center text-md-start">
-                            <div class="mb-4">
-                                <div class="name-group mb-1">
-                                    <div class="view-mode">
-                                        <h1 class="fw-bold h3 mb-0"><?= htmlspecialchars($templateParams['user']['name'] . ' ' . $templateParams['user']['surname']); ?></h1>
-                                    </div>
-                                    <div class="edit-mode d-none">
-                                        <label for="edit-name" class="visually-hidden">Nome</label>
-                                        <input type="text" id="edit-name" name="name" class="form-control-inline h3 fw-bold"
-                                            value="<?= htmlspecialchars($templateParams['user']['name']); ?>"
-                                            maxlength="50" placeholder="Nome" title="Inserisci il tuo nome">
-
-                                        <label for="edit-surname" class="visually-hidden">Cognome</label>
-                                        <input type="text" id="edit-surname" name="surname" class="form-control-inline h3 fw-bold"
-                                            value="<?= htmlspecialchars($templateParams['user']['surname']); ?>"
-                                            maxlength="50" placeholder="Cognome" title="Inserisci il tuo cognome">
-                                    </div>
+                        <div class="flex-grow-1 w-100 overflow-hidden text-center text-md-start">
+                            <div class="name-group mb-1">
+                                <div class="view-mode">
+                                    <h1 class="fw-bold h3 mb-0 text-truncate"><?= htmlspecialchars($templateParams['user']['name'] . ' ' . $templateParams['user']['surname']); ?></h1>
                                 </div>
-                                <div class="email-group text-muted">
-                                    <div class="view-mode small">
-                                        <span class="bi bi-envelope me-1"></span><?= htmlspecialchars($templateParams['user']['email']); ?>
-                                    </div>
-                                    <div class="edit-mode d-none small">
-                                        <label for="edit-email" class="visually-hidden">Indirizzo Email (Sola lettura)</label>
-                                        <input type="email" id="edit-email" class="form-control-inline"
-                                            value="<?= htmlspecialchars($templateParams['user']['email']); ?>"
-                                            readonly title="L'indirizzo email non può essere modificato">
-                                    </div>
+                                <div class="edit-mode d-none input-scroll-container">
+                                    <label for="edit-name" class="visually-hidden">Nome</label>
+                                    <input type="text" id="edit-name" name="name" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['name']); ?>" maxlength="50" placeholder="Nome">
+
+                                    <label for="edit-surname" class="visually-hidden">Cognome</label>
+                                    <input type="text" id="edit-surname" name="surname" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['surname']); ?>" maxlength="50" placeholder="Cognome">
                                 </div>
                             </div>
-
-                            <div class="mt-auto d-grid d-md-flex gap-2">
-                                <div class="view-mode d-grid d-md-flex gap-2">
-                                    <button type="button" onclick="toggleEdit(true)" class="btn btn-outline-primary fw-bold">Modifica Profilo</button>
-                                    <button type="button" class="btn btn-outline-danger fw-bold" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">Elimina Account</button>
-                                </div>
-                                <div class="edit-mode d-none gap-2">
-                                    <button type="submit" class="btn btn-primary fw-bold shadow-sm">Salva Modifiche</button>
-                                    <button type="button" onclick="toggleEdit(false)" class="btn btn-outline-secondary fw-bold">Annulla</button>
-                                </div>
+                            <div class="email-group text-muted small">
+                                <span class="bi bi-envelope me-1"></span><?= htmlspecialchars($templateParams['user']['email']); ?>
                             </div>
                         </div>
                     </div>
                 </form>
+                <div class="d-flex justify-content-center justify-content-md-end gap-2 mt-4 border-top pt-3">
+                    <div class="view-mode d-flex gap-2">
+                        <button type="button" onclick="toggleEdit(true)" class="btn btn-sm btn-outline-primary fw-bold px-3">
+                            <span class="bi bi-pencil me-1"></span> Modifica
+                        </button>
+
+                        <form action="api/delete_profile.php" method="POST" onsubmit="return confirm('Sei sicuro? L\'azione è irreversibile.')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger fw-bold px-3">Elimina</button>
+                        </form>
+                    </div>
+
+                    <div class="edit-mode d-none gap-2">
+                        <button type="submit" form="profileForm" class="btn btn-sm btn-primary fw-bold px-4 shadow-sm">Salva</button>
+                        <button type="button" onclick="toggleEdit(false)" class="btn btn-sm btn-outline-secondary fw-bold px-3">Annulla</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -139,65 +131,3 @@ if (in_array($templateParams["user_role"], ['host', 'admin'])) {
         </div>
     </div>
 </main>
-
-<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h2 class="modal-title h5 fw-bold">Elimina Account</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
-            </div>
-            <div class="modal-body py-4">
-                <p class="mb-0 text-muted">Stai per eliminare il tuo account. L'azione è irreversibile.</p>
-            </div>
-            <div class="modal-footer border-0 pt-0">
-                <button type="button" class="btn btn-light rounded-3 px-4 fw-bold" data-bs-dismiss="modal">Annulla</button>
-                <form action="api/delete_profile.php" method="POST">
-                    <button type="submit" class="btn btn-danger rounded-3 px-4 fw-bold">Conferma Eliminazione</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="unsubEventModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h2 class="modal-title h5 fw-bold">Annulla Iscrizione</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
-            </div>
-            <div class="modal-body py-4 text-center">
-                <p class="mb-0 text-muted">Vuoi annullare l'iscrizione a:<br><strong id="modal-event-name"></strong>?</p>
-            </div>
-            <div class="modal-footer border-0 pt-0 justify-content-center">
-                <form action="api/unsubscribe.php" method="POST" class="w-100 d-flex gap-2">
-                    <input type="hidden" name="event_id" id="modal-event-id">
-                    <button type="button" class="btn btn-light flex-grow-1 rounded-3 fw-bold" data-bs-dismiss="modal">No, rimani</button>
-                    <button type="submit" class="btn btn-outline-danger flex-grow-1 rounded-3 fw-bold">Sì, annulla</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="deleteEventModal" tabindex="-1" aria-labelledby="deleteEventTitle" aria-hidden="true" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h2 class="modal-title h5 fw-bold" id="deleteEventTitle">Elimina Evento</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi modale"></button>
-            </div>
-            <div class="modal-body py-4">
-                <p class="mb-0 text-muted">Sei sicuro di voler eliminare questo evento? Questa operazione non può essere annullata.</p>
-            </div>
-            <div class="modal-footer border-0 pt-0">
-                <form action="api/delete_event.php" method="POST" class="w-100 d-flex gap-2">
-                    <input type="hidden" name="event_id" id="delete-event-id">
-                    <button type="button" class="btn btn-light flex-grow-1 rounded-3 fw-bold" data-bs-dismiss="modal">Indietro</button>
-                    <button type="submit" class="btn btn-danger flex-grow-1 rounded-3 fw-bold shadow-sm">Conferma Azione</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
