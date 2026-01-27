@@ -166,7 +166,7 @@ if (!empty($event_time)) {
                     </div>
 
                     <div class="d-grid gap-2">
-                        <input type="submit" form="eventForm" class="btn btn-dark py-3 fw-bold rounded-3 shadow" value="Pubblica Evento">
+                        <input type="submit" form="eventForm" name="publish_from_draft" class="btn btn-dark py-3 fw-bold rounded-3 shadow" value="Pubblica Evento">
                         <?php if (!$isEdit || ($isEdit && $currentStatus === 'DRAFT')): ?>
                             <input type="submit" name="save_draft" form="eventForm" class="btn btn-white py-3 fw-bold rounded-3 border shadow-sm" value="Salva come Bozza">
                         <?php endif; ?>
