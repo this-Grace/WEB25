@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const syncInputWidth = (input) => {
         const measure = document.createElement('span');
         const style = window.getComputedStyle(input);
-        
+
         Object.assign(measure.style, {
             visibility: 'hidden',
             position: 'absolute',
@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         measure.textContent = input.value || input.placeholder || " ";
         document.body.appendChild(measure);
-        
+
         input.style.width = (measure.getBoundingClientRect().width + 2) + 'px';
-        
+
         document.body.removeChild(measure);
     };
 
@@ -58,13 +58,4 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsDataURL(input.files[0]);
         }
     };
-
-    const unsubModal = document.getElementById('unsubEventModal');
-    if (unsubModal) {
-        unsubModal.addEventListener('show.bs.modal', (e) => {
-            const btn = e.relatedTarget;
-            unsubModal.querySelector('#modal-event-name').textContent = btn.dataset.eventTitle;
-            unsubModal.querySelector('#modal-event-id').value = btn.dataset.eventId;
-        });
-    }
 });
