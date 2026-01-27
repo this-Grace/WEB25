@@ -76,6 +76,21 @@ class Event
     }
 
     /**
+     * Create a new event
+     * @param array $data Associative array of event data (column => value)
+     * @return int|null Inserted event ID or null on failure
+     */
+    public function create(array $data): int
+    {
+        $keys = array_keys($data);
+        $placeholders = array_fill(0, count($keys), '?');
+        $sql = "INSERT INTO EVENT (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $placeholders) . ")";
+        $res = $this->db->prepareAndExecute($sql, array_values($data));
+        $insertId = (int)$this->db->getConnection()->insert_id;
+        return ($res && $insertId > 0) ? $insertId : 0;
+    }
+
+    /**
      * Number of events happening in the current month
      * 
      * @return int Count of approved events in current month
@@ -300,5 +315,47 @@ class Event
           AND (e.event_date < CURRENT_DATE() OR e.status = 'CANCELLED')
           ORDER BY e.event_date DESC";
         return $this->fetchEvents($sql, [$userId, $userId]);
+    }
+
+    /**
+     * Get event by ID with category and user info
+     * @param int $id Event ID
+     * @return array|null Event data as associative array or null if not found
+     */
+    public function getEventById(int $id): ?array
+    {
+        $sql = $this->baseEventSelect() .
+            "FROM EVENT e 
+            LEFT JOIN USER u ON e.user_id = u.id 
+            LEFT JOIN CATEGORY c ON e.category_id = c.id 
+            WHERE e.id = ? LIMIT 1";
+
+        $res = $this->db->prepareAndExecute($sql, [$id]);
+        if (!$res || !($res instanceof mysqli_result)) return null;
+
+        return $res->fetch_assoc() ?: null;
+    }
+
+    /**
+     * Update event data
+     * @param array $data Associative array of fields to update (column => value)
+     * @param int $id Event ID
+     * @return bool True on success, false on failure
+     */
+    public function updateEvent(array $data, int $id): bool
+    {
+        $fields = [];
+        $params = [];
+
+        foreach ($data as $key => $value) {
+            $fields[] = "$key = ?";
+            $params[] = $value;
+        }
+        $params[] = $id;
+
+        $sql = "UPDATE EVENT SET " . implode(', ', $fields) . " WHERE id = ?";
+        $res = $this->db->prepareAndExecute($sql, $params);
+
+        return $res !== false;
     }
 }
