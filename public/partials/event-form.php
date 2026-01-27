@@ -1,5 +1,7 @@
 <?php
 $event = $templateParams['event'] ?? null;
+$isEdit = $templateParams['is_edit'] ?? false;
+$currentStatus = $event['status'] ?? '';
 
 $event_time = $event['event_time'] ?? $event['time'] ?? '';
 $event_hour = '';
@@ -19,7 +21,7 @@ if (!empty($event_time)) {
 
         <div class="row">
             <div class="col-lg-8">
-                <form id="eventForm" action="process-event.php" method="POST" enctype="multipart/form-data">
+                <form id="eventForm" action="<?= $templateParams['form_action'] ?>" method="POST" enctype="multipart/form-data">
 
                     <?php if (!empty($event['id'])): ?>
                         <input type="hidden" name="event_id" value="<?= (int)$event['id'] ?>">
@@ -165,7 +167,9 @@ if (!empty($event_time)) {
 
                     <div class="d-grid gap-2">
                         <input type="submit" form="eventForm" class="btn btn-dark py-3 fw-bold rounded-3 shadow" value="Pubblica Evento">
-                        <input type="submit" name="save_draft" form="eventForm" class="btn btn-white py-3 fw-bold rounded-3 border shadow-sm" value="Salva come Bozza">
+                        <?php if (!$isEdit || ($isEdit && $currentStatus === 'DRAFT')): ?>
+                            <input type="submit" name="save_draft" form="eventForm" class="btn btn-white py-3 fw-bold rounded-3 border shadow-sm" value="Salva come Bozza">
+                        <?php endif; ?>
                     </div>
                 </div>
             </aside>

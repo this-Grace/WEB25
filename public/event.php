@@ -37,6 +37,8 @@ if ($eventId > 0) {
         if ($role === 'admin' || ($sessionEmail !== '' && $sessionEmail === $ownerEmail)) {
             $templateParams['event'] = $row;
             $templateParams['h1'] = 'Modifica Evento';
+            $templateParams['is_edit'] = true;
+            $templateParams['form_action'] = 'api/edit_event.php?event_id=' . $eventId;
         } else {
             header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php'));
             exit;
@@ -47,6 +49,8 @@ if ($eventId > 0) {
     }
 } else {
     $templateParams['h1'] = 'Crea Nuovo Evento';
+    $templateParams['is_edit'] = false;
+    $templateParams['form_action'] = 'api/create_event.php';
 }
 
 require 'template/base.php';
