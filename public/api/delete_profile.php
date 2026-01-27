@@ -1,8 +1,11 @@
 <?php
 require_once __DIR__ . '/../../app/bootstrap.php';
-session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user']['email'])) {
     $userEmail = $_SESSION['user']['email'];
     
     if ($userMapper->delete($userEmail)) {
