@@ -1,9 +1,10 @@
 <?php
+
+require_once __DIR__ . '/../app/bootstrap.php';
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
-require_once __DIR__ . '/../app/bootstrap.php';
 
 if (empty($_SESSION['user']['id'])) {
     header('Location: login.php?error=not_logged_in');
