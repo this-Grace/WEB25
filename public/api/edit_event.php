@@ -51,8 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $success = $eventMapper->updateEvent($updateData, $eventId);
 
     if ($success) {
-        $msg = isset($updateData['status']) ? 'published' : 'updated';
-        header('Location: ../profile.php?msg=' . $msg);
+        header('Location: ../profile.php');
     } else {
         header('Location: ../event.php?event_id=' . $eventId . '&error=1');
     }
