@@ -122,7 +122,7 @@ if (!empty($event_time)) {
                     <div class="card event-card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
                         <div class="position-relative">
                             <img id="previewImageSidebar"
-                                src="<?= EVENTS_IMG_DIR . htmlspecialchars($event['image'] ?? 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop', ENT_QUOTES, 'UTF-8') ?>"
+                                src="<?= htmlspecialchars(!empty($event['image']) ? EVENTS_IMG_DIR . $event['image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop', ENT_QUOTES, 'UTF-8') ?>"
                                 class="card-img-top"
                                 style="height: 200px; object-fit: cover;"
                                 alt="Anteprima immagine evento">
