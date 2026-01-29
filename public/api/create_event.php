@@ -17,6 +17,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = isset($_POST['save_draft']) ? 'DRAFT' : 'WAITING';
     $hour   = $_POST['event_time_hour'] ?? '00';
     $minute = $_POST['event_time_minute'] ?? '00';
+    $fileNameToSave = 'photo1.jpeg';
+
+    if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . '/../' . EVENTS_IMG_DIR;
+
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $ext = pathinfo($_FILES['event_image']['name'], PATHINFO_EXTENSION);
+        $newFileName = bin2hex(random_bytes(10)) . '.' . $ext;
+
+        if (move_uploaded_file($_FILES['event_image']['tmp_name'], $uploadDir . $newFileName)) {
+            $fileNameToSave = $newFileName;
+            @chmod($uploadDir . $newFileName, 0644);
+        }
+    }
 
     $data = [
         'title'       => $_POST['title'] ?? '',
@@ -28,19 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'total_seats' => (int)($_POST['max_seats'] ?? 0),
         'status'      => $status,
         'user_id'     => $userId,
+        'image'       => $fileNameToSave
     ];
 
-    if (!empty($_FILES['event_image']['tmp_name'])) {
-        $filename = basename($_FILES['event_image']['name']);
-        $targetFile = EVENTS_IMG_DIR . time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $filename);
-        if (move_uploaded_file($_FILES['event_image']['tmp_name'], $targetFile)) {
-            $data['image'] = $targetFile;
-        }
-    }
-
-    $success = $eventMapper->create($data);
-
-    if ($success) {
+    if ($eventMapper->create($data)) {
         header('Location: ../profile.php');
     } else {
         header('Location: ../event.php?error=sql_error');

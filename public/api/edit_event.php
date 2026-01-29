@@ -11,20 +11,37 @@ if ($eventId <= 0) {
     exit;
 }
 
-$sessionEmail = $_SESSION['user']['email'] ?? '';
-$event = $eventMapper->getEventById($eventId);
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $eventId = (int)($_POST['event_id'] ?? 0);
 
-    // publish from draft without edits
-    if (isset($_POST['publish_from_draft']) && !isset($_POST['title'])) {
-        $success = $eventMapper->updateEvent(['status' => 'WAITING'], $eventId);
-        header('Location: ../profile.php?msg=published');
+    $currentEvent = $eventMapper->getEventById($eventId);
+
+    if (!$currentEvent) {
+        header('Location: ../profile.php?error=not_found');
         exit;
     }
 
     $hour   = $_POST['event_time_hour'] ?? '00';
     $minute = $_POST['event_time_minute'] ?? '00';
+    $eventTime = "$hour:$minute:00";
+
+    $imageToDatabase = $currentEvent['image'] ?? 'photo1.jpeg';
+
+    if (isset($_FILES['event_image']) && $_FILES['event_image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . '/../' . EVENTS_IMG_DIR;
+
+        $ext = pathinfo($_FILES['event_image']['name'], PATHINFO_EXTENSION);
+        $newFileName = bin2hex(random_bytes(10)) . '.' . $ext;
+
+        if (move_uploaded_file($_FILES['event_image']['tmp_name'], $uploadDir . $newFileName)) {
+            $oldImage = $currentEvent['image'] ?? '';
+            if (!empty($oldImage) && $oldImage !== 'photo1.jpeg' && is_file($uploadDir . $oldImage)) {
+                @unlink($uploadDir . $oldImage);
+            }
+            $imageToDatabase = $newFileName;
+            @chmod($uploadDir . $newFileName, 0644);
+        }
+    }
 
     $updateData = [
         'title'       => $_POST['title'] ?? '',
@@ -33,24 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'event_time'  => "$hour:$minute:00",
         'location'    => $_POST['location'] ?? '',
         'category_id' => (int)($_POST['category_id'] ?? 0),
-        'total_seats' => (int)($_POST['max_seats'] ?? 0)
+        'total_seats' => (int)($_POST['max_seats'] ?? 0),
+        'image'       => $imageToDatabase
     ];
 
     if (isset($_POST['publish_from_draft'])) {
         $updateData['status'] = 'WAITING';
     }
 
-    if (!empty($_FILES['event_image']['tmp_name'])) {
-        $filename = basename($_FILES['event_image']['name']);
-        $targetFile = EVENTS_IMG_DIR . time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $filename);
-        if (move_uploaded_file($_FILES['event_image']['tmp_name'], $targetFile)) {
-            $updateData['image'] = $targetFile;
-        }
-    }
-
-    $success = $eventMapper->updateEvent($updateData, $eventId);
-
-    if ($success) {
+    if ($eventMapper->updateEvent($updateData, $eventId)) {
         header('Location: ../profile.php');
     } else {
         header('Location: ../event.php?event_id=' . $eventId . '&error=1');

@@ -127,8 +127,14 @@ if (!empty($event_time)) {
 
                     <div class="card event-card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
                         <div class="position-relative">
+                            <?php
+                            $previewSrc = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070';
+                            if (!empty($event['image'])) {
+                                $previewSrc = EVENTS_IMG_DIR . htmlspecialchars($event['image'], ENT_QUOTES, 'UTF-8');
+                            }
+                            ?>
                             <img id="previewImageSidebar"
-                                src="<?= htmlspecialchars($event['image'] ?? 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop', ENT_QUOTES, 'UTF-8') ?>"
+                                src="<?= $previewSrc ?>"
                                 class="card-img-top"
                                 style="height: 200px; object-fit: cover;"
                                 alt="Anteprima immagine evento">

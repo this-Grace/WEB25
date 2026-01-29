@@ -18,16 +18,21 @@ $canDelete  = ($isOwner && ($status === 'DRAFT' || $status === 'WAITING')) || $i
 $canPublish = $isOwner && $status === 'DRAFT' && !$isPast;
 
 $cleanTitle   = htmlspecialchars($event["title"] ?? 'Evento senza titolo', ENT_QUOTES, 'UTF-8');
-$img = EVENTS_IMG_DIR . htmlspecialchars($event["image"] ?? 'default.jpg', ENT_QUOTES, 'UTF-8')
+
+$imageName = (!empty($event["image"])) ? $event["image"] : 'photo1.jpeg';
+$img = EVENTS_IMG_DIR . htmlspecialchars(basename($imageName), ENT_QUOTES, 'UTF-8');
 ?>
 
 <article class="card event-card h-100 shadow-sm border-0 rounded-4 overflow-hidden <?= ($isPast || $isCancelled) ? 'opacity-75' : '' ?>">
     <div class="position-relative">
         <img src="<?= $img ?>" class="card-img-top"
-            alt="Immagine relativa all'evento: <?= htmlspecialchars($event["title"], ENT_QUOTES, 'UTF-8') ?>"
-            loading="lazy">
-        <span class="badge badge-cate-<?= strtolower(htmlspecialchars($event["category"], ENT_QUOTES, 'UTF-8')) ?> position-absolute top-0 start-0 m-3">
-            <?= htmlspecialchars($event["category"], ENT_QUOTES, 'UTF-8') ?>
+             style="height: 200px; object-fit: cover;"
+             alt="Immagine relativa all'evento: <?= $cleanTitle ?>"
+             loading="lazy"
+             onerror="this.onerror=null;this.src='<?= EVENTS_IMG_DIR ?>photo1.jpg';">
+        
+        <span class="badge badge-cate-<?= strtolower(htmlspecialchars($event["category"] ?? 'default', ENT_QUOTES, 'UTF-8')) ?> position-absolute top-0 start-0 m-3">
+            <?= htmlspecialchars($event["category"] ?? 'Evento', ENT_QUOTES, 'UTF-8') ?>
         </span>
 
         <?php if ($isCancelled || $isPast): ?>
