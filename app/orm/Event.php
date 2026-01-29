@@ -312,8 +312,11 @@ class Event
           LEFT JOIN USER u ON e.user_id = u.id
           LEFT JOIN CATEGORY c ON e.category_id = c.id
           WHERE (e.user_id = ? OR e.id IN (SELECT event_id FROM SUBSCRIPTION WHERE user_id = ?))
-          AND (e.event_date < CURRENT_DATE() OR e.status = 'CANCELLED')
-          ORDER BY e.event_date DESC";
+          AND e.status = 'APPROVED' 
+          AND (e.event_date < CURRENT_DATE() 
+               OR (e.event_date = CURRENT_DATE() AND e.event_time < CURRENT_TIME()))
+          ORDER BY e.event_date DESC, e.event_time DESC";
+
         return $this->fetchEvents($sql, [$userId, $userId]);
     }
 

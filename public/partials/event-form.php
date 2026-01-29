@@ -100,7 +100,7 @@ if (!empty($event_time)) {
 
                             <div>
                                 <label for="eventMaxSeatsInput" class="form-label small fw-bold">Numero Massimo Partecipanti <span class="text-danger">*</span></label>
-                                <input id="eventMaxSeatsInput" name="max_seats" type="number" min="1" class="form-control bg-light mb-2" placeholder="es. 100" required value="<?= htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                <input id="eventMaxSeatsInput" name="max_seats" type="number" min="<?= htmlspecialchars($event['total_seats'] ?? '1', ENT_QUOTES, 'UTF-8') ?>" class="form-control bg-light mb-2" placeholder="es. 100" required value="<?= htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             </div>
                         </div>
                     </div>
