@@ -83,15 +83,11 @@ if (!empty($event_time)) {
                             <h2 class="card-title mb-4"><span class="bi bi-sliders me-2" aria-hidden="true"></span>Altro</h2>
 
                             <div class="mb-4">
-                                <label for="eventCategorySelector" class="form-label small fw-bold">Seleziona Tipologia <span class="text-danger">*</span></label>
-                                <select class="form-select bg-light" id="eventCategorySelector" name="category_id" required>
-                                    <option value="" <?= empty($event['category_id']) ? 'selected' : 'disabled' ?>>Scegli una categoria...</option>
-                                    <?php foreach ($templateParams['categories'] ?? [] as $c):
-                                        $catId = $c['id'] ?? $c['ID'] ?? null;
-                                        $catName = $c['name'] ?? $c['nome'] ?? '';
-                                        $isSelected = (!empty($event['category_id']) && $catId == $event['category_id']) ? 'selected' : '';
-                                    ?>
-                                        <option value="<?= htmlspecialchars($catId, ENT_QUOTES, 'UTF-8') ?>" <?= $isSelected ?>><?= htmlspecialchars($catName, ENT_QUOTES, 'UTF-8') ?></option>
+                                <label for="eventCategorySelector" class="form-label small fw-bold">Seleziona Tipologia *</label>
+                                <select class="form-select bg-light" id="eventCategorySelector" name="event_type">
+                                    <option value="" selected disabled>Scegli una categoria...</option>
+                                    <?php foreach ($templateParams['categories'] ?? [] as $category): ?>
+                                        <option value="<?= htmlspecialchars($category["name"], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($category["name"], ENT_QUOTES, 'UTF-8') ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -126,7 +122,7 @@ if (!empty($event_time)) {
                     <div class="card event-card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
                         <div class="position-relative">
                             <img id="previewImageSidebar"
-                                src="<?= htmlspecialchars($event['image'] ?? 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop', ENT_QUOTES, 'UTF-8') ?>"
+                                src="<?= EVENTS_IMG_DIR . htmlspecialchars($event['image'] ?? 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop', ENT_QUOTES, 'UTF-8') ?>"
                                 class="card-img-top"
                                 style="height: 200px; object-fit: cover;"
                                 alt="Anteprima immagine evento">
