@@ -14,7 +14,6 @@ $search = isset($_GET['q']) ? trim((string)$_GET['q']) : null;
 $role = strtolower($_SESSION['user']['role'] ?? '');
 $userEmail = $_SESSION['user']['email'] ?? null;
 
-// parse filters: client sends comma-separated tokens (category ids, emails, or 'waiting')
 $specialFilter = null;
 if ($filters !== '') {
     $parts = array_filter(array_map('trim', explode(',', $filters)));
@@ -24,17 +23,14 @@ if ($filters !== '') {
             break;
         }
         if (filter_var($p, FILTER_VALIDATE_EMAIL)) {
-            // treat any email filter as "miei"
             $specialFilter = 'miei';
             break;
         }
-        // numeric category handled via category_id param
     }
 }
 
 $events = $eventMapper->getEventsWithFilters($role, $userEmail, $limit, $offset, $category, $specialFilter, $search);
 
-// render each event using existing partial to keep markup consistent
 $html = '';
 foreach ($events as $event) {
     $templateParams = $templateParams ?? [];

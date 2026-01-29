@@ -8,7 +8,7 @@ $activeTabs[] = [
     'active' => true
 ];
 
-if (in_array($templateParams["user_role"], ['host', 'admin'])) {
+if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
     $activeTabs[] = [
         'id' => 'organized-pane',
         'label' => 'Miei Eventi',
@@ -33,11 +33,21 @@ if (in_array($templateParams["user_role"], ['host', 'admin'])) {
 <main class="py-4 py-md-5 bg-light flex-grow-1">
     <div class="container">
 
-        <?php if (!empty($templateParams["feedback_msg"])): ?>
-            <div class="alert alert-<?= $templateParams["feedback_type"] ?> alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4" role="alert">
-                <span class="bi <?= $templateParams["feedback_type"] === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' ?> me-2"></span>
-                <?= $templateParams["feedback_msg"] ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
+        <?php if (isset($_GET['msg'])): ?>
+            <?php $alertType = isset($_GET['error']) ? 'danger' : 'success'; ?>
+            <div class="alert alert-<?= $alertType ?> alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4" role="alert">
+                <span class="bi <?= $alertType === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill' ?> me-2"></span>
+                <?php switch ($_GET['msg']):
+                    case 'updated': ?>
+                        Profilo aggiornato con successo!
+                    <?php break;
+                    case 'error': ?>
+                        Si è verificato un errore durante l'operazione.
+                    <?php break;
+                    default: ?>
+                        Si è verificato un errore.
+                <?php endswitch; ?>
+                <input type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></input>
             </div>
         <?php endif; ?>
 
@@ -98,11 +108,11 @@ if (in_array($templateParams["user_role"], ['host', 'admin'])) {
             <ul class="nav nav-tabs border-0 gap-3 gap-md-4 flex-nowrap" id="profileTabs" role="tablist">
                 <?php foreach ($activeTabs as $tab): ?>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link <?= $tab['active'] ? 'active' : '' ?> border-0 bg-transparent p-0 pb-2 fw-bold"
+                        <a class="nav-link <?= $tab['active'] ? 'active' : '' ?> border-0 bg-transparent p-0 pb-2 fw-bold"
                             id="<?= $tab['id'] ?>-tab" data-bs-toggle="tab" data-bs-target="#<?= $tab['id'] ?>"
                             type="button" role="tab" aria-selected="<?= $tab['active'] ? 'true' : 'false' ?>">
                             <?= $tab['label'] ?>
-                        </button>
+                        </a>
                     </li>
                 <?php endforeach; ?>
             </ul>

@@ -11,26 +11,23 @@
 
                     <?php if (isset($_GET['error'])): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?php
-                            switch ($_GET['error']) {
-                                case 'missing':
-                                    echo 'Tutti i campi sono obbligatori.';
-                                    break;
-                                case 'nomatch':
-                                    echo 'Le password non coincidono.';
-                                    break;
-                                case 'exists':
-                                    echo 'Esiste già un account con questa email.';
-                                    break;
-                                case 'dberror':
-                                    echo 'Si è verificato un errore durante la registrazione. Riprova più tardi.';
-                                    break;
-                                default:
-                                    echo 'Si è verificato un errore.';
-                                    break;
-                            }
-                            ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <?php switch ($_GET['error']):
+                                case 'missing': ?>
+                                    Tutti i campi sono obbligatori.
+                                <?php break;
+                                case 'nomatch': ?>
+                                    Le password non coincidono.
+                                <?php break;
+                                case 'exists': ?>
+                                    Esiste già un account con questa email.
+                                <?php break;
+                                case 'dberror': ?>
+                                    Si è verificato un errore durante la registrazione. Riprova più tardi.
+                                <?php break;
+                                default: ?>
+                                    Si è verificato un errore.
+                            <?php endswitch; ?>
+                            <input type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></input>
                         </div>
                     <?php endif; ?>
 
@@ -66,16 +63,12 @@
 
                     <div class="form-check text-start my-3">
                         <input class="form-check-input" type="checkbox" value="agree-terms" id="flexCheckDefault" required>
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Accetto i <a href="#">termini e le condizioni</a>
-                        </label>
+                        <label class="form-check-label" for="flexCheckDefault">Accetto i <a href="#">termini e le condizioni</a></label>
                     </div>
 
-                    <button class="w-100 btn btn-lg btn-primary" type="submit">Registrati</button>
+                    <input class="w-100 btn btn-lg btn-primary" type="submit" value="Registrati" />
 
-                    <p class="mt-4 text-center text-muted">
-                        Hai già un account? <a href="login.php">Accedi</a>
-                    </p>
+                    <p class="mt-4 text-center text-muted">Hai già un account? <a href="login.php">Accedi</a></p>
                 </form>
             </div>
         </div>

@@ -1,15 +1,3 @@
-<?php
-$event = $templateParams['event'] ?? null;
-
-$event_time = $event['event_time'] ?? $event['time'] ?? '';
-$event_hour = '';
-$event_minute = '';
-if (!empty($event_time)) {
-    $parts = explode(':', $event_time);
-    $event_hour = str_pad($parts[0] ?? '', 2, '0', STR_PAD_LEFT);
-    $event_minute = str_pad($parts[1] ?? '', 2, '0', STR_PAD_LEFT);
-}
-?>
 <main class="py-5 bg-light">
     <div class="container">
         <div class="mb-5">
@@ -21,8 +9,8 @@ if (!empty($event_time)) {
             <div class="col-lg-8">
                 <form id="eventForm" action="<?= $templateParams['form_action'] ?>" method="POST" enctype="multipart/form-data">
 
-                    <?php if (!empty($event['id'])): ?>
-                        <input type="hidden" name="event_id" value="<?= (int)$event['id'] ?>">
+                    <?php if (!empty($templateParams['event']['id'])): ?>
+                        <input type="hidden" name="event_id" value="<?= (int)$templateParams['event']['id'] ?>">
                     <?php endif; ?>
 
                     <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -30,11 +18,11 @@ if (!empty($event_time)) {
                             <h2 class="card-title mb-4"><span class="bi bi-file-text me-2" aria-hidden="true"></span>Informazioni Base</h2>
                             <div class="mb-3">
                                 <label for="eventTitleInput" class="form-label small fw-bold">Titolo Evento <span class="text-danger">*</span></label>
-                                <input id="eventTitleInput" name="title" type="text" class="form-control" placeholder="es. Workshop di Programmazione Python" required value="<?= htmlspecialchars($event['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                <input id="eventTitleInput" name="title" type="text" class="form-control" placeholder="es. Workshop di Programmazione Python" required value="<?= htmlspecialchars($templateParams['event']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             </div>
                             <div class="mb-0">
                                 <label for="eventDescriptionInput" class="form-label small fw-bold">Descrizione <span class="text-danger">*</span></label>
-                                <textarea id="eventDescriptionInput" name="description" class="form-control" rows="3" placeholder="Descrivi il tuo evento in dettaglio..." required><?= htmlspecialchars($event['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                                <textarea id="eventDescriptionInput" name="description" class="form-control" rows="3" placeholder="Descrivi il tuo evento in dettaglio..." required><?= htmlspecialchars($templateParams['event']['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -45,34 +33,30 @@ if (!empty($event_time)) {
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="eventDateInput" class="form-label small fw-bold">Data Evento <span class="text-danger">*</span></label>
-                                    <input id="eventDateInput" name="event_date" type="date" class="form-control bg-light" required min="<?= date('Y-m-d', strtotime('+1 day')) ?>" value="<?= htmlspecialchars($event['event_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                    <input id="eventDateInput" name="event_date" type="date" class="form-control bg-light" required min="<?= date('Y-m-d', strtotime('+1 day')) ?>" value="<?= htmlspecialchars($templateParams['event']['event_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="eventTimeHour" class="form-label small fw-bold">Orario</label>
+                                    <label for="eventTimeHour" class="form-label small fw-bold">Orario <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <select id="eventTimeHour" name="event_time_hour" class="form-select bg-light" aria-label="Ora (24H)" required>
-                                            <option value="" <?= ($event_hour === '') ? 'selected' : 'disabled' ?>>Ora</option>
-                                            <?php for ($h = 0; $h < 24; $h++): $hh = str_pad($h, 2, '0', STR_PAD_LEFT);
-                                                $sel = ($hh === $event_hour) ? 'selected' : ''; ?>
-                                                <option value="<?= $hh ?>" <?= $sel ?>><?= $hh ?></option>
+                                            <option value="" selected disabled>Ora</option>
+                                            <?php for ($h = 0; $h < 24; $h++): $hh = str_pad($h, 2, '0', STR_PAD_LEFT); ?>
+                                                <option value="<?= $hh; ?>" <?= explode(':', $templateParams['event']['event_time'])[0] === $hh ? 'selected' : '' ?>><?= $hh; ?></option>
                                             <?php endfor; ?>
                                         </select>
-                                        <label for="eventTimeMinute" class="visually-hidden">Minuti</label>
                                         <select id="eventTimeMinute" name="event_time_minute" class="form-select bg-light" aria-label="Minuti" required>
-                                            <option value="" <?= ($event_minute === '') ? 'selected' : 'disabled' ?>>Minuti</option>
-                                            <?php for ($m = 0; $m < 60; $m += 15): $mm = str_pad($m, 2, '0', STR_PAD_LEFT);
-                                                $ms = ($mm === $event_minute) ? 'selected' : ''; ?>
-                                                <option value="<?= $mm ?>" <?= $ms ?>><?= $mm ?></option>
+                                            <option value="" selected disabled>Minuti</option>
+                                            <?php for ($m = 0; $m < 60; $m += 15): $mm = str_pad($m, 2, '0', STR_PAD_LEFT); ?>
+                                                <option value="<?= $mm; ?>" <?= explode(':', $templateParams['event']['event_time'])[1] === $mm ? 'selected' : '' ?>><?= $mm; ?></option>
                                             <?php endfor; ?>
                                         </select>
                                     </div>
-                                    <input type="hidden" id="eventTimeInput" name="event_time" value="<?= htmlspecialchars($event_time, ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 mb-3">
                                     <label for="eventLocationInput" class="form-label small fw-bold">Sede <span class="text-danger">*</span></label>
-                                    <input id="eventLocationInput" name="location" type="text" class="form-control" placeholder="es. Aula Magna - Edificio A" required value="<?= htmlspecialchars($event['location'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                    <input id="eventLocationInput" name="location" type="text" class="form-control" placeholder="es. Aula Magna - Edificio A" required value="<?= htmlspecialchars($templateParams['event']['location'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
                             </div>
                         </div>
@@ -83,18 +67,18 @@ if (!empty($event_time)) {
                             <h2 class="card-title mb-4"><span class="bi bi-sliders me-2" aria-hidden="true"></span>Altro</h2>
 
                             <div class="mb-4">
-                                <label for="eventCategorySelector" class="form-label small fw-bold">Seleziona Tipologia *</label>
+                                <label for="eventCategorySelector" class="form-label small fw-bold">Seleziona Tipologia <span class="text-danger">*</span></label>
                                 <select class="form-select bg-light" id="eventCategorySelector" name="event_type">
                                     <option value="" selected disabled>Scegli una categoria...</option>
-                                    <?php foreach ($templateParams['categories'] ?? [] as $category): ?>
-                                        <option value="<?= htmlspecialchars($category["name"], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($category["name"], ENT_QUOTES, 'UTF-8') ?></option>
+                                    <?php foreach ($templateParams['categories'] ?? [] as $category): $c = htmlspecialchars($category["name"], ENT_QUOTES, 'UTF-8'); ?>
+                                        <option value="<?= $c ?>" <?= $category['id'] === $templateParams['event']['category_id'] ? 'selected' : '' ?>><?= $c ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
 
                             <div>
                                 <label for="eventMaxSeatsInput" class="form-label small fw-bold">Numero Massimo Partecipanti <span class="text-danger">*</span></label>
-                                <input id="eventMaxSeatsInput" name="max_seats" type="number" min="<?= htmlspecialchars($event['total_seats'] ?? '1', ENT_QUOTES, 'UTF-8') ?>" class="form-control bg-light mb-2" placeholder="es. 100" required value="<?= htmlspecialchars($event['total_seats'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                <input id="eventMaxSeatsInput" name="max_seats" type="number" min="0" class="form-control bg-light mb-2" placeholder="es. 100" required value="<?= htmlspecialchars($templateParams['event']['total_seats'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             </div>
                         </div>
                     </div>
@@ -122,28 +106,24 @@ if (!empty($event_time)) {
                     <div class="card event-card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
                         <div class="position-relative">
                             <img id="previewImageSidebar"
-                                src="<?= htmlspecialchars(!empty($event['image']) ? EVENTS_IMG_DIR . $event['image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop', ENT_QUOTES, 'UTF-8') ?>"
+                                src="<?= htmlspecialchars(!empty($templateParams['event']['image']) ? EVENTS_IMG_DIR . $templateParams['event']['image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop', ENT_QUOTES, 'UTF-8') ?>"
                                 class="card-img-top"
-                                style="height: 200px; object-fit: cover;"
                                 alt="Anteprima immagine evento">
 
-                            <span id="previewCategoryBadge"
-                                class="badge position-absolute top-0 start-0 m-3 shadow-sm">
-                                <?= htmlspecialchars($event['category'] ?? $event['category_name'] ?? 'Categoria', ENT_QUOTES, 'UTF-8') ?>
-                            </span>
+                            <span id="previewCategoryBadge" class="badge position-absolute top-0 start-0 m-3 shadow-sm">Categoria</span>
                         </div>
 
                         <div class="card-body d-flex flex-column p-4">
-                            <h3 id="previewTitleDisplay" class="h5 card-title fw-bold"><?= htmlspecialchars($event['title'] ?? 'Titolo del tuo evento', ENT_QUOTES, 'UTF-8') ?></h3>
-                            <p id="previewDescription" class="small text-muted mb-2"><?= htmlspecialchars($event['description'] ?? 'Breve descrizione dell\'evento', ENT_QUOTES, 'UTF-8') ?></p>
+                            <h3 id="previewTitleDisplay" class="h5 card-title fw-bold">Titolo del tuo evento</h3>
+                            <p id="previewDescription" class="small text-muted mb-2">Breve descrizione dell'evento</p>
 
                             <p class="card-text text-muted small flex-grow-1">
                                 <span class="bi bi-calendar me-1 text-primary" aria-hidden="true"></span>
-                                <span id="previewDate"><?= htmlspecialchars($event['event_date'] ?? $event['date'] ?? 'Data da definire', ENT_QUOTES, 'UTF-8') ?></span>
-                                <span id="previewTime" class="ms-2"><?= htmlspecialchars($event_time ?: ($event['time'] ?? 'Ora da definire'), ENT_QUOTES, 'UTF-8') ?></span>
+                                <span id="previewDate">Data da definire</span>
+                                <span id="previewTime" class="ms-2">Ora da definire'</span>
                                 <br>
-                                <span class="bi bi-geo-alt me-1 text-danger" aria-hidden="true"></span> <span id="previewLocation"><?= htmlspecialchars($event['location'] ?? 'Luogo da definire', ENT_QUOTES, 'UTF-8') ?></span><br>
-                                <span class="bi bi-people me-1 text-success" aria-hidden="true"></span> 0 / <span id="previewMaxSeats"><?= htmlspecialchars($event['total_seats'] ?? '∞', ENT_QUOTES, 'UTF-8') ?></span> iscritti
+                                <span class="bi bi-geo-alt me-1 text-danger" aria-hidden="true"></span> <span id="previewLocation">Luogo da definire</span><br>
+                                <span class="bi bi-people me-1 text-success" aria-hidden="true"></span> 0 / <span id="previewMaxSeats">∞</span> iscritti
                             </p>
                         </div>
                     </div>
@@ -161,7 +141,7 @@ if (!empty($event_time)) {
 
                     <div class="d-grid gap-2">
                         <input type="submit" form="eventForm" name="publish_from_draft" class="btn btn-dark py-3 fw-bold rounded-3 shadow" value="Pubblica Evento">
-                        <?php if (!$templateParams['is_edit'] ?? false || ($templateParams['is_edit'] ?? false && $event['status'] ?? '' === 'DRAFT')): ?>
+                        <?php if (empty($templateParams['event']['id'])): ?>
                             <input type="submit" name="save_draft" form="eventForm" class="btn btn-white py-3 fw-bold rounded-3 border shadow-sm" value="Salva come Bozza">
                         <?php endif; ?>
                     </div>

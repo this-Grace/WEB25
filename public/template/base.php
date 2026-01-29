@@ -1,8 +1,4 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
 $templateParams["brand"] = "UniEvents";
 $templateParams["tagline"] = "Il futuro dei tuoi eventi universitari, oggi.";
 
@@ -17,15 +13,10 @@ $navClass = function (string $label) use ($templateParams): string {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8') . " | " . htmlspecialchars($templateParams['title'], ENT_QUOTES, 'UTF-8'); ?></title>
+    <title><?= htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8') . " | " . htmlspecialchars($templateParams['title'], ENT_QUOTES, 'UTF-8'); ?></title>
 
     <link rel="stylesheet" href="assets/css/style.css">
-
-    <?php if (!empty($templateParams['css']) && is_array($templateParams['css'])): ?>
-        <?php foreach ($templateParams['css'] as $stylesheet) : ?>
-            <link rel="stylesheet" href="<?php echo htmlspecialchars($stylesheet, ENT_QUOTES, 'UTF-8'); ?>">
-        <?php endforeach ?>
-    <?php endif; ?>
+    <link rel="stylesheet" href="<?= htmlspecialchars($templateParams['css'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -39,23 +30,23 @@ $navClass = function (string $label) use ($templateParams): string {
         <div class="container flex-column flex-lg-row">
             <a class="navbar-brand d-flex align-items-center mx-auto mx-lg-0 mb-2 mb-lg-0" href="index.php">
                 <span class="bi bi-calendar-check-fill fs-3 text-primary me-2" aria-hidden="true"></span>
-                <span class="fs-4 fw-bold tracking-tight"><?php echo htmlspecialchars($templateParams['brand'] ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="fs-4 fw-bold tracking-tight"><?= htmlspecialchars($templateParams['brand'] ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
             </a>
 
             <ul class="nav nav-pills justify-content-center mt-md-2">
                 <li class="nav-item">
-                    <a href="index.php" class="<?php echo $navClass('Home'); ?>">Home</a>
+                    <a href="index.php" class="<?= $navClass('Home'); ?>">Home</a>
                 </li>
 
                 <?php if (isset($_SESSION['user']['role']) && in_array(strtolower($_SESSION['user']['role']), ['admin', 'host'], true)): ?>
                     <li class="nav-item">
-                        <a href="event.php" class="<?php echo $navClass('Crea Evento'); ?>">Crea Evento</a>
+                        <a href="event.php" class="<?= $navClass('Crea Evento'); ?>">Crea Evento</a>
                     </li>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION['user'])): ?>
                     <li class="nav-item">
-                        <a href="profile.php" class="<?php echo $navClass('Profilo'); ?>">Profilo</a>
+                        <a href="profile.php" class="<?= $navClass('Profilo'); ?>">Profilo</a>
                     </li>
                     <li class="nav-item">
                         <a href="logout.php" class="nav-link text-danger px-3">Logout</a>
@@ -108,7 +99,7 @@ $navClass = function (string $label) use ($templateParams): string {
             <hr class="my-4 border-secondary">
 
             <div class="text-center small text-white-50">
-                &copy; <?php echo date('Y'); ?> <strong><?php echo htmlspecialchars($templateParams['brand']); ?></strong>. Tutti i diritti riservati.
+                &copy; <?= date('Y'); ?> <strong><?= htmlspecialchars($templateParams['brand']); ?></strong>. Tutti i diritti riservati.
             </div>
         </div>
     </footer>
@@ -119,7 +110,7 @@ $navClass = function (string $label) use ($templateParams): string {
 
     <?php if (!empty($templateParams['js']) && is_array($templateParams['js'])): ?>
         <?php foreach ($templateParams['js'] as $script) : ?>
-            <script src="<?php echo htmlspecialchars($script); ?>"></script>
+            <script src="<?= htmlspecialchars($script); ?>"></script>
         <?php endforeach ?>
     <?php endif; ?>
 </body>

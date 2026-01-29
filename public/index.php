@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 $templateParams['title'] = "Home";
-$templateParams['css'] = ['assets/css/home.css'];
+$templateParams['css'] = 'assets/css/home.css';
 $templateParams['js'] = ['assets/js/filters.js', 'assets/js/load-more.js', 'assets/js/search.js'];
 
 $templateParams['content'] = "partials/homepage.php";

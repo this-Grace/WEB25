@@ -93,7 +93,7 @@
                     <?php $limit = 6;
                     $loaded = is_array($templateParams["featured_events"]) ? count($templateParams["featured_events"]) : 0; ?>
                     <?php $hideLoadMore = ($loaded < $limit); ?>
-                    <button id="load-more-btn" data-offset="<?= (int)$loaded ?>" data-limit="<?= (int)$limit ?>" class="btn btn-dark" <?= $hideLoadMore ? 'style="display:none"' : '' ?>>Carica altri eventi</button>
+                    <a id="load-more-btn" data-offset="<?= (int)$loaded ?>" data-limit="<?= (int)$limit ?>" class="btn btn-dark" <?= $hideLoadMore ? 'style="display:none"' : '' ?>>Carica altri eventi</a>
                 </div>
             </div>
         <?php endif; ?>

@@ -13,7 +13,6 @@ if (empty($_SESSION['user']['id'])) {
 $userId = $_SESSION['user']['id'] ?? 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $status = isset($_POST['save_draft']) ? 'DRAFT' : 'WAITING';
     $hour   = $_POST['event_time_hour'] ?? '00';
     $minute = $_POST['event_time_minute'] ?? '00';

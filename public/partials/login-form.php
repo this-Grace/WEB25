@@ -12,20 +12,23 @@
                     <?php if (isset($_GET['registered'])): ?>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             Registrazione completata! Ora puoi accedere.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <input type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></input>
                         </div>
                     <?php endif; ?>
 
                     <?php if (isset($_GET['error'])): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?php if ($_GET['error'] === 'missing'): ?>
-                                Tutti i campi sono obbligatori.
-                            <?php elseif ($_GET['error'] === 'invalid'): ?>
-                                Credenziali non valide. Riprova.
-                            <?php else: ?>
-                                Si è verificato un errore.
-                            <?php endif; ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <?php switch ($_GET['error']):
+                                case 'missing': ?>
+                                    Tutti i campi sono obbligatori.
+                                <?php break;
+                                case 'invalid': ?>
+                                    Credenziali non valide. Riprova.
+                                <?php break;
+                                default: ?>
+                                    Si è verificato un errore.
+                            <?php endswitch; ?>
+                            <input type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></input>
                         </div>
                     <?php endif; ?>
 
@@ -38,11 +41,9 @@
                         <label for="floatingPassword">Password</label>
                     </div>
 
-                    <button class="w-100 btn btn-lg btn-primary" type="submit">Accedi</button>
+                    <input class="w-100 btn btn-lg btn-primary" type="submit" value="Accedi" />
 
-                    <p class="mt-4 text-center text-muted">
-                        Non hai un account? <a href="register.php">Registrati</a>
-                    </p>
+                    <p class="mt-4 text-center text-muted">Non hai un account? <a href="register.php">Registrati</a></p>
                 </form>
             </div>
         </div>
