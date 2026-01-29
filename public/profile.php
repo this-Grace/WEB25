@@ -19,11 +19,7 @@ $msg = $_GET['msg'] ?? "";
 $msgType = isset($_GET['error']) ? "danger" : "success";
 $feedbackMap = [
     'updated' => 'Profilo aggiornato con successo!',
-    'deleted' => 'Evento rimosso correttamente.',
-    'unsubscribed' => 'Iscrizione annullata.',
-    'published' => 'Evento inviato per la revisione.',
-    'created' => 'Evento creato correttamente.',
-    'error' => 'Si è verificato un errore durante l\'operazione.'
+    'error'   => 'Si è verificato un errore durante l\'operazione.'
 ];
 
 $templateParams["user"] = $userMapper->findByEmail($userEmail);

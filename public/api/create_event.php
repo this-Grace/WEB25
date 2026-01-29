@@ -41,8 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $success = $eventMapper->create($data);
 
     if ($success) {
-        $msg = ($status === 'DRAFT') ? 'draft_saved' : 'created';
-        header('Location: ../profile.php?msg=' . $msg);
+        header('Location: ../profile.php');
     } else {
         header('Location: ../event.php?error=sql_error');
     }
