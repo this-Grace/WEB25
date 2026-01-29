@@ -72,19 +72,19 @@ $img = EVENTS_IMG_DIR . htmlspecialchars($event["image"] ?? 'default.jpg', ENT_Q
 
         <div class="mt-auto pt-2 border-top">
             <?php if ($isCancelled || $isPast): ?>
-                <a href="#?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-light btn-sm w-100 border text-center text-muted">
+                <a href="#?event_id=<?= $event['id'] ?>" class="btn btn-light btn-sm w-100 border text-center text-muted">
                     Vedi dettagli <span class="visually-hidden"> dell'evento <?= $cleanTitle ?></span>
                 </a>
 
             <?php elseif ($tabContext === 'subscriber-pane'): ?>
-                <a href="api/unsubscribe.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger btn-sm w-100 rounded-3 fw-bold d-flex align-items-center justify-content-center" onclick="return confirm('Vuoi annullare la tua iscrizione?')">
+                <a href="api/unsubscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-danger btn-sm w-100 rounded-3 fw-bold d-flex align-items-center justify-content-center" onclick="return confirm('Vuoi annullare la tua iscrizione?')">
                     <em class="bi bi-person-x me-2" aria-hidden="true"></em> Disiscriviti
                 </a>
 
             <?php elseif ($isOwner || $isAdmin): ?>
                 <div class="d-flex flex-wrap gap-2">
                     <?php if ($canPublish): ?>
-                        <form action="api/edit_event.php?event_id=<?php echo urlencode($event['id']); ?>" method="POST" class="flex-fill">
+                        <form action="api/edit_event.php?event_id=<?= $event['id'] ?>" method="POST" class="flex-fill">
                             <input type="hidden" name="publish_from_draft" value="1">
                             <button type="submit" class="btn btn-outline-dark btn-sm w-100 shadow-sm">
                                 <span class="bi bi-send me-1"></span> Pubblica
@@ -93,20 +93,20 @@ $img = EVENTS_IMG_DIR . htmlspecialchars($event["image"] ?? 'default.jpg', ENT_Q
                     <?php endif; ?>
 
                     <?php if ($canEdit): ?>
-                        <a href="event.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-outline-dark btn-sm flex-fill text-center">
+                        <a href="event.php?event_id=<?= $event['id'] ?>" class="btn btn-outline-dark btn-sm flex-fill text-center">
                             <span class="bi bi-pencil" aria-hidden="true"></span> Modifica
                         </a>
                     <?php endif; ?>
 
                     <div class="d-flex gap-2 w-100 mt-1">
                         <?php if ($canCancel): ?>
-                            <a href="api/cancel_event.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-warning btn-sm flex-fill fw-bold text-center text-dark" onclick="return confirm('Annullare l\'evento?')">
+                            <a href="api/cancel_event.php?event_id=<?= $event['id'] ?>" class="btn btn-warning btn-sm flex-fill fw-bold text-center text-dark" onclick="return confirm('Annullare l\'evento?')">
                                 <span class="bi bi-x-circle"></span> Annulla
                             </a>
                         <?php endif; ?>
 
                         <?php if ($canDelete): ?>
-                            <a href="api/delete_event.php?event_id=<?php echo urlencode($event['id']); ?>" class="btn btn-danger btn-sm flex-fill text-center" onclick="return confirm('Eliminare l\'evento?')">
+                            <a href="api/delete_event.php?event_id=<?= $event['id'] ?>" class="btn btn-danger btn-sm flex-fill text-center" onclick="return confirm('Eliminare l\'evento?')">
                                 <span class="bi bi-trash"></span> Elimina
                             </a>
                         <?php endif; ?>
