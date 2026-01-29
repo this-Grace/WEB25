@@ -49,7 +49,7 @@ if (in_array($templateParams["user_role"], ['host', 'admin'])) {
                     <div class="d-flex flex-column flex-md-row align-items-center align-items-md-center gap-4">
                         <div class="avatar-container">
                             <img src="<?= PROFILE_IMG_DIR . $templateParams['user']['avatar']; ?>" id="display-avatar" class="profile-img" alt="Foto profilo di <?= htmlspecialchars($templateParams['user']['name']); ?>">
-                            <label for="avatarUpload" class="avatar-edit-btn" title="Cambia foto profilo">
+                            <label for="avatarUpload" class="avatar-edit-btn edit-mode d-none" title="Cambia foto profilo">
                                 <span class="bi bi-camera" aria-hidden="true"></span>
                                 <span class="visually-hidden">Carica una nuova foto profilo</span>
                                 <input type="file" id="avatarUpload" name="avatar" class="d-none" onchange="previewImage(this)" accept="image/*">
