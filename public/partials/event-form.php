@@ -47,7 +47,7 @@ if (!empty($event_time)) {
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="eventDateInput" class="form-label small fw-bold">Data Evento <span class="text-danger">*</span></label>
-                                    <input id="eventDateInput" name="event_date" type="date" class="form-control bg-light" required value="<?= htmlspecialchars($event['event_date'] ?? $event['date'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                    <input id="eventDateInput" name="event_date" type="date" class="form-control bg-light" required min="<?= date('Y-m-d', strtotime('+1 day')) ?>" value="<?= htmlspecialchars($event['event_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="eventTimeHour" class="form-label small fw-bold">Orario</label>
