@@ -7,7 +7,7 @@
             <div class="col-12 col-md-8 col-lg-6">
                 <form id="homepage-search-form" class="d-flex" role="search" method="get" action="#">
                     <label for="searchInput" class="visually-hidden">Cerca eventi, organizzazioni o luoghi</label>
-                    <input id="searchInput" name="q" type="search" class="form-control" placeholder="Cerca eventi..." aria-label="Cerca">
+                    <input id="searchInput" name="search" type="search" class="form-control" placeholder="Cerca eventi..." aria-label="Cerca">
                     <button class="btn btn-primary btn-lg visually-hidden" type="submit">Cerca</button>
                 </form>
             </div>
