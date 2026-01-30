@@ -19,8 +19,7 @@ if (isset($templateParams['user_subscriptions']) && is_array($templateParams['us
         <div class="position-relative">
             <img src="<?= EVENTS_IMG_DIR . htmlspecialchars($event['image']) ?>"
                 class="card-img-top <?= $isPast ? 'opacity-50' : '' ?>"
-                alt="Locandina: <?= htmlspecialchars($event['title']) ?>"
-                style="height: 200px; object-fit: cover; <?= $isPast ? 'filter: grayscale(80%) brightness(0.7);' : '' ?>" />
+                alt="Locandina: <?= htmlspecialchars($event['title']) ?>"/>
 
             <?php if ($isPast): ?>
                 <div class="position-absolute top-50 start-50 translate-middle w-100 text-center z-1">
