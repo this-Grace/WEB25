@@ -73,10 +73,10 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
                                 </div>
                                 <div class="edit-mode d-none input-scroll-container">
                                     <label for="edit-name" class="visually-hidden">Nome</label>
-                                    <input type="text" id="edit-name" name="name" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['name']); ?>" maxlength="50" placeholder="Nome">
+                                    <input type="text" id="edit-name" name="name" class="form-control-plaintext custom-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['name']); ?>" maxlength="50" placeholder="Nome">
 
                                     <label for="edit-surname" class="visually-hidden">Cognome</label>
-                                    <input type="text" id="edit-surname" name="surname" class="form-control-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['surname']); ?>" maxlength="50" placeholder="Cognome">
+                                    <input type="text" id="edit-surname" name="surname" class="form-control-plaintext custom-inline h3 fw-bold" value="<?= htmlspecialchars($templateParams['user']['surname']); ?>" maxlength="50" placeholder="Cognome">
                                 </div>
                             </div>
                             <div class="email-group text-muted small">
@@ -130,7 +130,7 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
                         <div class="row g-4">
                             <?php foreach ($tab['data'] as $event): ?>
                                 <?php $tabId = $tab['id'];
-                                    include 'event-card.php'; ?>
+                                include 'event-card.php'; ?>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>

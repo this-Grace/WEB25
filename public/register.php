@@ -25,8 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $ok = $userMapper->create($email, $first, $last, $password, 'USER');
-    if ($ok) {
+    if ($userMapper->create($email, $first, $last, $password, 'USER')) {
         header('Location: login.php?registered=1');
         exit;
     } else {

@@ -41,13 +41,13 @@
                                         <select id="eventTimeHour" name="event_time_hour" class="form-select bg-light" aria-label="Ora (24H)" required>
                                             <option value="" selected disabled>Ora</option>
                                             <?php for ($h = 0; $h < 24; $h++): $hh = str_pad($h, 2, '0', STR_PAD_LEFT); ?>
-                                                <option value="<?= $hh; ?>" <?= explode(':', $templateParams['event']['event_time'])[0] === $hh ? 'selected' : '' ?>><?= $hh; ?></option>
+                                                <option value="<?= $hh; ?>" <?= ((explode(':', $templateParams['event']['event_time'] ?? '')[0] ?? '') === $hh) ? 'selected' : '' ?>><?= $hh; ?></option>
                                             <?php endfor; ?>
                                         </select>
                                         <select id="eventTimeMinute" name="event_time_minute" class="form-select bg-light" aria-label="Minuti" required>
                                             <option value="" selected disabled>Minuti</option>
                                             <?php for ($m = 0; $m < 60; $m += 15): $mm = str_pad($m, 2, '0', STR_PAD_LEFT); ?>
-                                                <option value="<?= $mm; ?>" <?= explode(':', $templateParams['event']['event_time'])[1] === $mm ? 'selected' : '' ?>><?= $mm; ?></option>
+                                                <option value="<?= $mm; ?>" <?= ((explode(':', $templateParams['event']['event_time'] ?? '')[1] ?? '') === $mm) ? 'selected' : '' ?>><?= $mm; ?></option>
                                             <?php endfor; ?>
                                         </select>
                                     </div>
@@ -68,10 +68,10 @@
 
                             <div class="mb-4">
                                 <label for="eventCategorySelector" class="form-label small fw-bold">Seleziona Tipologia <span class="text-danger">*</span></label>
-                                <select class="form-select bg-light" id="eventCategorySelector" name="event_type">
+                                <select class="form-select bg-light" id="eventCategorySelector" name="category_id" required>
                                     <option value="" selected disabled>Scegli una categoria...</option>
                                     <?php foreach ($templateParams['categories'] ?? [] as $category): $c = htmlspecialchars($category["name"], ENT_QUOTES, 'UTF-8'); ?>
-                                        <option value="<?= $c ?>" <?= $category['id'] === $templateParams['event']['category_id'] ? 'selected' : '' ?>><?= $c ?></option>
+                                        <option value="<?= (int)$category['id'] ?>" <?= (($templateParams['event']['category_id'] ?? '') == $category['id']) ? 'selected' : '' ?>><?= $c ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -117,14 +117,21 @@
                             <h3 id="previewTitleDisplay" class="h5 card-title fw-bold">Titolo del tuo evento</h3>
                             <p id="previewDescription" class="small text-muted mb-2">Breve descrizione dell'evento</p>
 
-                            <p class="card-text text-muted small flex-grow-1">
-                                <span class="bi bi-calendar me-1 text-primary" aria-hidden="true"></span>
-                                <span id="previewDate">Data da definire</span>
-                                <span id="previewTime" class="ms-2">Ora da definire'</span>
-                                <br>
-                                <span class="bi bi-geo-alt me-1 text-danger" aria-hidden="true"></span> <span id="previewLocation">Luogo da definire</span><br>
-                                <span class="bi bi-people me-1 text-success" aria-hidden="true"></span> 0 / <span id="previewMaxSeats">∞</span> iscritti
-                            </p>
+                            <ul class="card-text text-muted small flex-grow-1 mb-0 list-unstyled">
+                                <li>
+                                    <span class="bi bi-calendar me-1 text-primary" aria-hidden="true"></span>
+                                    <span id="previewDate">Data da definire</span>
+                                    <span id="previewTime" class="ms-2">Ora da definire</span>
+                                </li>
+                                <li class="mt-2">
+                                    <span class="bi bi-geo-alt me-1 text-danger" aria-hidden="true"></span>
+                                    <span id="previewLocation">Luogo da definire</span>
+                                </li>
+                                <li class="mt-2">
+                                    <span class="bi bi-people me-1 text-success" aria-hidden="true"></span>
+                                    0 / <span id="previewMaxSeats">∞</span> iscritti
+                                </li>
+                            </ul>
                         </div>
                     </div>
 

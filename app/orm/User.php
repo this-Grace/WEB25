@@ -118,7 +118,6 @@ class User
         if (!$user) return null;
         $hash = $user['password'] ?? null;
         if ($hash && password_verify($password, $hash)) {
-            // Remove password hash from returned data for security
             unset($user['password']);
             return $user;
         }

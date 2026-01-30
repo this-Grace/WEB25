@@ -63,7 +63,7 @@
 
                     <div class="form-check text-start my-3">
                         <input class="form-check-input" type="checkbox" value="agree-terms" id="flexCheckDefault" required>
-                        <label class="form-check-label" for="flexCheckDefault">Accetto i <a href="#">termini e le condizioni</a></label>
+                        <label class="form-check-label" for="flexCheckDefault">Accetto i <a href="terms.php">termini e le condizioni</a></label>
                     </div>
 
                     <input class="w-100 btn btn-lg btn-primary" type="submit" value="Registrati" />

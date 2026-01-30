@@ -26,7 +26,7 @@ $navClass = function (string $label) use ($templateParams): string {
 </head>
 
 <body class="d-flex flex-column vh-100">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-2">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-2 z-1">
         <div class="container flex-column flex-lg-row">
             <a class="navbar-brand d-flex align-items-center mx-auto mx-lg-0 mb-2 mb-lg-0" href="index.php">
                 <span class="bi bi-calendar-check-fill fs-3 text-primary me-2" aria-hidden="true"></span>
@@ -69,8 +69,8 @@ $navClass = function (string $label) use ($templateParams): string {
             <div class="row text-center text-md-start g-4 align-items-start">
 
                 <div class="col-12 col-md-4">
-                    <h2 class="h5 text-primary fw-bold mb-2">UniEvents</h2>
-                    <p class="small text-white-50 mb-0">Il futuro dei tuoi eventi universitari, oggi.</p>
+                    <h2 class="h5 text-primary fw-bold mb-2"><?= htmlspecialchars($templateParams["brand"]) ?></h2>
+                    <p class="small text-white-50 mb-0"><?= htmlspecialchars($templateParams["tagline"])  ?></p>
                 </div>
 
                 <div class="col-6 col-md-4">
@@ -78,11 +78,11 @@ $navClass = function (string $label) use ($templateParams): string {
                     <ul class="list-unstyled small mb-0">
                         <li class="mb-2">
                             <span class="bi bi-envelope text-primary me-2" aria-hidden="true"></span>
-                            <a href="mailto:alessandro.rebosio@studio.unibo.it" class="text-white-50 text-decoration-none">
-                                Alessandro Rebosio </a><br />
+                            <a href="mailto:alessandro.rebosio@studio.unibo.it" class="text-white-50 text-decoration-none">Alessandro Rebosio </a>
+                        </li>
+                        <li>
                             <span class="bi bi-envelope text-primary me-2" aria-hidden="true"></span>
-                            <a href="mailto:grazia.bochdanovits@studio.unibo.it" class="text-white-50 text-decoration-none">
-                                Grazia Bochdanovits de Kavna </a>
+                            <a href="mailto:grazia.bochdanovits@studio.unibo.it" class="text-white-50 text-decoration-none">Grazia Bochdanovits de Kavna </a>
                         </li>
                     </ul>
                 </div>
@@ -90,7 +90,7 @@ $navClass = function (string $label) use ($templateParams): string {
                     <h3 class="h6 text-uppercase mb-2 small fw-bold text-white">Info</h3>
                     <ul class="list-unstyled small mb-0">
                         <li class="mb-2">
-                            <a href="#" class="text-white-50 text-decoration-none">Termini e Condizioni</a>
+                            <a href="terms.php" class="text-white-50 text-decoration-none">Termini e Condizioni</a>
                         </li>
                     </ul>
                 </div>

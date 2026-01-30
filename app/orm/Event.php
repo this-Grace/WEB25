@@ -165,7 +165,7 @@ class Event
     {
         $sql = $this->baseEventSelect() .
             "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
-            "WHERE e.status = 'APPROVED' OR e.status = 'CANCELLED' " .
+            "WHERE e.status = 'APPROVED' " .
             "ORDER BY e.event_date DESC, e.event_time DESC";
 
         $sql = $this->applyLimit($sql, $limit);
@@ -236,8 +236,16 @@ class Event
                 $sql .= "AND u.email = ? ";
                 $params[] = $userEmail;
             }
-            if ($specialFilter === 'waiting' && $role === 'admin') {
-                $sql .= "AND e.status = 'WAITING' ";
+
+            // 'waiting' should show events waiting for approval.
+            // Admins see all waiting events; hosts should see their own waiting events.
+            if ($specialFilter === 'waiting') {
+                if ($role === 'admin') {
+                    $sql .= "AND e.status = 'WAITING' ";
+                } elseif ($role === 'host' && $userEmail) {
+                    $sql .= "AND (e.status = 'WAITING' AND u.email = ?) ";
+                    $params[] = $userEmail;
+                }
             }
         }
 
@@ -359,6 +367,18 @@ class Event
         $sql = "UPDATE EVENT SET " . implode(', ', $fields) . " WHERE id = ?";
         $res = $this->db->prepareAndExecute($sql, $params);
 
+        return $res !== false;
+    }
+
+    /**
+     * Delete an event by id
+     * @param int $id Event ID
+     * @return bool True on success, false on failure
+     */
+    public function deleteEvent(int $id): bool
+    {
+        $sql = "DELETE FROM EVENT WHERE id = ?";
+        $res = $this->db->prepareAndExecute($sql, [$id]);
         return $res !== false;
     }
 }

@@ -21,7 +21,7 @@ $templateParams['categories'] = $categoryMapper->findAll();
 $eventId = isset($_GET['event_id']) ? (int)$_GET['event_id'] : 0;
 if ($eventId > 0) {
     $row = $eventMapper->getEventById($eventId);
-    if (true) {
+    if (!empty($row)) {
         $templateParams['h1'] = 'Modifica Evento';
         $templateParams['form_action'] = 'api/edit_event.php?event_id=' . $eventId;
         $templateParams['event'] = $row;

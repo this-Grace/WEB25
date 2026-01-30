@@ -63,21 +63,6 @@ class Subscription
     }
 
     /**
-     * Find subscription by participation code
-     * 
-     * @param string $code Participation code
-     * @return array|null Subscription data or null if not found
-     */
-    public function findByCode(string $code): ?array
-    {
-        $sql = 'SELECT * FROM SUBSCRIPTION WHERE participation_code = ? LIMIT 1';
-        $res = $this->db->prepareAndExecute($sql, [$code]);
-        if (!$res || !($res instanceof mysqli_result)) return null;
-        $row = $res->fetch_assoc();
-        return $row ?: null;
-    }
-
-    /**
      * Find a subscription by user and event
      * 
      * @param mixed $user User identifier (email or numeric id)
