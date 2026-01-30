@@ -84,9 +84,7 @@
         <?php else: ?>
             <div id="events-grid" class="row">
                 <?php foreach ($templateParams["featured_events"] as $event): ?>
-                    <div class="col-lg-4 col-md-6 mb-4 event-item-container">
-                        <?php include __DIR__ . '/event-card.php'; ?>
-                    </div>
+                    <?php include __DIR__ . '/event-card.php'; ?>
                 <?php endforeach; ?>
 
                 <div class="text-center m-4">

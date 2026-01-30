@@ -129,10 +129,8 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
                     <?php else: ?>
                         <div class="row g-4">
                             <?php foreach ($tab['data'] as $event): ?>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <?php $tabId = $tab['id'];
+                                <?php $tabId = $tab['id'];
                                     include 'event-card.php'; ?>
-                                </div>
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>

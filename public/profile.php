@@ -22,4 +22,8 @@ $templateParams["events_organized"] = $eventMapper->getEventsOrganizedByUser($us
 $templateParams["events_drafts"] = $eventMapper->getEventsOrganizedByUser($userId, ['DRAFT']);
 $templateParams["events_history"] = $eventMapper->getUserEventHistory($userId);
 
+$templateParams['user_subscriptions'] = $subscriptionMapper->findSubscribedEventsByUser($userId, 
+    array_column($templateParams["events_subscribed"], 'id')
+);
+
 require "template/base.php";
