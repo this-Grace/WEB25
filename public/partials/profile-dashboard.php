@@ -5,7 +5,6 @@ $activeTabs[] = [
     'id' => 'subscriber-pane',
     'label' => 'Iscrizioni',
     'data' => $templateParams["events_subscribed"],
-    'active' => true
 ];
 
 if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
@@ -13,19 +12,16 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
         'id' => 'organized-pane',
         'label' => 'Miei Eventi',
         'data' => $templateParams["events_organized"],
-        'active' => false
     ];
     $activeTabs[] = [
         'id' => 'draft-pane',
         'label' => 'Bozze',
         'data' => $templateParams["events_drafts"],
-        'active' => false
     ];
     $activeTabs[] = [
         'id' => 'history-pane',
         'label' => 'Storico',
         'data' => $templateParams["events_history"],
-        'active' => false
     ];
 }
 ?>
@@ -106,11 +102,14 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
 
         <nav class="nav-tabs-container mb-4">
             <ul class="nav nav-tabs border-0 gap-3 gap-md-4 flex-nowrap" id="profileTabs" role="tablist">
-                <?php foreach ($activeTabs as $tab): ?>
+                <?php foreach ($activeTabs as $index => $tab): ?>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link <?= $tab['active'] ? 'active' : '' ?> border-0 bg-transparent p-0 pb-2 fw-bold"
-                            id="<?= $tab['id'] ?>-tab" data-bs-toggle="tab" data-bs-target="#<?= $tab['id'] ?>"
-                            type="button" role="tab" aria-selected="<?= $tab['active'] ? 'true' : 'false' ?>">
+                        <a class="nav-link <?= $index === 0 ? 'active' : '' ?> border-0 bg-transparent p-0 pb-2 fw-bold"
+                            id="<?= $tab['id'] ?>-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#<?= $tab['id'] ?>"
+                            type="button"
+                            role="tab">
                             <?= $tab['label'] ?>
                         </a>
                     </li>
@@ -119,8 +118,8 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
         </nav>
 
         <div class="tab-content" id="profileTabsContent">
-            <?php foreach ($activeTabs as $tab): ?>
-                <div class="tab-pane fade <?= $tab['active'] ? 'show active' : '' ?>" id="<?= $tab['id'] ?>" role="tabpanel" aria-labelledby="<?= $tab['id'] ?>-tab">
+            <?php foreach ($activeTabs as $index => $tab): ?>
+                <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>" id="<?= $tab['id'] ?>" role="tabpanel">
                     <?php if (empty($tab['data'])): ?>
                         <div class="text-center py-5 text-muted bg-white rounded-4 shadow-sm border border-dashed">
                             <span class="bi bi-calendar-x display-4 mb-3 d-block opacity-25"></span>

@@ -35,8 +35,8 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
                 endswitch; ?>
             <?php endif; ?>
 
-            <span class="badge badge-cate-<?= strtolower(htmlspecialchars($event['category'] ?? 'generico')) ?> position-absolute top-0 start-0 m-3 shadow-sm">
-                <?= htmlspecialchars($event['category'] ?? 'Evento') ?>
+            <span class="badge badge-cate-<?= strtolower(htmlspecialchars($event['category_name'] ?? 'generico')) ?> position-absolute top-0 start-0 m-3 shadow-sm">
+                <?= htmlspecialchars($event['category_name'] ?? 'Evento') ?>
             </span>
         </div>
 
@@ -81,7 +81,7 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
                         <?php if ($_SESSION['user']['id'] == $event['user_id']): ?>
                             <div class="d-flex flex-column w-100 gap-2">
                                 <?php if (strtolower($event['status']) === 'draft'): ?>
-                                    <a href="api/edit_event.php?event_id=<?= $event['id'] ?>&action=publish_from_draft" class="btn btn-outline-success btn-sm w-100">
+                                    <a href="api/edit_event.php?event_id=<?= $event['id'] ?>&action=publish_from_draft" class="btn btn-outline-success btn-sm w-100 btn-ajax">
                                         <span class="bi bi-upload me-1"></span> Pubblica
                                     </a>
                                 <?php endif; ?>
@@ -93,14 +93,12 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
                                         </a>
                                         <?php if (strtolower($event['status']) === 'draft'): ?>
                                             <a href="api/delete_event.php?event_id=<?= $event['id'] ?>"
-                                                class="btn btn-outline-danger btn-sm flex-grow-1"
-                                                onclick="return confirm('Sei sicuro di voler eliminare definitivamente questo evento?')">
+                                                class="btn btn-outline-danger btn-sm flex-grow-1 btn-ajax">
                                                 <span class="bi bi-trash me-1"></span> Elimina
                                             </a>
                                         <?php else: ?>
                                             <a href="api/cancel_event.php?event_id=<?= $event['id'] ?>"
-                                                class="btn btn-outline-warning btn-sm flex-grow-1"
-                                                onclick="return confirm('Sei sicuro di voler annullare questo evento?')">
+                                                class="btn btn-outline-warning btn-sm flex-grow-1 btn-ajax">
                                                 <span class="bi bi-x-circle me-1"></span> Annulla
                                             </a>
                                         <?php endif; ?>
@@ -108,16 +106,16 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
                                 <?php endif; ?>
                             </div>
                         <?php elseif ($isAdmin && strtolower($event['status']) === 'waiting'): ?>
-                            <a href="api/approve_event.php?event_id=<?= $event['id'] ?>" class="btn btn-success btn-sm flex-grow-1">
+                            <a href="api/approve_event.php?event_id=<?= $event['id'] ?>" class="btn btn-success btn-sm flex-grow-1 btn-ajax">
                                 <span class="bi bi-check-circle me-1"></span> Approva Evento
                             </a>
                         <?php elseif (strtolower($event['status']) === 'approved'): ?>
                             <?php if ($isSubscribed): ?>
-                                <a href="api/unsubscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-danger btn-sm flex-grow-1">
+                                <a href="api/unsubscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-danger btn-sm flex-grow-1 btn-ajax">
                                     <span class="bi bi-person-dash me-1"></span> Disiscriviti
                                 </a>
                             <?php elseif (!$isFull):?>
-                                <a href="api/subscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-primary btn-sm flex-grow-1">
+                                <a href="api/subscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-primary btn-sm flex-grow-1 btn-ajax">
                                     <span class="bi bi-person-plus me-1"></span> Iscriviti
                                 </a>
                             <?php endif; ?>
