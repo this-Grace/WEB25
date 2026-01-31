@@ -27,4 +27,11 @@ $templateParams["completed_events"] = $eventMapper->getCompletedEventsCount();
 
 $templateParams['featured_events'] = $eventMapper->getApprovedOrCancelledEvents(6);
 
+if (isset($_SESSION['user']['id'])) {
+    $templateParams['user_subscriptions'] = $subscriptionMapper->findSubscribedEventsByUser(
+        $_SESSION['user']['id'], 
+        array_column($templateParams['featured_events'], 'id')
+    );
+}
+
 require 'template/base.php';

@@ -148,7 +148,7 @@
 
                     <div class="d-grid gap-2">
                         <input type="submit" form="eventForm" name="publish_from_draft" class="btn btn-dark py-3 fw-bold rounded-3 shadow" value="Pubblica Evento">
-                        <?php if (empty($templateParams['event']['id'])): ?>
+                        <?php if (empty($templateParams['event']['id']) || strtolower($templateParams['event']['status']) === 'draft'): ?>
                             <input type="submit" name="save_draft" form="eventForm" class="btn btn-white py-3 fw-bold rounded-3 border shadow-sm" value="Salva come Bozza">
                         <?php endif; ?>
                     </div>
