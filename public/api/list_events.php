@@ -14,13 +14,23 @@ $special = isset($_GET['special']) ? trim($_GET['special']) : null;
 
 $role = 'other';
 $userEmail = null;
+$userId = null;
 if (!empty($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $role = $user['role'] ?? 'other';
     $userEmail = $user['email'] ?? null;
+    $userId = $user['id'] ?? null;
 }
 
 $events = $eventMapper->getEventsWithFilters($role, $userEmail, $limit, $offset, $categoryId, $special, $search);
+
+$templateParams['user_subscriptions'] = [];
+if ($userId && !empty($events)) {
+    $templateParams['user_subscriptions'] = $subscriptionMapper->findSubscribedEventsByUser(
+        $userId, 
+        array_column($events, 'id')
+    );
+}
 
 $html = '';
 foreach ($events as $event) {
