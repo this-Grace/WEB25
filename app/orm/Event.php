@@ -8,7 +8,7 @@
  * Uses prepared statements to prevent SQL injection.
  * 
  * @package DataMappers
- * @author Alessandro Rebosio
+ * @author Grazia Bochdanovits de Kavna
  * @version 1.0
  */
 class Event
@@ -36,24 +36,12 @@ class Event
      */
     private function baseEventSelect(): string
     {
-        // select e.user_id and user's email for backward-compatible templates that expect user_email
-        return "SELECT e.id, e.title, e.description, e.event_date, e.event_time, e.location, e.total_seats, e.occupied_seats, e.status, e.image, e.user_id, u.email AS user_email, e.category_id, c.name AS category ";
-    }
-
-    /**
-     * Append a LIMIT clause if $limit > 0
-     * 
-     * @param string $sql SQL query
-     * @param int $limit Maximum number of records to return
-     * @return string SQL query with LIMIT clause if applicable
-     */
-    private function applyLimit(string $sql, int $limit): string
-    {
-        $limit = (int)$limit;
-        if ($limit > 0) {
-            $sql .= " LIMIT " . $limit;
-        }
-        return $sql;
+        return "SELECT 
+                e.*, 
+                c.name AS category_name 
+            FROM EVENT e 
+            LEFT JOIN USER u ON e.user_id = u.id 
+            LEFT JOIN CATEGORY c ON e.category_id = c.id ";
     }
 
     /**
@@ -76,130 +64,19 @@ class Event
     }
 
     /**
-     * Create a new event
-     * @param array $data Associative array of event data (column => value)
-     * @return int|null Inserted event ID or null on failure
-     */
-    public function create(array $data): int
-    {
-        $keys = array_keys($data);
-        $placeholders = array_fill(0, count($keys), '?');
-        $sql = "INSERT INTO EVENT (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $placeholders) . ")";
-        $res = $this->db->prepareAndExecute($sql, array_values($data));
-        $insertId = (int)$this->db->getConnection()->insert_id;
-        return ($res && $insertId > 0) ? $insertId : 0;
-    }
-
-    /**
-     * Number of events happening in the current month
+     * Get event statistics including monthly count, completed events, and average participation
      * 
-     * @return int Count of approved events in current month
+     * @return array Associative array with statistics (monthly_count, completed_count, avg_participation)
      */
-    public function getEventsThisMonth(): int
+    public function getStats(): array
     {
-        $sql = "SELECT COUNT(*) AS cnt FROM EVENT WHERE MONTH(event_date) = MONTH(CURRENT_DATE()) AND YEAR(event_date) = YEAR(CURRENT_DATE()) AND status = 'APPROVED'";
+        $sql = "SELECT 
+            (SELECT COUNT(*) FROM EVENT WHERE MONTH(event_date) = MONTH(CURRENT_DATE()) AND YEAR(event_date) = YEAR(CURRENT_DATE()) AND status = 'APPROVED') as monthly_count,
+            (SELECT COUNT(*) FROM EVENT WHERE (event_date < CURRENT_DATE() OR (event_date = CURRENT_DATE() AND event_time < CURRENT_TIME())) AND status = 'APPROVED') as completed_count,
+            (SELECT AVG(occupied_seats / total_seats) * 100 FROM EVENT WHERE status = 'APPROVED' AND event_date < CURRENT_DATE()) as avg_participation";
+
         $res = $this->db->prepareAndExecute($sql, []);
-        if (!$res || !($res instanceof mysqli_result)) return 0;
-        $row = $res->fetch_assoc();
-        return (int)($row['cnt'] ?? 0);
-    }
-
-    /**
-     * Average participation percentage across published events
-     * 
-     * Returns a float percentage (0-100) representing average participation
-     * Only considers approved events that have already happened
-     * 
-     * @return float Average participation percentage
-     */
-    public function getAvgParticipationPercent(): float
-    {
-        // Use occupied_seats and DATE comparison for event_date
-        $sql = "SELECT AVG(NULLIF(occupied_seats,0) / NULLIF(total_seats,0)) * 100 AS avgp FROM EVENT WHERE status = 'APPROVED' AND event_date < CURRENT_DATE()";
-        $res = $this->db->prepareAndExecute($sql, []);
-        if (!$res || !($res instanceof mysqli_result)) return 0.0;
-        $row = $res->fetch_assoc();
-        return isset($row['avgp']) ? (float)$row['avgp'] : 0.0;
-    }
-
-    /**
-     * Count events that already happened (completed)
-     * 
-     * @return int Count of approved events with past dates
-     */
-    public function getCompletedEventsCount(): int
-    {
-        // event_date is DATE; compare with CURRENT_DATE()
-        $sql = "SELECT COUNT(*) AS cnt FROM EVENT WHERE event_date < CURRENT_DATE() AND status = 'APPROVED'";
-        $res = $this->db->prepareAndExecute($sql, []);
-        if (!$res || !($res instanceof mysqli_result)) return 0;
-        $row = $res->fetch_assoc();
-        return (int)($row['cnt'] ?? 0);
-    }
-
-    /**
-     * Retrieve all events, optionally limited.
-     * Joins category name and orders by date/time descending (newest first).
-     *
-     * @param int $limit Maximum number of events to return (0 = no limit)
-     * @return array Array of event data with category and user information
-     */
-    public function getAllEvents(int $limit = 0): array
-    {
-        $sql = $this->baseEventSelect() .
-            "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
-            "WHERE (e.status IS NULL OR e.status <> 'DRAFT') " .
-            "ORDER BY e.event_date DESC, e.event_time DESC";
-
-        $sql = $this->applyLimit($sql, $limit);
-        return $this->fetchEvents($sql);
-    }
-
-    /**
-     * Events visible to normal users: only events with status = 'APPROVED' or 'CANCELLED'
-     * 
-     * @param int $limit Maximum number of events to return (0 = no limit)
-     * @return array Array of approved or cancelled events with category and user information
-     */
-    public function getApprovedOrCancelledEvents(int $limit = 0): array
-    {
-        $sql = $this->baseEventSelect() .
-            "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
-            "WHERE e.status = 'APPROVED' " .
-            "ORDER BY e.event_date DESC, e.event_time DESC";
-
-        $sql = $this->applyLimit($sql, $limit);
-        return $this->fetchEvents($sql);
-    }
-
-    /**
-     * Events visible to a host: all APPROVED events plus the host's own events in WAITING status
-     * 
-     * @param string $hostEmail Email of the host user
-     * @param int $limit Maximum number of events to return (0 = no limit)
-     * @return array Array of events visible to the host
-     */
-    public function getEventsForHost(string $hostEmail, int $limit = 0): array
-    {
-        // keep interface accepting host email for convenience; join USER to compare email
-        $sql = $this->baseEventSelect() .
-            "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id " .
-            "WHERE (e.status = 'APPROVED') OR (u.email = ? AND e.status = 'WAITING') " .
-            "ORDER BY e.event_date DESC, e.event_time DESC";
-
-        $sql = $this->applyLimit($sql, $limit);
-        return $this->fetchEvents($sql, [$hostEmail]);
-    }
-
-    /**
-     * Events visible to admin: all events (wrapper for getAllEvents)
-     * 
-     * @param int $limit Maximum number of events to return (0 = no limit)
-     * @return array Array of all events regardless of status
-     */
-    public function getEventsForAdmin(int $limit = 0): array
-    {
-        return $this->getAllEvents($limit);
+        return ($res instanceof mysqli_result) ? $res->fetch_assoc() : [];
     }
 
     /**
@@ -207,178 +84,170 @@ class Event
      * and special filters like 'miei' (host's own events) or 'waiting' (admin review queue).
      *
      * @param string $role User role (admin|host|other)
-     * @param string|null $userEmail Current user's email
+     * @param int|null $currentUserId Current user's ID (required for host role and special filters)
      * @param int $limit Number of records to return
      * @param int $offset Offset for pagination
      * @param int|null $categoryId Optional category id to filter
      * @param string|null $specialFilter Optional special filter ('miei'|'waiting')
+     * @param string|null $search Optional search term to filter events by title, location, or category name
      * @return array Array of event rows
      */
-    public function getEventsWithFilters(string $role, ?string $userEmail, int $limit = 6, int $offset = 0, ?int $categoryId = null, ?string $specialFilter = null, ?string $search = null): array
+    public function getEventsWithFilters(string $role, ?int $currentUserId = null, int $limit = 6, int $offset = 0, ?int $categoryId = null, ?string $specialFilter = null, ?string $search = null): array
     {
         $params = [];
-        $sql = $this->baseEventSelect() .
-            "FROM EVENT e LEFT JOIN USER u ON e.user_id = u.id LEFT JOIN CATEGORY c ON e.category_id = c.id WHERE 1=1 ";
+        $sql = $this->baseEventSelect() . " WHERE 1=1 ";
 
-        // Role-based visibility
-        if ($role === 'host') {
-            $sql .= "AND ((e.status = 'APPROVED') OR (u.email = ? AND e.status = 'WAITING')) ";
-            $params[] = $userEmail;
-        } elseif ($role === 'admin') {
-            // admins see everything, no extra condition
+        if ($role === 'admin') {
+            // admin can see everything
+        } elseif ($role === 'host' && $currentUserId) {
+            $sql .= " AND (e.status IN ('APPROVED', 'CANCELLED') OR e.user_id = ?) ";
+            $params[] = $currentUserId;
         } else {
-            $sql .= "AND (e.status = 'APPROVED' OR e.status = 'CANCELLED') ";
+            $sql .= " AND e.status IN ('APPROVED', 'CANCELLED') ";
         }
 
-        // Special filters from client
-        if (!empty($specialFilter)) {
-            if ($specialFilter === 'miei' && $userEmail) {
-                $sql .= "AND u.email = ? ";
-                $params[] = $userEmail;
-            }
-
-            // 'waiting' should show events waiting for approval.
-            // Admins see all waiting events; hosts should see their own waiting events.
-            if ($specialFilter === 'waiting') {
-                if ($role === 'admin') {
-                    $sql .= "AND e.status = 'WAITING' ";
-                } elseif ($role === 'host' && $userEmail) {
-                    $sql .= "AND (e.status = 'WAITING' AND u.email = ?) ";
-                    $params[] = $userEmail;
-                }
-            }
+        if ($specialFilter === 'miei' && $currentUserId) {
+            $sql .= " AND e.user_id = ? ";
+            $params[] = $currentUserId;
+        } elseif ($specialFilter === 'waiting' && $role === 'admin') {
+            $sql .= " AND e.status = 'WAITING' ";
         }
 
-        if (!empty($categoryId)) {
-            $sql .= "AND e.category_id = ? ";
-            $params[] = (int)$categoryId;
+        if ($categoryId) {
+            $sql .= " AND e.category_id = ? ";
+            $params[] = $categoryId;
         }
 
-        // Full text-ish search across title, description, location, category name and user email
         if (!empty($search)) {
-            $s = '%' . (string)$search . '%';
-            $sql .= "AND (e.title LIKE ? OR e.description LIKE ? OR e.location LIKE ? OR c.name LIKE ? OR u.email LIKE ?) ";
-            $params[] = $s;
-            $params[] = $s;
-            $params[] = $s;
-            $params[] = $s;
-            $params[] = $s;
+            $s = '%' . $search . '%';
+            $sql .= " AND (e.title LIKE ? OR e.location LIKE ? OR c.name LIKE ?) ";
+            array_push($params, $s, $s, $s);
         }
 
-        $sql .= "ORDER BY e.event_date DESC, e.event_time DESC LIMIT ?, ?";
-        $params[] = (int)$offset;
-        $params[] = (int)$limit;
+        $sql .= " ORDER BY e.event_date DESC, e.event_time DESC LIMIT ?, ?";
+        array_push($params, $offset, $limit);
 
         return $this->fetchEvents($sql, $params);
     }
 
     /**
      * Get events a user is subscribed to
+     * 
      * @param int $userId User ID
      * @return array Array of events the user is subscribed to
      */
-    public function getEventsSubscribedByUser(int $userId): array
+    public function getSubscriptionsByUserId(int $userId): array
     {
         $sql = $this->baseEventSelect() .
-            " FROM EVENT e 
-          JOIN SUBSCRIPTION s ON e.id = s.event_id 
-          LEFT JOIN USER u ON e.user_id = u.id
-          LEFT JOIN CATEGORY c ON e.category_id = c.id
-          WHERE s.user_id = ? AND e.event_date >= CURRENT_DATE()
-          ORDER BY e.event_date ASC";
+            " JOIN SUBSCRIPTION s ON e.id = s.event_id 
+                 WHERE s.user_id = ? AND e.event_date >= CURRENT_DATE() 
+                 ORDER BY e.event_date ASC";
         return $this->fetchEvents($sql, [$userId]);
     }
 
     /**
      * Get events organized by a user with specific statuses
+     * 
      * @param int $userId User ID
      * @param array $statuses Array of statuses to filter by (e.g. ['DRAFT', 'WAITING'])
+     * @param bool $onlyFuture If true, only returns future events; if false, includes all events
      * @return array Array of events organized by the user with the specified statuses
      */
-    public function getEventsOrganizedByUser(int $userId, array $statuses): array
+    public function getEventsOrganizedByUser(int $userId, array $statuses, bool $onlyFuture = true): array
     {
         $placeholders = implode(',', array_fill(0, count($statuses), '?'));
-        $sql = $this->baseEventSelect() .
-            " FROM EVENT e 
-          LEFT JOIN USER u ON e.user_id = u.id
-          LEFT JOIN CATEGORY c ON e.category_id = c.id
-          WHERE e.user_id = ? AND e.status IN ($placeholders)
-          AND e.event_date >= CURRENT_DATE()
-          ORDER BY e.event_date ASC";
+        $sql = $this->baseEventSelect() . " WHERE e.user_id = ? AND e.status IN ($placeholders) ";
+
+        if ($onlyFuture) {
+            $sql .= " AND (e.event_date > CURRENT_DATE() OR (e.event_date = CURRENT_DATE() AND e.event_time >= CURRENT_TIME())) ";
+            $sql .= " ORDER BY e.event_date ASC";
+        } else {
+            $sql .= " ORDER BY e.event_date DESC";
+        }
+
         return $this->fetchEvents($sql, array_merge([$userId], $statuses));
     }
 
     /**
      * Get user's event history (past events or cancelled) 
+     * 
      * @param int $userId User ID
      * @return array Array of past or cancelled events organized by or subscribed to by the user
      */
     public function getUserEventHistory(int $userId): array
     {
         $sql = $this->baseEventSelect() .
-            " FROM EVENT e 
-          LEFT JOIN USER u ON e.user_id = u.id
-          LEFT JOIN CATEGORY c ON e.category_id = c.id
-          WHERE (e.user_id = ? OR e.id IN (SELECT event_id FROM SUBSCRIPTION WHERE user_id = ?))
-          AND e.status = 'APPROVED' 
-          AND (e.event_date < CURRENT_DATE() 
-               OR (e.event_date = CURRENT_DATE() AND e.event_time < CURRENT_TIME()))
-          ORDER BY e.event_date DESC, e.event_time DESC";
+            " WHERE (e.user_id = ? OR e.id IN (SELECT event_id FROM SUBSCRIPTION WHERE user_id = ?))
+             AND e.status = 'APPROVED' 
+             AND (e.event_date < CURRENT_DATE() OR (e.event_date = CURRENT_DATE() AND e.event_time < CURRENT_TIME()))
+             ORDER BY e.event_date DESC";
 
         return $this->fetchEvents($sql, [$userId, $userId]);
     }
 
     /**
      * Get event by ID with category and user info
+     * 
      * @param int $id Event ID
      * @return array|null Event data as associative array or null if not found
      */
     public function getEventById(int $id): ?array
     {
-        $sql = $this->baseEventSelect() .
-            "FROM EVENT e 
-            LEFT JOIN USER u ON e.user_id = u.id 
-            LEFT JOIN CATEGORY c ON e.category_id = c.id 
-            WHERE e.id = ? LIMIT 1";
+        $sql = $this->baseEventSelect() . " WHERE e.id = ? LIMIT 1";
+        $rows = $this->fetchEvents($sql, [$id]);
+        return $rows[0] ?? null;
+    }
 
-        $res = $this->db->prepareAndExecute($sql, [$id]);
-        if (!$res || !($res instanceof mysqli_result)) return null;
+    /**
+     * Cancel an event (only if user is the organizer)
+     * 
+     * @param int $eventId Event ID to cancel
+     * @param int $userId User ID of the organizer (for authorization)
+     * @return bool True on success, false on failure
+     */
+    public function cancel(int $eventId, int $userId): bool
+    {
+        $sql = "UPDATE EVENT SET status = 'CANCELLED' WHERE id = ? AND user_id = ?";
+        return $this->db->prepareAndExecute($sql, [$eventId, $userId]) !== false;
+    }
 
-        return $res->fetch_assoc() ?: null;
+    /**
+     * Create a new event
+     * 
+     * @param array $data Associative array of event data (column => value)
+     * @return int Inserted event ID
+     */
+    public function create(array $data): int
+    {
+        $keys = array_keys($data);
+        $sql = "INSERT INTO EVENT (" . implode(',', $keys) . ") VALUES (" . implode(',', array_fill(0, count($keys), '?')) . ")";
+        $this->db->prepareAndExecute($sql, array_values($data));
+        return (int)$this->db->getConnection()->insert_id;
     }
 
     /**
      * Update event data
+     * 
      * @param array $data Associative array of fields to update (column => value)
      * @param int $id Event ID
      * @return bool True on success, false on failure
      */
-    public function updateEvent(array $data, int $id): bool
+    public function update(array $data, int $id): bool
     {
-        $fields = [];
-        $params = [];
-
-        foreach ($data as $key => $value) {
-            $fields[] = "$key = ?";
-            $params[] = $value;
-        }
+        $fields = array_map(fn($key) => "$key = ?", array_keys($data));
+        $params = array_values($data);
         $params[] = $id;
-
-        $sql = "UPDATE EVENT SET " . implode(', ', $fields) . " WHERE id = ?";
-        $res = $this->db->prepareAndExecute($sql, $params);
-
-        return $res !== false;
+        return $this->db->prepareAndExecute("UPDATE EVENT SET " . implode(',', $fields) . " WHERE id = ?", $params) !== false;
     }
 
     /**
      * Delete an event by id
+     * 
      * @param int $id Event ID
      * @return bool True on success, false on failure
      */
-    public function deleteEvent(int $id): bool
+    public function delete(int $id): bool
     {
-        $sql = "DELETE FROM EVENT WHERE id = ?";
-        $res = $this->db->prepareAndExecute($sql, [$id]);
-        return $res !== false;
+        return $this->db->prepareAndExecute("DELETE FROM EVENT WHERE id = ?", [$id]) !== false;
     }
 }
