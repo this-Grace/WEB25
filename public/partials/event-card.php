@@ -10,18 +10,18 @@
                 alt="Locandina: <?= htmlspecialchars($event['title']) ?>" />
 
             <?php if ((new DateTime($event['event_date'])) < new DateTime('today')): ?>
-                <div class="position-absolute top-50 start-50 translate-middle w-100 text-center z-1">
-                    <span class="badge text-dark px-4 py-2 fs-6">CONCLUSO</span>
+                <div class="position-absolute top-50 start-50 translate-middle w-100 text-center">
+                    <span class="badge bg-dark text-light px-4 py-2 fs-6">CONCLUSO</span>
                 </div>
             <?php else: ?>
                 <?php switch (strtolower($event['status'] ?? '')):
                     case 'waiting': ?>
-                        <div class="position-absolute top-50 start-50 translate-middle w-100 text-center z-1">
+                        <div class="position-absolute top-50 start-50 translate-middle w-100 text-center">
                             <span class="badge bg-warning text-dark px-4 py-2 fs-6">In Revisione</span>
                         </div>
                     <?php break;
                     case 'cancelled': ?>
-                        <div class="position-absolute top-50 start-50 translate-middle w-100 text-center z-1">
+                        <div class="position-absolute top-50 start-50 translate-middle w-100 text-center">
                             <span class="badge bg-danger text-light px-4 py-2 fs-6">Annullato</span>
                         </div>
                 <?php break;
@@ -56,9 +56,65 @@
                 </li>
             </ul>
 
-            <?php if ((int)$event['total_seats'] > 0 && (int)$event['occupied_seats'] >= (int)$event['total_seats']): ?>
-                <div class="mt-auto pt-2">
-                    <span class="badge bg-secondary w-100 py-2">POSTI ESAURITI</span>
+            <?php
+            $isFull = (int)$event['total_seats'] > 0 && (int)$event['occupied_seats'] >= (int)$event['total_seats'];
+            $isSubscribed = false;
+            if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'])) {
+                $isSubscribed = in_array((int)$event['id'], array_map('intval', $templateParams['user_subscriptions']), true);
+            }
+            ?>
+            <?php
+            if ((new DateTime($event['event_date'])) >= new DateTime('today') && isset($_SESSION['user']['id'])):
+                $isAdmin = (strtolower($_SESSION['user']['role']) === 'admin');
+            ?>
+                <div class="mt-auto pt-3">
+                    <div class="d-flex flex-wrap gap-2">
+                        <?php if ($_SESSION['user']['id'] == $event['user_id']): ?>
+                            <div class="d-flex flex-column w-100 gap-2">
+                                <?php if (strtolower($event['status']) === 'draft'): ?>
+                                    <a href="api/edit_event.php?event_id=<?= $event['id'] ?>&action=publish_from_draft" class="btn btn-outline-success btn-sm w-100">
+                                        <span class="bi bi-upload me-1"></span> Pubblica
+                                    </a>
+                                <?php endif; ?>
+                                <div class="d-flex gap-2">
+                                    <a href="event.php?event_id=<?= $event['id'] ?>" class="btn btn-outline-dark btn-sm flex-grow-1">
+                                        <span class="bi bi-pencil me-1"></span> Modifica
+                                    </a>
+                                    <?php if (strtolower($event['status']) === 'draft'): ?>
+                                        <a href="api/delete_event.php?event_id=<?= $event['id'] ?>"
+                                            class="btn btn-outline-danger btn-sm flex-grow-1"
+                                            onclick="return confirm('Sei sicuro di voler eliminare definitivamente questo evento?')">
+                                            <span class="bi bi-trash me-1"></span> Elimina
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="api/cancel_event.php?event_id=<?= $event['id'] ?>"
+                                            class="btn btn-outline-warning btn-sm flex-grow-1"
+                                            onclick="return confirm('Sei sicuro di voler annullare questo evento?')">
+                                            <span class="bi bi-x-circle me-1"></span> Annulla
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php elseif ($isAdmin && strtolower($event['status']) === 'waiting'): ?>
+                            <a href="api/approve_event.php?event_id=<?= $event['id'] ?>" class="btn btn-success btn-sm flex-grow-1">
+                                <span class="bi bi-check-circle me-1"></span> Approva Evento
+                            </a>
+                        <?php elseif (strtolower($event['status']) === 'approved'): ?>
+                            <?php if ($isSubscribed): ?>
+                                <a href="api/unsubscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-danger btn-sm flex-grow-1">
+                                    <span class="bi bi-person-dash me-1"></span> Disiscriviti
+                                </a>
+                            <?php elseif ($isFull): ?>
+                                <button class="btn btn-secondary btn-sm flex-grow-1" disabled>
+                                    <span class="bi bi-slash-circle me-1"></span> POSTI ESAURITI
+                                </button>
+                            <?php else: ?>
+                                <a href="api/subscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-primary btn-sm flex-grow-1">
+                                    <span class="bi bi-person-plus me-1"></span> Iscriviti
+                                </a>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
