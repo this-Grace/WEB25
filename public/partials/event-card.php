@@ -63,12 +63,21 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
                 </li>
             </ul>
 
-            <?php
-            if ((new DateTime($event['event_date'])) >= new DateTime('today') && isset($_SESSION['user']['id'])):
-                $isAdmin = (strtolower($_SESSION['user']['role']) === 'admin');
-            ?>
-                <div class="mt-auto pt-3">
-                    <div class="d-flex flex-wrap gap-2">
+            <div class="mt-auto pt-3">
+                <div class="d-flex flex-wrap gap-2">
+                    <?php
+                    if ($isFull && (new DateTime($event['event_date'])) >= new DateTime('today') && strtolower($event['status'] ?? '') === 'approved'): ?>
+                        <div class="w-100 mb-2">
+                            <span class="badge bg-secondary w-100 py-2">
+                                <span class="bi bi-slash-circle me-1"></span> POSTI ESAURITI
+                            </span>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php
+                    if ((new DateTime($event['event_date'])) >= new DateTime('today') && isset($_SESSION['user']['id'])):
+                        $isAdmin = (strtolower($_SESSION['user']['role']) === 'admin');
+                    ?>
                         <?php if ($_SESSION['user']['id'] == $event['user_id']): ?>
                             <div class="d-flex flex-column w-100 gap-2">
                                 <?php if (strtolower($event['status']) === 'draft'): ?>
@@ -107,19 +116,15 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
                                 <a href="api/unsubscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-danger btn-sm flex-grow-1">
                                     <span class="bi bi-person-dash me-1"></span> Disiscriviti
                                 </a>
-                            <?php elseif ($isFull): ?>
-                                <button class="btn btn-secondary btn-sm flex-grow-1" disabled>
-                                    <span class="bi bi-slash-circle me-1"></span> POSTI ESAURITI
-                                </button>
-                            <?php else: ?>
+                            <?php elseif (!$isFull):?>
                                 <a href="api/subscribe.php?event_id=<?= $event['id'] ?>" class="btn btn-primary btn-sm flex-grow-1">
                                     <span class="bi bi-person-plus me-1"></span> Iscriviti
                                 </a>
                             <?php endif; ?>
                         <?php endif; ?>
-                    </div>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
+            </div>
         </div>
     </div>
 </article>
