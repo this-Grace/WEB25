@@ -12,30 +12,27 @@ $categoryId = isset($_GET['categoryId']) && $_GET['categoryId'] !== '' ? (int)$_
 $search = isset($_GET['search']) ? trim($_GET['search']) : null;
 $special = isset($_GET['special']) ? trim($_GET['special']) : null;
 
-$role = 'other';
-$userEmail = null;
+$role = 'guest';
 $userId = null;
 if (!empty($_SESSION['user'])) {
     $user = $_SESSION['user'];
-    $role = $user['role'] ?? 'other';
-    $userEmail = $user['email'] ?? null;
+    $role = strtolower($user['role'] ?? 'guest');
     $userId = $user['id'] ?? null;
 }
 
-$events = $eventMapper->getEventsWithFilters($role, $userEmail, $limit, $offset, $categoryId, $special, $search);
+$events = $eventMapper->getEventsWithFilters($role, $userId, $limit, $offset, $categoryId, $special, $search);
 
-$templateParams['user_subscriptions'] = [];
+$userSubscriptions = [];
 if ($userId && !empty($events)) {
-    $templateParams['user_subscriptions'] = $subscriptionMapper->findSubscribedEventsByUser(
-        $userId, 
-        array_column($events, 'id')
-    );
+    $eventIds = array_column($events, 'id');
+    $userSubscriptions = $subscriptionMapper->findSubscribedEventsByUser($userId, $eventIds);
 }
 
 $html = '';
 foreach ($events as $event) {
     // render each event using the existing partial
     $e = $event; // provide variable name expected by event-card
+    $templateParams['user_subscriptions'] = $userSubscriptions;
     ob_start();
     include __DIR__ . '/../partials/event-card.php';
     $html .= ob_get_clean();

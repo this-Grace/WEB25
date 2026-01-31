@@ -6,24 +6,43 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $eventId = isset($_REQUEST['event_id']) ? (int)$_REQUEST['event_id'] : 0;
+$userId  = $_SESSION['user']['id'] ?? null;
 
-if ($eventId <= 0) {
-    header('Location: ../index.php?error=invalid_id');
+if ($eventId <= 0 || !$userId) {
+    if (isset($_GET['action'])) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Sessione scaduta o ID mancante']);
+        exit;
+    }
+    header('Location: ../index.php');
     exit;
 }
 
 $currentEvent = $eventMapper->getEventById($eventId);
 
-if (!$currentEvent || $currentEvent['user_id'] != $_SESSION['user']['id']) {
-    header('Location: ../profile.php?error=unauthorized');
+if (!$currentEvent || (int)$currentEvent['user_id'] !== $userId) {
+    if (isset($_GET['action'])) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Non autorizzato']);
+        exit;
+    }
+    header('Location: ../profile.php');
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'publish_from_draft') {
-    if ($eventMapper->updateEvent(['status' => 'WAITING'], $eventId)) {
-        header('Location: ../profile.php?msg=published');
+    header('Content-Type: application/json; charset=utf-8');
+    
+    if ($eventMapper->update(['status' => 'WAITING'], $eventId)) {
+        $event = $eventMapper->getEventById($eventId);
+        
+        ob_start();
+        include __DIR__ . '/../partials/event-card.php';
+        $html = ob_get_clean();
+
+        echo json_encode(['success' => true, 'html' => $html]);
     } else {
-        header('Location: ../profile.php?error=sql_error');
+        echo json_encode(['success' => false, 'message' => 'Errore durante la pubblicazione']);
     }
     exit;
 }
@@ -67,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updateData['status'] = 'WAITING';
     }
 
-    if ($eventMapper->updateEvent($updateData, $eventId)) {
+    if ($eventMapper->update($updateData, $eventId)) {
         header('Location: ../profile.php');
     } else {
         header('Location: ../event.php?event_id=' . $eventId . '&error=sql_fail');

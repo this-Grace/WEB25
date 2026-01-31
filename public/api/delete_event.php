@@ -1,27 +1,29 @@
 <?php
 require_once __DIR__ . '/../../app/bootstrap.php';
 
+header('Content-Type: application/json; charset=utf-8');
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 $eventId = isset($_GET['event_id']) ? (int)$_GET['event_id'] : 0;
-if ($eventId <= 0) {
-    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/'));
+$userId  = $_SESSION['user']['id'] ?? null;
+$userRole = strtolower($_SESSION['user']['role'] ?? '');
+
+if ($eventId <= 0 || !$userId) {
+    echo json_encode(['success' => false, 'message' => 'Dati mancanti o sessione scaduta']);
     exit;
 }
 
-$userRole = strtolower($_SESSION['user']['role'] ?? '');
-$sessionEmail = $_SESSION['user']['email'] ?? '';
-
-$eventMapper = new Event($dbh);
 $evt = $eventMapper->getEventById($eventId);
-if ($evt) {
-    $ownerEmail = $evt['user_email'] ?? '';
-    if ($userRole === 'admin' || ($sessionEmail !== '' && $sessionEmail === $ownerEmail)) {
-        $eventMapper->deleteEvent($eventId);
+if ($evt && ($userRole === 'admin' || $userId === (int)$evt['user_id'])) {
+    $ok = $eventMapper->delete($eventId);
+    if ($ok) {
+        echo json_encode(['success' => true, 'message' => 'Evento eliminato con successo']);
+        exit;
     }
 }
 
-header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/'));
-exit;
+echo json_encode(['success' => false, 'message' => 'Permesso negato o errore durante l\'eliminazione']);
+exit; 
