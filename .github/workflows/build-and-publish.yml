@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Lowercase repository owner for image tag
+        run: echo "IMAGE_OWNER=$(echo $GITHUB_REPOSITORY_OWNER | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -38,6 +41,6 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/web25:latest
-            ghcr.io/${{ github.repository_owner }}/web25:${{ github.sha }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/web25:latest
+            ghcr.io/${{ env.IMAGE_OWNER }}/web25:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
