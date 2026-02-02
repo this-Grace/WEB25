@@ -28,49 +28,61 @@ php -S localhost:8000 -t public
 
 ### 4) Run with Docker (recommended)
 
-You can run the app + MySQL using Docker Compose. Create a `docker-compose.yml` in the project root with the following content (or copy/paste into your CI/deploy):
+You can run the app + MySQL using Docker Compose. For production we provide `docker-compose.yml` which pulls the image from GHCR. Example `docker-compose.yml` (already in this repo):
 
 ```yaml
-version: '3.8'
-
 services:
-	web:
-		build: .
-		ports:
-			- "4567:80"
-		depends_on:
-			- db
-		environment:
-			DB_HOST: db
-			DB_USER: root
-			DB_PASSWORD: example
-			DB_NAME: web25
-			DB_PORT: 3306
-		volumes:
-			- ./:/var/www/html:delegated
-		restart: unless-stopped
+  web:
+    image: ghcr.io/this-Grace/web25:latest
+    ports:
+      - "4567:80"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: example
+      DB_NAME: web25
+      DB_PORT: 3306
+    volumes:
+      - ./upload:/var/www/html/upload:delegated
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
 
-	db:
-		image: mysql:8.0
-		environment:
-			MYSQL_ROOT_PASSWORD: example
-			MYSQL_DATABASE: web25
-		volumes:
-			- db_data:/var/lib/mysql
-			- ./resources/database.sql:/docker-entrypoint-initdb.d/init.sql:ro
-		ports:
-			- "3306:3306"
-		restart: unless-stopped
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: web25
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./resources/database.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$MYSQL_ROOT_PASSWORD >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Watchtower keeps services up-to-date by pulling new images from the registry
+  watchtower:
+    image: containrrr/watchtower:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 300 --cleanup
+    restart: unless-stopped
 
 volumes:
-	db_data:
+  db_data:
 
 ```
 
-Start the stack:
+Start the stack (production file):
 
 ```bash
-docker-compose up --build -d
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
 Web: http://localhost:4567
@@ -80,7 +92,7 @@ Importing demo data:
 - To import `resources/demo.sql` into a running DB container:
 
 ```bash
-docker exec -i $(docker-compose ps -q db) mysql -u root -pexample web25 < resources/demo.sql
+docker exec -i $(docker-compose -f docker-compose.prod.yml ps -q db) mysql -u root -pexample web25 < resources/demo.sql
 ```
 
 Notes:
