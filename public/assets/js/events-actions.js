@@ -2,19 +2,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const activeTabId = sessionStorage.getItem('activeProfileTab');
     if (activeTabId) {
-        const tabTrigger = document.querySelector(`#${activeTabId}`);
-        if (tabTrigger) {
-            document.querySelectorAll('.nav-link, .tab-pane').forEach(el => {
-                el.classList.remove('active', 'show');
-            });
-            const tab = new bootstrap.Tab(tabTrigger);
+        const tabTriggerEl = document.querySelector(`#${activeTabId}`);
+        if (tabTriggerEl) {
+            const tab = new bootstrap.Tab(tabTriggerEl);
             tab.show();
         }
     }
 
-    document.querySelectorAll('#profileTabs a[data-bs-toggle="tab"]').forEach(link => {
-        link.addEventListener('shown.bs.tab', (e) => {
-            sessionStorage.setItem('activeProfileTab', e.target.id);
+    const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabEls.forEach(tabEl => {
+        tabEl.addEventListener('shown.bs.tab', (event) => {
+            sessionStorage.setItem('activeProfileTab', event.target.id);
         });
     });
 
@@ -23,19 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!btn) return;
 
         e.preventDefault();
-
         const url = btn.href;
+        
+        const isPublish = url.includes('publish_from_draft');
+        const isApprove = url.includes('approve_event.php');
         const isDelete = url.includes('delete_event.php');
         const isCancel = url.includes('cancel_event.php');
-        const isUnsubscribe = url.includes('unsubscribe.php');
-        const isPublish = url.includes('publish_from_draft');
 
-        if ((isDelete || isCancel) && !confirm('Sei sicuro di voler procedere?')) {
-            return;
-        }
-
-        const cardContainer = btn.closest('article');
-        const isProfilePage = document.getElementById('profileTabsContent') !== null;
+        if ((isDelete || isCancel) && !confirm('Sei sicuro di voler procedere?')) return;
 
         try {
             btn.classList.add('disabled');
@@ -43,45 +36,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             });
-
             const data = await response.json();
 
             if (data.success) {
-                if (isPublish && isProfilePage) {
+                if ((isPublish || isApprove) && document.getElementById('profileTabsContent')) {
                     window.location.reload();
                     return;
                 }
 
-                let shouldRemove = false;
-
-                if (isDelete) {
-                    shouldRemove = true;
-                } else if (isCancel) {
-                    shouldRemove = isProfilePage;
-                } else if (isUnsubscribe) {
-                    shouldRemove = btn.closest('#subscriber-pane') !== null;
-                }
-
-                if (shouldRemove) {
+                const cardContainer = btn.closest('article');
+                if (cardContainer) {
                     cardContainer.style.transition = 'all 0.3s ease';
                     cardContainer.style.opacity = '0';
                     cardContainer.style.transform = 'scale(0.9)';
                     setTimeout(() => {
                         cardContainer.remove();
-                        if (isProfilePage) checkEmptyTab(); 
+                        checkEmptyTab(); 
                     }, 300);
-                } else {
-                    if (data.html) {
-                        cardContainer.outerHTML = data.html;
-                    }
                 }
             } else {
-                alert(data.message || 'Errore durante l\'operazione');
+                alert(data.message || 'Errore');
                 btn.classList.remove('disabled');
             }
         } catch (error) {
-            console.error('Errore AJAX:', error);
-            alert('Errore di connessione o sessione scaduta');
+            console.error('Errore:', error);
             btn.classList.remove('disabled');
         }
     });

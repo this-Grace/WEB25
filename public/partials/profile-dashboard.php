@@ -14,6 +14,11 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
         'data' => $templateParams["events_organized"],
     ];
     $activeTabs[] = [
+        'id' => 'waiting-pane',
+        'label' => 'In Revisione',
+        'data' => $templateParams["events_waiting"],
+    ];
+    $activeTabs[] = [
         'id' => 'draft-pane',
         'label' => 'Bozze',
         'data' => $templateParams["events_drafts"],

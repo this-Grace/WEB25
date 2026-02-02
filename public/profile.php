@@ -18,7 +18,8 @@ $templateParams["content"] = "partials/profile-dashboard.php";
 
 $templateParams["user"] = $userMapper->findByEmail($_SESSION['user']['email']);
 $templateParams["events_subscribed"] = $eventMapper->getSubscriptionsByUserId($userId);
-$templateParams["events_organized"] = $eventMapper->getEventsOrganizedByUser($userId, ['APPROVED', 'WAITING']);
+$templateParams["events_organized"] = $eventMapper->getEventsOrganizedByUser($userId, ['APPROVED']);
+$templateParams["events_waiting"] = $eventMapper->getEventsOrganizedByUser($userId, ['WAITING']);
 $templateParams["events_drafts"] = $eventMapper->getEventsOrganizedByUser($userId, ['DRAFT']);
 $templateParams["events_history"] = $eventMapper->getUserEventHistory($userId);
 
