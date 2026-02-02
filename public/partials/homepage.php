@@ -41,7 +41,7 @@
                 <a href="#" class="btn-cate btn-cate-waiting" data-id="waiting">Waiting</a>
             <?php endif; ?>
 
-            <?php if (!empty($templateParams['categories'] ?? []) && (in_array($userRole, ['host', 'admin'], true) || $userRole === 'admin')): ?>
+            <?php if (!empty($templateParams['categories'] ?? []) && in_array($userRole, ['admin'], true)): ?>
                 <div class="vr mx-2" role="separator" aria-orientation="vertical" aria-hidden="true"></div>
             <?php endif; ?>
 

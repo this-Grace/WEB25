@@ -76,10 +76,8 @@ INSERT INTO `EVENT` (title, description, event_date, event_time, location, total
 INSERT INTO `SUBSCRIPTION` (user_id, event_id, participation_code, status, checkin_time) VALUES
 (1, 1, 'SUB1001', 'REGISTERED', NULL),
 (2, 1, 'SUB1002', 'REGISTERED', NULL),
-(3, 1, 'SUB1003', 'CANCELLED', NULL),
 (4, 4, 'SUB1004', 'PRESENT', '2026-04-10 08:05:00'),
 (1, 9, 'SUB1010', 'PRESENT', '2026-06-08 19:35:00'),
 (2, 7, 'SUB1011', 'PRESENT', '2026-05-12 17:05:00'),
-(3, 7, 'SUB1012', 'REGISTERED', NULL),
 (5, 10, 'SUB1013', 'PRESENT', '2026-05-20 11:05:00'),
 (2, 4, 'SUB1014', 'CANCELLED', NULL);

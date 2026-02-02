@@ -92,39 +92,51 @@ class Event
      * @param string|null $search Optional search term to filter events by title, location, or category name
      * @return array Array of event rows
      */
-    public function getEventsWithFilters(string $role, ?int $currentUserId = null, int $limit = 6, int $offset = 0, ?int $categoryId = null, ?string $specialFilter = null, ?string $search = null): array
-    {
+    public function getEventsWithFilters(
+        string $role,
+        ?int $currentUserId = null,
+        int $limit = 6,
+        int $offset = 0,
+        ?int $categoryId = null,
+        ?string $specialFilter = null,
+        ?string $search = null
+    ): array {
         $params = [];
         $sql = $this->baseEventSelect() . " WHERE 1=1 ";
 
-        if ($role === 'admin') {
-            // admin can see everything
-        } elseif ($role === 'host' && $currentUserId) {
-            $sql .= " AND (e.status IN ('APPROVED', 'CANCELLED') OR e.user_id = ?) ";
-            $params[] = $currentUserId;
-        } else {
-            $sql .= " AND e.status IN ('APPROVED', 'CANCELLED') ";
+        switch ($role) {
+            case 'admin':
+                break;
+
+            default:
+                $sql .= " AND e.status = 'APPROVED' ";
         }
 
         if ($specialFilter === 'miei' && $currentUserId) {
             $sql .= " AND e.user_id = ? ";
             $params[] = $currentUserId;
-        } elseif ($specialFilter === 'waiting' && $role === 'admin') {
+        }
+
+        if ($specialFilter === 'waiting' && $role === 'admin') {
             $sql .= " AND e.status = 'WAITING' ";
         }
 
-        if ($categoryId) {
+        if ($categoryId !== null) {
             $sql .= " AND e.category_id = ? ";
             $params[] = $categoryId;
         }
 
-        if (!empty($search)) {
-            $s = '%' . $search . '%';
+        if ($search !== null && $search !== '') {
+            $like = "%{$search}%";
             $sql .= " AND (e.title LIKE ? OR e.location LIKE ? OR c.name LIKE ?) ";
-            array_push($params, $s, $s, $s);
+            array_push($params, $like, $like, $like);
         }
 
-        $sql .= " ORDER BY e.event_date DESC, e.event_time DESC LIMIT ?, ?";
+        if ($specialFilter !== 'miei') {
+            $sql .= " AND (e.event_date > CURRENT_DATE() OR (e.event_date = CURRENT_DATE() AND e.event_time >= CURRENT_TIME())) ";
+        }
+
+        $sql .= " ORDER BY e.event_date DESC, e.event_time DESC LIMIT ?, ? ";
         array_push($params, $offset, $limit);
 
         return $this->fetchEvents($sql, $params);
