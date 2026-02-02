@@ -8,9 +8,20 @@ if (session_status() == PHP_SESSION_NONE) {
 // Read params
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 6;
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-$categoryId = isset($_GET['categoryId']) && $_GET['categoryId'] !== '' ? (int)$_GET['categoryId'] : null;
-$search = isset($_GET['search']) ? trim($_GET['search']) : null;
+
+$categoryId = null;
 $special = isset($_GET['special']) ? trim($_GET['special']) : null;
+
+if (isset($_GET['categoryId']) && $_GET['categoryId'] !== '') {
+    $rawCategory = trim($_GET['categoryId']);
+    if (strtolower($rawCategory) === 'waiting') {
+        $special = 'waiting';
+    } elseif (is_numeric($rawCategory)) {
+        $categoryId = (int)$rawCategory;
+    }
+}
+
+$search = isset($_GET['search']) ? trim($_GET['search']) : null;
 
 $role = 'guest';
 $userId = null;
@@ -30,8 +41,7 @@ if ($userId && !empty($events)) {
 
 $html = '';
 foreach ($events as $event) {
-    // render each event using the existing partial
-    $e = $event; // provide variable name expected by event-card
+    $e = $event;
     $templateParams['user_subscriptions'] = $userSubscriptions;
     ob_start();
     include __DIR__ . '/../partials/event-card.php';

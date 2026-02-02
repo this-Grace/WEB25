@@ -30,13 +30,13 @@ $templateParams['categories'] = $allCategories;
 $templateParams['featured_events'] = $eventMapper->getEventsWithFilters(
     role: $userRole,
     currentUserId: $userId,
-    limit: 6
+    limit: 1000
 );
 
 if ($userId) {
     $featuredIds = array_column($templateParams['featured_events'], 'id');
-    $templateParams['user_subscriptions'] = !empty($featuredIds) 
-        ? $subscriptionMapper->findSubscribedEventsByUser($userId, $featuredIds) 
+    $templateParams['user_subscriptions'] = !empty($featuredIds)
+        ? $subscriptionMapper->findSubscribedEventsByUser($userId, $featuredIds)
         : [];
 }
 

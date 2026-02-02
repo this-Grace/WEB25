@@ -36,6 +36,15 @@
     <div class="container">
         <h2 class="visually-hidden">Filtra eventi per categoria</h2>
         <div class="d-flex justify-content-center flex-wrap gap-2">
+            <?php $userRole = strtolower($_SESSION['user']['role'] ?? '');
+            if ($userRole === 'admin'): ?>
+                <a href="#" class="btn-cate btn-cate-waiting" data-id="waiting">Waiting</a>
+            <?php endif; ?>
+
+            <?php if (!empty($templateParams['categories'] ?? []) && (in_array($userRole, ['host', 'admin'], true) || $userRole === 'admin')): ?>
+                <div class="vr mx-2" role="separator" aria-orientation="vertical" aria-hidden="true"></div>
+            <?php endif; ?>
+
             <?php foreach ($templateParams['categories'] ?? [] as $cat): ?>
                 <a href="<?= strtolower($cat['name'] ?? '') ?>"
                     class="btn-cate btn-cate-<?= strtolower($cat['name'] ?? '') ?>"
