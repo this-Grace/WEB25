@@ -33,7 +33,7 @@ You can run the app + MySQL using Docker Compose. For production we provide `doc
 ```yaml
 services:
   web:
-    image: ghcr.io/this-Grace/web25:latest
+    image: ghcr.io/this-grace/web25:latest
     ports:
       - "4567:80"
     environment:
