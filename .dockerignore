@@ -1,0 +1,11 @@
+.git
+.gitignore
+node_modules
+vendor
+docs
+build
+.idea
+*.md
+*.log
+/.vscode
+/.DS_Store

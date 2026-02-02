@@ -30,7 +30,7 @@ $templateParams['categories'] = $allCategories;
 $templateParams['featured_events'] = $eventMapper->getEventsWithFilters(
     role: $userRole,
     currentUserId: $userId,
-    limit: 1000
+    limit: 6
 );
 
 if ($userId) {
