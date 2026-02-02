@@ -34,7 +34,6 @@ INSERT INTO `EVENT` (title, description, event_date, event_time, location, total
 ('Pulizia Volontaria della Spiaggia', 'Evento di volontariato per pulire la spiaggia locale.', '2026-06-01', '09:00:00', 'Spiaggia della Marina - Edificio B', 60, 0, 'WAITING', CURRENT_TIMESTAMP, 'photo1.jpeg', 4, 5),
 ('Incontro di Conversazione in Francese', 'Scambio linguistico informale per partecipanti di livello intermedio.', '2025-06-08', '19:30:00', 'Sala Caffetteria - Edificio B', 30, 0, 'APPROVED', CURRENT_TIMESTAMP, 'photo1.jpeg', 3, 5),
 ('Fiera Maker di Primavera', 'Esposizione di progetti studenteschi e dimostrazioni dei maker.', '2026-05-20', '11:00:00', 'Padiglione Espositivo - Edificio B', 300, 0, 'APPROVED', CURRENT_TIMESTAMP, 'photo3.jpeg', 4, 2),
-('Prova', 'prova', '2026-05-20', '11:00:00', 'Padiglione Espositivo - Edificio B', 300, 0, 'APPROVED', CURRENT_TIMESTAMP, 'photo3.jpeg', 3, 4),
 ('Hackathon GreenTech', 'Evento intensivo di sviluppo di soluzioni ecologiche e prototipi funzionanti.', '2026-07-10', '09:00:00', 'Laboratorio Innovazione - Edificio C', 120, 0, 'WAITING', CURRENT_TIMESTAMP, 'photo2.jpeg', 3, 2),
 ('Seminario UX Design', 'Best practices per progettare interfacce utente intuitive e accessibili.', '2026-06-25', '14:30:00', 'Aula C2 - Edificio A', 60, 0, 'APPROVED', CURRENT_TIMESTAMP, 'photo1.jpeg', 4, 3),
 ('Torneo di Calcio a 5', 'Torneo amatoriale aperto a squadre miste. Iscrizione a squadre di massimo 8 giocatori.', '2026-07-03', '18:00:00', 'Campo Sportivo - Edificio D', 80, 0, 'APPROVED', CURRENT_TIMESTAMP, 'photo2.jpeg', 4, 4),
