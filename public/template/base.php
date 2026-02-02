@@ -16,8 +16,9 @@ $navClass = function (string $label) use ($templateParams): string {
     <title><?= htmlspecialchars($templateParams['brand'], ENT_QUOTES, 'UTF-8') . " | " . htmlspecialchars($templateParams['title'], ENT_QUOTES, 'UTF-8'); ?></title>
 
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="<?= htmlspecialchars($templateParams['css'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-
+    <?php if (!empty($templateParams['css'])): ?>
+        <link rel="stylesheet" href="<?= htmlspecialchars($templateParams['css'], ENT_QUOTES, 'UTF-8'); ?>">
+    <?php endif; ?>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">

@@ -53,7 +53,7 @@
 
                 <section class="mb-5">
                     <h2 class="h4 fw-bold">7. Limitazione di Responsabilità</h2>
-                    <p, class="small"><?= htmlspecialchars($templateParams['brand']); ?> non può essere ritenuta responsabile per danni indiretti, perdita di dati o perdite finanziarie derivanti dall'uso della piattaforma, salvo i casi previsti dalla legge.</p>
+                    <p class="small"><?= htmlspecialchars($templateParams['brand']); ?> non può essere ritenuta responsabile per danni indiretti, perdita di dati o perdite finanziarie derivanti dall'uso della piattaforma, salvo i casi previsti dalla legge.</p>
                 </section>
 
                 <section class="mb-5">

@@ -44,6 +44,7 @@
                                                 <option value="<?= $hh; ?>" <?= ((explode(':', $templateParams['event']['event_time'] ?? '')[0] ?? '') === $hh) ? 'selected' : '' ?>><?= $hh; ?></option>
                                             <?php endfor; ?>
                                         </select>
+                                        <label for="eventTimeMinute" class="visually-hidden">Minuti</label>
                                         <select id="eventTimeMinute" name="event_time_minute" class="form-select bg-light" aria-label="Minuti" required>
                                             <option value="" selected disabled>Minuti</option>
                                             <?php for ($m = 0; $m < 60; $m += 15): $mm = str_pad($m, 2, '0', STR_PAD_LEFT); ?>

@@ -104,14 +104,14 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
             <ul class="nav nav-tabs border-0 gap-3 gap-md-4 flex-nowrap" id="profileTabs" role="tablist">
                 <?php foreach ($activeTabs as $index => $tab): ?>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link <?= $index === 0 ? 'active' : '' ?> border-0 bg-transparent p-0 pb-2 fw-bold"
+                        <button class="nav-link <?= $index === 0 ? 'active' : '' ?> border-0 bg-transparent p-0 pb-2 fw-bold"
                             id="<?= $tab['id'] ?>-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#<?= $tab['id'] ?>"
                             type="button"
                             role="tab">
                             <?= $tab['label'] ?>
-                        </a>
+                        </button>
                     </li>
                 <?php endforeach; ?>
             </ul>
