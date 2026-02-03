@@ -122,6 +122,18 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
             </ul>
         </nav>
 
+        <div id="profile-search-container" class="mb-4 d-none">
+            <div class="row justify-content-end">
+                <div class="col-12 col-md-5 col-lg-3">
+                    <form id="profile-search-form" class="d-flex" role="search" onsubmit="return false;">
+                        <label for="profileSearchInput" class="visually-hidden">Cerca nei tuoi eventi</label>
+                        <input id="profileSearchInput" type="search"
+                            class="form-control" placeholder="Cerca eventi..." aria-label="Cerca nel profilo">
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="tab-content" id="profileTabsContent">
             <?php foreach ($activeTabs as $index => $tab): ?>
                 <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>" id="<?= $tab['id'] ?>" role="tabpanel">

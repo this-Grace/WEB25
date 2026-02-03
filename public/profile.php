@@ -13,7 +13,7 @@ if (empty($userId)) {
 
 $templateParams["title"] = "Profilo";
 $templateParams['css'] = 'assets/css/profile.css';
-$templateParams['js'] = ['assets/js/edit-profile.js', 'assets/js/events-actions.js'];
+$templateParams['js'] = ['assets/js/edit-profile.js', 'assets/js/events-actions.js', 'assets/js/profile-search.js'];
 $templateParams["content"] = "partials/profile-dashboard.php";
 
 $templateParams["user"] = $userMapper->findByEmail($_SESSION['user']['email']);
