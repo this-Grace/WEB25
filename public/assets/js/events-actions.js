@@ -2,17 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const activeTabId = sessionStorage.getItem('activeProfileTab');
     if (activeTabId) {
-        const tabTriggerEl = document.querySelector(`#${activeTabId}`);
-        if (tabTriggerEl) {
-            const tab = new bootstrap.Tab(tabTriggerEl);
+        const tabTrigger = document.querySelector(`#${activeTabId}`);
+        if (tabTrigger) {
+            document.querySelectorAll('.nav-link, .tab-pane').forEach(el => {
+                el.classList.remove('active', 'show');
+            });
+            const tab = new bootstrap.Tab(tabTrigger);
             tab.show();
         }
     }
 
-    const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
-    tabEls.forEach(tabEl => {
-        tabEl.addEventListener('shown.bs.tab', (event) => {
-            sessionStorage.setItem('activeProfileTab', event.target.id);
+    document.querySelectorAll('#profileTabs a[data-bs-toggle="tab"]').forEach(link => {
+        link.addEventListener('shown.bs.tab', (e) => {
+            sessionStorage.setItem('activeProfileTab', e.target.id);
         });
     });
 
@@ -22,13 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         e.preventDefault();
         const url = btn.href;
-        
+
         const isPublish = url.includes('publish_from_draft');
-        const isApprove = url.includes('approve_event.php');
         const isDelete = url.includes('delete_event.php');
         const isCancel = url.includes('cancel_event.php');
+        const isUnsubscribe = url.includes('unsubscribe.php');
 
-        if ((isDelete || isCancel) && !confirm('Sei sicuro di voler procedere?')) return;
+        if ((isDelete || isCancel) && !confirm('Sei sicuro di voler procedere?')) {
+            return;
+        }
+
+        const cardContainer = btn.closest('article');
+        const isProfilePage = document.getElementById('profileTabsContent') !== null;
 
         try {
             btn.classList.add('disabled');
@@ -39,27 +46,40 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.success) {
-                if ((isPublish || isApprove) && document.getElementById('profileTabsContent')) {
-                    window.location.reload();
-                    return;
+                const isProfilePage = document.getElementById('profileTabsContent') !== null;
+                const currentTab = btn.closest('.tab-pane')?.id;
+
+                let shouldRemove = false;
+
+                if (isDelete) {
+                    shouldRemove = true;
+                } else if (isCancel && isProfilePage) {
+                    shouldRemove = true;
+                } else if (isUnsubscribe && currentTab === 'subscriber-pane') {
+                    shouldRemove = true;
+                } else if (isPublish && currentTab === 'draft-pane') {
+                    shouldRemove = true;
                 }
 
-                const cardContainer = btn.closest('article');
-                if (cardContainer) {
+                if (shouldRemove) {
                     cardContainer.style.transition = 'all 0.3s ease';
                     cardContainer.style.opacity = '0';
                     cardContainer.style.transform = 'scale(0.9)';
                     setTimeout(() => {
                         cardContainer.remove();
-                        checkEmptyTab(); 
+                        if (isProfilePage) checkEmptyTab();
                     }, 300);
+                } else {
+                    if (data.html) {
+                        cardContainer.outerHTML = data.html;
+                    } else {
+                        window.location.reload();
+                    }
                 }
-            } else {
-                alert(data.message || 'Errore');
-                btn.classList.remove('disabled');
             }
         } catch (error) {
-            console.error('Errore:', error);
+            console.error('Errore AJAX:', error);
+            alert('Errore di connessione o sessione scaduta');
             btn.classList.remove('disabled');
         }
     });
