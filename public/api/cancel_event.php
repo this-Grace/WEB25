@@ -14,7 +14,16 @@ if ($eventId > 0 && $userId) {
     $success = $eventMapper->cancel($eventId, $userId);
     
     if ($success) {
-        echo json_encode(['success' => true, 'message' => 'Evento annullato.']);
+        $event = $eventMapper->getEventById($eventId);
+        $html = '';
+
+        if ($event) {
+            ob_start();
+            include __DIR__ . '/../partials/event-card.php';
+            $html = ob_get_clean();
+        }
+
+        echo json_encode(['success' => true, 'message' => 'Evento annullato.', 'html' => $html]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Impossibile annullare l\'evento.']);
     }

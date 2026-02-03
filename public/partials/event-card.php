@@ -94,15 +94,15 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
                                             </a>
                                         <?php endif; ?>
 
-                                        <?php if (strtolower($event['status']) === 'draft'): ?>
-                                            <a href="api/delete_event.php?event_id=<?= $event['id'] ?>"
-                                                class="btn btn-outline-danger btn-sm flex-grow-1 btn-ajax">
-                                                <span class="bi bi-trash me-1"></span> Elimina
-                                            </a>
-                                        <?php else: ?>
+                                        <?php if (strtolower($event['status']) === 'approved'): ?>
                                             <a href="api/cancel_event.php?event_id=<?= $event['id'] ?>"
                                                 class="btn btn-outline-warning btn-sm flex-grow-1 btn-ajax">
                                                 <span class="bi bi-x-circle me-1"></span> Annulla
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="api/delete_event.php?event_id=<?= $event['id'] ?>"
+                                                class="btn btn-outline-danger btn-sm flex-grow-1 btn-ajax">
+                                                <span class="bi bi-trash me-1"></span> Elimina
                                             </a>
                                         <?php endif; ?>
                                     </div>
