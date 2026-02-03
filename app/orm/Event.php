@@ -194,12 +194,20 @@ class Event
     public function getUserEventHistory(int $userId): array
     {
         $sql = $this->baseEventSelect() .
-            " WHERE (e.user_id = ? OR e.id IN (SELECT event_id FROM SUBSCRIPTION WHERE user_id = ?))
-             AND e.status = 'APPROVED' 
-             AND (e.event_date < CURRENT_DATE() OR (e.event_date = CURRENT_DATE() AND e.event_time < CURRENT_TIME()))
-             ORDER BY e.event_date DESC";
+            " WHERE (
+            (
+                (e.user_id = ? OR e.id IN (SELECT event_id FROM SUBSCRIPTION WHERE user_id = ?)) 
+                AND e.status = 'APPROVED'
+                AND (e.event_date < CURRENT_DATE() OR (e.event_date = CURRENT_DATE() AND e.event_time < CURRENT_TIME()))
+            )
+            OR 
+            (
+                e.user_id = ? AND e.status = 'CANCELLED'
+            )
+        )
+        ORDER BY e.event_date DESC, e.event_time DESC";
 
-        return $this->fetchEvents($sql, [$userId, $userId]);
+        return $this->fetchEvents($sql, [$userId, $userId, $userId]);
     }
 
     /**
