@@ -3,18 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchContainer = document.getElementById('profile-search-container');
     const tabButtons = document.querySelectorAll('#profileTabs button');
 
-    const toggleSearchVisibility = () => {
-        const activePane = document.querySelector('.tab-pane.active');
-        const hasEvents = activePane && activePane.querySelector('.row') && activePane.querySelector('.row').children.length > 0;
-        const isPlaceholderPresent = activePane && activePane.querySelector('.bi-calendar-x');
-
-        if (hasEvents && !isPlaceholderPresent) {
-            searchContainer.classList.remove('d-none');
-        } else {
-            searchContainer.classList.add('d-none');
-        }
-    };
-
     const handleSearch = () => {
         const term = searchInput.value.toLowerCase().trim();
         const activePane = document.querySelector('.tab-pane.active');
@@ -24,13 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let foundAny = false;
 
         cards.forEach(card => {
-            const title = card.querySelector('.card-title')?.textContent || '';
-            const description = card.querySelector('.preview-description')?.textContent || '';
-            const category = card.querySelector('.badge')?.textContent || '';
-            const location = card.querySelector('.bi-geo-alt')?.parentElement?.textContent || '';
-            const date = card.querySelector('.bi-calendar3')?.parentElement?.textContent || '';
+            const title = card.querySelector('.card-title')?.innerText || '';
+            const description = card.querySelector('.preview-description')?.innerText || '';
+            const location = card.querySelector('.bi-geo-alt')?.parentElement?.innerText || '';
+            const date = card.querySelector('.bi-calendar3')?.parentElement?.innerText || '';
 
-            const allContent = `${title} ${description} ${category} ${location} ${date}`.toLowerCase();
+            const statusBadge = card.querySelector('.position-absolute.top-50 .badge')?.innerText || '';
+            const categoryElement = card.querySelector('[class*="badge-cate-"]');
+            const category = categoryElement ? (categoryElement.textContent || categoryElement.innerText) : '';
+
+            const allContent = [title, description, category, location, date, statusBadge]
+                .join(' ')
+                .toLowerCase()
+                .trim();
 
             if (allContent.includes(term)) {
                 card.classList.remove('d-none');
@@ -45,16 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!noResultMsg) {
                 noResultMsg = document.createElement('div');
                 noResultMsg.className = 'search-no-results text-center py-5 w-100';
-                noResultMsg.innerHTML = `
-                    <div class="text-muted">
-                        <i class="bi bi-search display-6 d-block mb-3 opacity-25"></i>
-                        <p>Nessun risultato trovato per "<strong>${term}</strong>"</p>
-                    </div>`;
+                noResultMsg.innerHTML = `<p class="text-muted">Nessun risultato per "<strong>${term}</strong>"</p>`;
                 activePane.querySelector('.row').appendChild(noResultMsg);
             }
         } else if (noResultMsg) {
             noResultMsg.remove();
         }
+    };
+
+    const toggleSearchVisibility = () => {
+        const activePane = document.querySelector('.tab-pane.active');
+        const hasEvents = activePane && activePane.querySelectorAll('article').length > 0;
+        searchContainer?.classList.toggle('d-none', !hasEvents);
     };
 
     if (searchInput) {
@@ -64,10 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     tabButtons.forEach(btn => {
         btn.addEventListener('shown.bs.tab', () => {
             if (searchInput) searchInput.value = '';
-
             document.querySelectorAll('article').forEach(a => a.classList.remove('d-none'));
             document.querySelectorAll('.search-no-results').forEach(m => m.remove());
-
             toggleSearchVisibility();
         });
     });
