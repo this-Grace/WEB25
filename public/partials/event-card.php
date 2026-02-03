@@ -88,9 +88,12 @@ if (isset($_SESSION['user']['id']) && isset($templateParams['user_subscriptions'
 
                                 <?php if (in_array(strtolower($event['status']), ['draft', 'waiting', 'approved'])): ?>
                                     <div class="d-flex gap-2">
-                                        <a href="event.php?event_id=<?= $event['id'] ?>" class="btn btn-outline-dark btn-sm flex-grow-1">
-                                            <span class="bi bi-pencil me-1"></span> Modifica
-                                        </a>
+                                        <?php if (strtolower($event['status']) !== 'approved'): ?>
+                                            <a href="event.php?event_id=<?= $event['id'] ?>" class="btn btn-outline-dark btn-sm flex-grow-1">
+                                                <span class="bi bi-pencil me-1"></span> Modifica
+                                            </a>
+                                        <?php endif; ?>
+
                                         <?php if (strtolower($event['status']) === 'draft'): ?>
                                             <a href="api/delete_event.php?event_id=<?= $event['id'] ?>"
                                                 class="btn btn-outline-danger btn-sm flex-grow-1 btn-ajax">

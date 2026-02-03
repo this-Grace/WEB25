@@ -14,6 +14,11 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
         'data' => $templateParams["events_organized"],
     ];
     $activeTabs[] = [
+        'id' => 'waiting-pane',
+        'label' => 'In Revisione',
+        'data' => $templateParams["events_waiting"],
+    ];
+    $activeTabs[] = [
         'id' => 'draft-pane',
         'label' => 'Bozze',
         'data' => $templateParams["events_drafts"],
@@ -116,6 +121,18 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
                 <?php endforeach; ?>
             </ul>
         </nav>
+
+        <div id="profile-search-container" class="mb-4 d-none">
+            <div class="row justify-content-end">
+                <div class="col-12 col-md-5 col-lg-3">
+                    <form id="profile-search-form" class="d-flex" role="search" onsubmit="return false;">
+                        <label for="profileSearchInput" class="visually-hidden">Cerca nei tuoi eventi</label>
+                        <input id="profileSearchInput" type="search"
+                            class="form-control" placeholder="Cerca eventi..." aria-label="Cerca nel profilo">
+                    </form>
+                </div>
+            </div>
+        </div>
 
         <div class="tab-content" id="profileTabsContent">
             <?php foreach ($activeTabs as $index => $tab): ?>
