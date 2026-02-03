@@ -89,8 +89,8 @@ filtrare e iscriversi agli eventi.
     dispositivi mobile e desktop.
 \end{itemize}
 
-\chapter{Personas e Scenarios}
-\section*{Personas}
+\chapter{Utenti e scenari d'uso}
+\section{Personas}
 \begin{itemize}
   \item \textbf{Martina (Studentessa, 21 anni)}: cerca workshop e
     seminari tramite smartphone. Vuole trovare eventi rapidamente e
@@ -102,7 +102,7 @@ filtrare e iscriversi agli eventi.
     inappropriati e controlla statistiche di utilizzo.
 \end{itemize}
 
-\section*{Scenarios}
+\section{Scenarios}
 \begin{enumerate}
   \item \textbf{Creare e pubblicare un evento (Organizzatore)}:
     l'organizzatore apre la modale di creazione, compila i campi,
@@ -115,14 +115,6 @@ filtrare e iscriversi agli eventi.
     segnalato, apre il pannello di moderazione e decide di rimuoverlo
     o segnalarlo come non conforme.
 \end{enumerate}
-
-\chapter{Mockup}
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\textwidth]{img/index.png}
-  \caption{Mockup della homepage di UniEvents}
-  \label{fig:mockup-homepage}
-\end{figure}
 
 \appendix
 \chapter{Guida Utente}
@@ -152,5 +144,26 @@ database, utente e password.
 L'applicazione sarà accessibile all'indirizzo
 \url{http://localhost:8080/}. Effettuare il login o la registrazione
 per iniziare a utilizzare il sistema.
+
+\section{Credenziali demo per accesso}
+Segue una tabella con gli account presenti nello script di
+popolazione \newline \texttt{resources/demo.sql}.
+
+\begin{center}
+  \begin{tabular}{ c c c c }
+    \hline
+    Email & Ruolo & Password \\
+    \hline
+    mario.rossi@example.com & USER & pas123 \\
+    luisa.bianchi@example.com & USER & pas123 \\
+    giulia.verdi@example.com & HOST & pas123 \\
+    paolo.neri@example.com & HOST & pas123 \\
+    admin@web25.com & ADMIN & pas123 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\paragraph{Nota:} Le password nello script
+\texttt{resources/demo.sql} sono memorizzate come hash.
 
 \end{document}
