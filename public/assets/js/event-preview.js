@@ -85,10 +85,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (previewCategoryBadge) {
             previewCategoryBadge.classList.remove(...allCategoryClasses);
-            const v = categorySelect?.value || '';
-            const cls = categoryClassMap[v] || '';
+            // Use the displayed option text for the badge (we keep option.value as the category id)
+            const selectedOption = categorySelect?.selectedOptions?.[0];
+            const displayName = selectedOption?.textContent?.trim() || '';
+            const cls = categoryClassMap[displayName] || '';
             if (cls) previewCategoryBadge.classList.add(cls);
-            previewCategoryBadge.textContent = v || 'Categoria';
+            previewCategoryBadge.textContent = displayName || 'Categoria';
         }
     }
 

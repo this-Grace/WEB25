@@ -72,7 +72,7 @@
                                 <select class="form-select bg-light" id="eventCategorySelector" name="category_id" required>
                                     <option value="" selected disabled>Scegli una categoria...</option>
                                     <?php foreach ($templateParams['categories'] ?? [] as $category): $c = htmlspecialchars($category["name"], ENT_QUOTES, 'UTF-8'); ?>
-                                        <option value="<?= $c ?>" <?= (($templateParams['event']['category_id'] ?? '') == $category['id']) ? 'selected' : '' ?>><?= $c ?></option>
+                                        <option value="<?= (int)$category['id']; ?>" <?= (($templateParams['event']['category_id'] ?? '') == $category['id']) ? 'selected' : '' ?>><?= $c ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
