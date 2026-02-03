@@ -1,3 +1,7 @@
+/**
+ * Profile Dashboard & AJAX Event Controller
+ * Handles tab persistence, asynchronous event actions, and dynamic UI updates.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const activeTabId = sessionStorage.getItem('activeProfileTab');
     if (activeTabId) {
@@ -11,12 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Save active tab ID whenever a user switches tabs
     document.querySelectorAll('#profileTabs button[data-bs-toggle="tab"]').forEach(link => {
         link.addEventListener('shown.bs.tab', (e) => {
             sessionStorage.setItem('activeProfileTab', e.target.id);
         });
     });
 
+    /**
+     * Global click listener to handle AJAX actions for elements with '.btn-ajax' class.
+     * Manages publishing, deleting, canceling, and unsubscribing from events.
+     */
     document.addEventListener('click', async (e) => {
         const btn = e.target.closest('.btn-ajax');
         if (!btn) return;
@@ -24,10 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const url = btn.href;
 
-        const isPublish = url.includes('publish_from_draft');
-        const isDelete = url.includes('delete_event.php');
-        const isCancel = url.includes('cancel_event.php');
-        const isUnsubscribe = url.includes('unsubscribe.php');
+        const isPublish      = url.includes('publish_from_draft');
+        const isDelete       = url.includes('delete_event.php');
+        const isCancel       = url.includes('cancel_event.php');
+        const isUnsubscribe  = url.includes('unsubscribe.php');
 
         if ((isDelete || isCancel) && !confirm('Sei sicuro di voler procedere?')) {
             return;
@@ -47,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.success) {
                 const currentTab = btn.closest('.tab-pane')?.id;
 
+                // Scenario A: Move card to a different tab (Publish/Cancel)
                 if ((isPublish || isCancel) && isProfilePage) {
                     const targetPaneId = isPublish ? 'waiting-pane' : 'history-pane';
                     const targetPane = document.getElementById(targetPaneId);
@@ -58,30 +68,28 @@ document.addEventListener('DOMContentLoaded', () => {
                             targetRow = targetPane.querySelector('.row');
                         }
 
-                        cardContainer.style.transition = 'all 0.3s ease';
-                        cardContainer.style.opacity = '0';
-                        cardContainer.style.transform = 'scale(0.9)';
+                        applyRemovalAnimation(cardContainer);
 
                         setTimeout(() => {
-                            cardContainer.remove();
-                            if (data.html) {
+                            cardContainer?.remove();
+                            if (data.html && targetRow) {
                                 targetRow.insertAdjacentHTML('afterbegin', data.html);
                             }
                             checkEmptyTab();
                         }, 300);
                     }
                 } 
+                // Scenario B: Permanent removal from view
                 else if (isDelete || (isUnsubscribe && currentTab === 'subscriber-pane')) {
-                    cardContainer.style.transition = 'all 0.3s ease';
-                    cardContainer.style.opacity = '0';
-                    cardContainer.style.transform = 'scale(0.9)';
+                    applyRemovalAnimation(cardContainer);
                     setTimeout(() => {
-                        cardContainer.remove();
+                        cardContainer?.remove();
                         if (isProfilePage) checkEmptyTab();
                     }, 300);
                 } 
+                // Scenario C: Generic HTML update or Fallback
                 else {
-                    if (data.html) {
+                    if (data.html && cardContainer) {
                         cardContainer.outerHTML = data.html;
                     } else {
                         window.location.reload();
@@ -98,6 +106,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /**
+     * Applies a scale and fade-out transition to an element.
+     * @param {HTMLElement|null} el 
+     */
+    function applyRemovalAnimation(el) {
+        if (!el) return;
+        el.style.transition = 'all 0.3s ease';
+        el.style.opacity = '0';
+        el.style.transform = 'scale(0.9)';
+    }
+
+    /**
+     * Checks all tab panes and displays a placeholder message if they are empty.
+     * @returns {void}
+     */
     function checkEmptyTab() {
         document.querySelectorAll('.tab-pane').forEach(pane => {
             const container = pane.querySelector('.row');

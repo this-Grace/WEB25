@@ -1,3 +1,7 @@
+/**
+ * Event Filter & Search Controller
+ * Manages asynchronous filtering of events by category and text search.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     const categoryButtons = document.querySelectorAll('.btn-cate');
     const eventsGrid = document.getElementById('events-grid');
@@ -6,9 +10,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearFiltersBtn = document.getElementById('clear-filters-btn');
     const searchInput = document.getElementById('searchInput');
 
+    /** * State of currently selected categories.
+     * @type {Map<string, {name: string}>} 
+     */
     let activeCategories = new Map();
 
+    /**
+     * Renders the visual badges for all active filters (categories and search terms).
+     * @returns {void}
+     */
     function renderActiveFilters() {
+        if (!activeFiltersList || !activeFiltersSection) return;
         activeFiltersList.innerHTML = '';
         const hasActive = activeCategories.size > 0 || (searchInput && searchInput.value.trim());
         activeFiltersSection.style.display = hasActive ? 'block' : 'none';
@@ -57,7 +69,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /**
+     * Fetches filtered event data from the server and updates the grid.
+     * @async
+     * @returns {Promise<void>}
+     */
     async function fetchAndRender() {
+        if (!eventsGrid) return;
         const params = new URLSearchParams();
 
         activeCategories.forEach((data, id) => {

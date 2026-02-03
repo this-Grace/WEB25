@@ -1,3 +1,7 @@
+/**
+ * Image Upload Handler with Drag & Drop
+ * Manages file selection, validation, and UI previews.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     const dropArea = document.getElementById('drop-area');
     const fileInput = document.getElementById('fileElem');
@@ -36,6 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     dropArea.addEventListener('click', () => fileInput.click());
 
+    /**
+     * Core logic for processing and validating images
+     * @param {FileList|null} files - The list of files to process
+     * @returns {void}
+     */
     function handleFiles(files) {
         if (!files || files.length === 0) return;
         const file = files[0];
@@ -56,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         reader.readAsDataURL(file);
 
+        // Sync: Programmatically update the hidden file input so the form can be submitted
         try {
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
@@ -66,6 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+/**
+ * Self-invoking function to inject CSS for the dragover state
+ * ensures the component is self-contained.
+ */
 (function addDragStyle() {
     const id = 'drag-and-drop-inline-style';
     if (document.getElementById(id)) return;

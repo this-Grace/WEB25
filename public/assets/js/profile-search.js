@@ -1,9 +1,19 @@
+/**
+ * Profile Live Search Controller
+ * Provides client-side filtering of event cards within the active tab pane.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('profileSearchInput');
     const searchContainer = document.getElementById('profile-search-container');
     const tabButtons = document.querySelectorAll('#profileTabs button');
 
+    /**
+     * Filters event cards based on the search term.
+     * Searches through titles, descriptions, locations, dates, and categories.
+     * @returns {void}
+     */
     const handleSearch = () => {
+        if (!searchInput) return;
         const term = searchInput.value.toLowerCase().trim();
         const activePane = document.querySelector('.tab-pane.active');
         if (!activePane) return;
@@ -16,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const description = card.querySelector('.preview-description')?.innerText || '';
             const location = card.querySelector('.bi-geo-alt')?.parentElement?.innerText || '';
             const date = card.querySelector('.bi-calendar3')?.parentElement?.innerText || '';
-
             const statusBadge = card.querySelector('.position-absolute.top-50 .badge')?.innerText || '';
+            
             const categoryElement = card.querySelector('[class*="badge-cate-"]');
             const category = categoryElement ? (categoryElement.textContent || categoryElement.innerText) : '';
 
@@ -34,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Manage "No Results" feedback message
+        /** @type {HTMLElement|null} */
         let noResultMsg = activePane.querySelector('.search-no-results');
+        
         if (!foundAny && term.length > 0) {
             if (!noResultMsg) {
                 noResultMsg = document.createElement('div');
@@ -47,6 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /**
+     * Shows or hides the search bar based on whether the current tab has items.
+     * @returns {void}
+     */
     const toggleSearchVisibility = () => {
         const activePane = document.querySelector('.tab-pane.active');
         const hasEvents = activePane && activePane.querySelectorAll('article').length > 0;
@@ -60,8 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
     tabButtons.forEach(btn => {
         btn.addEventListener('shown.bs.tab', () => {
             if (searchInput) searchInput.value = '';
+
             document.querySelectorAll('article').forEach(a => a.classList.remove('d-none'));
             document.querySelectorAll('.search-no-results').forEach(m => m.remove());
+
             toggleSearchVisibility();
         });
     });

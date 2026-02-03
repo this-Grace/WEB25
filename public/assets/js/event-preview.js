@@ -1,4 +1,9 @@
+/**
+ * Event Preview Controller
+ * Synchronizes form inputs with a real-time event preview card.
+ */
 document.addEventListener('DOMContentLoaded', function () {
+    // --- Preview Display Elements ---
     const previewTitle = document.getElementById('previewTitleDisplay');
     const previewDescription = document.getElementById('previewDescription');
     const previewDate = document.getElementById('previewDate');
@@ -7,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const previewMaxSeats = document.getElementById('previewMaxSeats');
     const previewCategoryBadge = document.getElementById('previewCategoryBadge');
 
+    // --- Form Input Elements ---
     const titleInput = document.getElementById('eventTitleInput');
     const descInput = document.getElementById('eventDescriptionInput');
     const dateInput = document.getElementById('eventDateInput');
@@ -18,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const maxSeatsInput = document.getElementById('eventMaxSeatsInput');
     const categorySelect = document.getElementById('eventCategorySelector');
 
+    /** * Mapping of category names to CSS badge classes.
+     * @type {Object.<string, string>} 
+     */
     const categoryClassMap = {
         'Conferenze': 'badge-cate-conferenze',
         'Workshop': 'badge-cate-workshop',
@@ -28,18 +37,28 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     const allCategoryClasses = Object.values(categoryClassMap);
 
+    /**
+     * Formats a date string into a localized format.
+     * @param {string} value - The raw date string from the input.
+     * @returns {string} The formatted date or the original value if invalid.
+     */
     function formatDate(value) {
         if (!value) return '';
         const d = new Date(value);
         return isNaN(d) ? value : d.toLocaleDateString();
     }
 
+    /**
+     * Updates all preview elements based on current form input values.
+     * @returns {void}
+     */
     function updatePreview() {
         if (previewTitle) previewTitle.textContent = titleInput?.value.trim() || 'Titolo del tuo evento';
         if (previewDescription) previewDescription.textContent = descInput?.value.trim() || "Breve descrizione dell'evento";
 
         const dateVal = dateInput?.value ? formatDate(dateInput.value) : '';
         let timeVal = '';
+
         if (timeHourSelect && timeMinuteSelect && timeHourSelect.value && timeMinuteSelect.value) {
             timeVal = `${timeHourSelect.value}:${timeMinuteSelect.value}`;
             if (timeInput) timeInput.value = timeVal;
@@ -73,6 +92,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /** * Array of input elements and their respective triggers to attach listeners.
+     * @type {Array<[HTMLElement|null, string]>} 
+     */
     const listeners = [
         [titleInput, 'input'],
         [descInput, 'input'],

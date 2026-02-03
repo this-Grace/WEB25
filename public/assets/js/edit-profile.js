@@ -1,5 +1,16 @@
+/**
+ * UI Controller for dynamic forms and profile editing.
+ * Handles auto-resizing inputs, view/edit mode toggling, and image previews.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const inputs = document.querySelectorAll('.form-control-inline');
+
+    /**
+     * Dynamically adjusts the width of an input field based on its text content.
+     * Uses an off-screen span element to calculate pixel width accurately.
+     * @param {HTMLInputElement} input - The input element to resize.
+     * @returns {void}
+     */
     const syncInputWidth = (input) => {
         const measure = document.createElement('span');
         const style = window.getComputedStyle(input);
@@ -26,11 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(measure);
     };
 
+    // Initialize all inline inputs and attach event listeners
     inputs.forEach(input => {
         syncInputWidth(input);
         input.addEventListener('input', () => syncInputWidth(input));
     });
 
+    /**
+     * Toggles the UI between viewing mode and editing mode.
+     * @global
+     * @param {boolean} isEditing - True if switching to edit mode, false for view mode.
+     * @returns {void}
+     */
     window.toggleEdit = (isEditing) => {
         const views = document.querySelectorAll('.view-mode');
         const edits = document.querySelectorAll('.edit-mode');
@@ -49,6 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /**
+     * Handles the preview of an uploaded image file.
+     * @global
+     * @param {HTMLInputElement} input - The file input element.
+     * @returns {void}
+     */
     window.previewImage = (input) => {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
