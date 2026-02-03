@@ -20,6 +20,11 @@ if ($eventId <= 0 || !$userId) {
 
 $currentEvent = $eventMapper->getEventById($eventId);
 
+if ($currentEvent && strtolower($currentEvent['status']) === 'approved') {
+    echo json_encode(['success' => false, 'message' => 'Non puoi modificare un evento già approvato.']);
+    exit;
+}
+
 if (!$currentEvent || (int)$currentEvent['user_id'] !== $userId) {
     if (isset($_GET['action'])) {
         header('Content-Type: application/json');
