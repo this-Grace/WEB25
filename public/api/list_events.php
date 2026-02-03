@@ -12,6 +12,13 @@ $special = isset($_GET['special']) ? trim($_GET['special']) : null;
 
 $categories = isset($_GET['categories']) ? (array)$_GET['categories'] : null;
 
+if (!empty($categories)) {
+    if (in_array('waiting', $categories)) {
+        $special = 'waiting';
+        $categories = array_filter($categories, fn($c) => $c !== 'waiting');
+    }
+}
+
 if (empty($categories) && isset($_GET['categoryId']) && $_GET['categoryId'] !== '') {
     $rawCategory = trim($_GET['categoryId']);
     if (strtolower($rawCategory) === 'waiting') {
@@ -28,7 +35,15 @@ if (!empty($_SESSION['user'])) {
     $userId = $_SESSION['user']['id'] ?? null;
 }
 
-$events = $eventMapper->getEventsWithFilters($role, $userId, $limit, $offset, $categories, $special, $search);
+$events = $eventMapper->getEventsWithFilters(
+    $role, 
+    $userId, 
+    $limit, 
+    $offset, 
+    !empty($categories) ? $categories : null, 
+    $special, 
+    $search
+);
 
 $userSubscriptions = [];
 if ($userId && !empty($events)) {

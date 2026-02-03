@@ -111,12 +111,12 @@ class Event
             $params[] = $currentUserId;
         }
 
-        if ($role !== 'admin') {
-            $sql .= " AND e.status = 'APPROVED' ";
-        }
-
         if ($specialFilter === 'waiting' && $role === 'admin') {
             $sql .= " AND e.status = 'WAITING' ";
+        } else if ($role === 'admin') {
+            $sql .= " AND e.status IN ('APPROVED', 'WAITING') ";
+        } else {
+            $sql .= " AND e.status = 'APPROVED' ";
         }
 
         if (!empty($categoryIds)) {

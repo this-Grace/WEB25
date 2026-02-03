@@ -83,6 +83,13 @@
                     <?php include __DIR__ . '/event-card.php'; ?>
                 <?php endforeach; ?>
             </div>
+
+            <div id="load-more-container" class="text-center mt-5 mb-3">
+                <button id="load-more-btn" class="btn btn-dark fw-bold px-5 py-2 rounded-3 shadow-sm">
+                    <span id="btn-text">Carica Altri</span>
+                    <span id="btn-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                </button>
+            </div>
         <?php endif; ?>
     </div>
 </main>

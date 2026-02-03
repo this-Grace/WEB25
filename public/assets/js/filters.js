@@ -68,20 +68,34 @@ document.addEventListener('DOMContentLoaded', function () {
             params.set('search', searchInput.value.trim());
         }
 
-        params.set('limit', 12);
+        const limit = 6;
+        params.set('limit', limit);
+        params.set('offset', 0);
 
         try {
+            eventsGrid.style.opacity = '0.5';
             const res = await fetch('api/list_events.php?' + params.toString());
             const data = await res.json();
 
             if (data.success) {
                 eventsGrid.innerHTML = data.html ||
-                    `<div class="text-center py-5"><p class="text-muted">Nessun evento trovato.</p></div>`;
+                    `<div class="text-center py-5 w-100"><p class="text-muted">Nessun evento trovato.</p></div>`;
+                
+                if (typeof window.resetLoadMoreOffset === 'function') {
+                    window.resetLoadMoreOffset();
+                }
+
+                const loadMoreBtn = document.getElementById('load-more-container');
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = (data.count < limit) ? 'none' : 'block';
+                }
             }
 
+            eventsGrid.style.opacity = '1';
             renderActiveFilters();
         } catch (err) {
             console.error('Errore:', err);
+            eventsGrid.style.opacity = '1';
         }
     }
 
@@ -119,4 +133,5 @@ document.addEventListener('DOMContentLoaded', function () {
             timeout = setTimeout(() => fetchAndRender(), 400);
         });
     }
+    renderActiveFilters();
 });
