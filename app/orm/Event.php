@@ -87,7 +87,7 @@ class Event
      * @param int|null $currentUserId Current user's ID (required for host role and special filters)
      * @param int $limit Number of records to return
      * @param int $offset Offset for pagination
-     * @param int|null $categoryId Optional category id to filter
+     * @param array|int|null $categoryId Optional category id to filter
      * @param string|null $specialFilter Optional special filter ('miei'|'waiting')
      * @param string|null $search Optional search term to filter events by title, location, or category name
      * @return array Array of event rows
@@ -97,33 +97,37 @@ class Event
         ?int $currentUserId = null,
         int $limit = 6,
         int $offset = 0,
-        ?int $categoryId = null,
+        ?array $categoryIds = null,
         ?string $specialFilter = null,
         ?string $search = null
     ): array {
         $params = [];
         $sql = $this->baseEventSelect() . " WHERE 1=1 ";
 
-        switch ($role) {
-            case 'admin':
-                break;
+        $sql .= " AND e.status != 'DRAFT' ";
 
-            default:
-                $sql .= " AND e.status = 'APPROVED' ";
+        if ($currentUserId !== null && $specialFilter !== 'miei') {
+            $sql .= " AND e.user_id != ? ";
+            $params[] = $currentUserId;
         }
 
-        if ($specialFilter === 'miei' && $currentUserId) {
-            $sql .= " AND e.user_id = ? ";
-            $params[] = $currentUserId;
+        if ($role !== 'admin') {
+            $sql .= " AND e.status = 'APPROVED' ";
         }
 
         if ($specialFilter === 'waiting' && $role === 'admin') {
             $sql .= " AND e.status = 'WAITING' ";
         }
 
-        if ($categoryId !== null) {
-            $sql .= " AND e.category_id = ? ";
-            $params[] = $categoryId;
+        if (!empty($categoryIds)) {
+            $categoryIds = array_map('intval', array_filter($categoryIds));
+            if (!empty($categoryIds)) {
+                $placeholders = implode(',', array_fill(0, count($categoryIds), '?'));
+                $sql .= " AND e.category_id IN ($placeholders) ";
+                foreach ($categoryIds as $catId) {
+                    $params[] = $catId;
+                }
+            }
         }
 
         if ($search !== null && $search !== '') {
@@ -136,8 +140,9 @@ class Event
             $sql .= " AND (e.event_date > CURRENT_DATE() OR (e.event_date = CURRENT_DATE() AND e.event_time >= CURRENT_TIME())) ";
         }
 
-        $sql .= " ORDER BY e.event_date DESC, e.event_time DESC LIMIT ?, ? ";
-        array_push($params, $offset, $limit);
+        $sql .= " ORDER BY e.event_date ASC, e.event_time ASC LIMIT ?, ? ";
+        $params[] = (int)$offset;
+        $params[] = (int)$limit;
 
         return $this->fetchEvents($sql, $params);
     }

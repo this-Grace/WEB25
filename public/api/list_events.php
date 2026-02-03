@@ -5,33 +5,30 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Read params
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 6;
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-
-$categoryId = null;
+$search = isset($_GET['search']) ? trim($_GET['search']) : null;
 $special = isset($_GET['special']) ? trim($_GET['special']) : null;
 
-if (isset($_GET['categoryId']) && $_GET['categoryId'] !== '') {
+$categories = isset($_GET['categories']) ? (array)$_GET['categories'] : null;
+
+if (empty($categories) && isset($_GET['categoryId']) && $_GET['categoryId'] !== '') {
     $rawCategory = trim($_GET['categoryId']);
     if (strtolower($rawCategory) === 'waiting') {
         $special = 'waiting';
     } elseif (is_numeric($rawCategory)) {
-        $categoryId = (int)$rawCategory;
+        $categories = [(int)$rawCategory];
     }
 }
-
-$search = isset($_GET['search']) ? trim($_GET['search']) : null;
 
 $role = 'guest';
 $userId = null;
 if (!empty($_SESSION['user'])) {
-    $user = $_SESSION['user'];
-    $role = strtolower($user['role'] ?? 'guest');
-    $userId = $user['id'] ?? null;
+    $role = strtolower($_SESSION['user']['role'] ?? 'guest');
+    $userId = $_SESSION['user']['id'] ?? null;
 }
 
-$events = $eventMapper->getEventsWithFilters($role, $userId, $limit, $offset, $categoryId, $special, $search);
+$events = $eventMapper->getEventsWithFilters($role, $userId, $limit, $offset, $categories, $special, $search);
 
 $userSubscriptions = [];
 if ($userId && !empty($events)) {
@@ -49,4 +46,8 @@ foreach ($events as $event) {
 }
 
 header('Content-Type: application/json; charset=utf-8');
-echo json_encode(['success' => true, 'html' => $html, 'count' => count($events)]);
+echo json_encode([
+    'success' => true, 
+    'html' => $html, 
+    'count' => count($events)
+]);

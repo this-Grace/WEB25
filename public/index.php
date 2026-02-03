@@ -27,10 +27,14 @@ $templateParams["total_hoster"] = "50+";
 $templateParams["total_categories"] = count($allCategories ?? []);
 $templateParams['categories'] = $allCategories;
 
+$selectedCategories = isset($_GET['categories']) ? (array)$_GET['categories'] : null;
+
 $templateParams['featured_events'] = $eventMapper->getEventsWithFilters(
     role: $userRole,
     currentUserId: $userId,
-    limit: 1000
+    limit: 6,
+    offset: 0,
+    categoryIds: $selectedCategories
 );
 
 if ($userId) {
