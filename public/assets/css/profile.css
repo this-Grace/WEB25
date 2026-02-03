@@ -21,25 +21,38 @@
 }
 
 .form-control-inline:focus {
-    border-bottom: 2px solid var(--primary) !important;
-}
-
-.name-group .edit-mode {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    border-bottom-style: solid !important;
+    border-bottom-color: var(--primary) !important;
+    box-shadow: none !important;
 }
 
 @media (min-width: 768px) {
-    .name-group .edit-mode {
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 0.75rem;
-    }
     .form-control-inline {
         text-align: left;
     }
+}
+
+.nav-tabs-container {
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+
+#profileTabs .nav-link {
+    color: var(--text-slate);
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.75rem 0; 
+    margin-bottom: -2px;
+    transition: var(--transition);
+    background: transparent !important;
+    position: relative;
+    font-weight: 500;
+}
+
+#profileTabs .nav-link.active {
+    color: var(--primary) !important;
+    border-bottom: 2px solid var(--primary) !important;
+    font-weight: 700;
 }
 
 .avatar-container {
@@ -80,35 +93,19 @@
     transform: scale(1.1);
 }
 
-.btn-sm {
-    font-size: 0.8rem;
-    border-radius: 8px;
+.name-group .edit-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.action-footer {
-    border-top: 1px solid #f1f5f9;
-    padding-top: 1.5rem;
-}
-
-.nav-tabs-container {
-    border-bottom: 2px solid #e2e8f0;
-    margin-bottom: 1.5rem;
-}
-
-#profileTabs .nav-link {
-    color: var(--text-light);
-    border: none;
-    padding: 0.75rem 0; 
-    margin-bottom: -2px;
-    transition: var(--transition);
-    background: transparent !important;
-    position: relative;
-}
-
-#profileTabs .nav-link.active {
-    color: var(--primary) !important;
-    border-bottom: 2px solid var(--primary) !important;
-    font-weight: 700;
+@media (min-width: 768px) {
+    .name-group .edit-mode {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 0.75rem;
+    }
 }
 
 .input-scroll-container {
@@ -128,11 +125,6 @@
 .input-scroll-container::-webkit-scrollbar-thumb {
     background: var(--input-border);
     border-radius: 10px;
-}
-
-.form-control-inline {
-    max-width: 100%;
-    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
