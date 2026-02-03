@@ -11,6 +11,13 @@ if (empty($userId)) {
     exit;
 }
 
+if (!$userMapper->exists($_SESSION['user']['email'])) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php?msg=account_not_found");
+    exit;
+}
+
 $templateParams["title"] = "Profilo";
 $templateParams['css'] = 'assets/css/profile.css';
 $templateParams['js'] = ['assets/js/edit-profile.js', 'assets/js/events-actions.js', 'assets/js/profile-search.js'];
