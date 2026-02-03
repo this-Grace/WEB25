@@ -53,7 +53,7 @@ if (in_array(strtolower($_SESSION['user']['role'] ?? ''), ['host', 'admin'])) {
         <?php endif; ?>
 
         <section class="card border-0 shadow-sm rounded-4 mb-4 mb-md-5 overflow-hidden">
-            <div class="card-body p-4 p-md-5">
+            <div class="card-body p-4">
                 <form id="profileForm" action="api/edit_profile.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="update_profile">
 
