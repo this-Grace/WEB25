@@ -68,24 +68,28 @@ immagine, capienza) e ai partecipanti un'interfaccia per cercare,
 filtrare e iscriversi agli eventi.
 
 \subsection*{Requisiti Funzionali}
-\begin{itemize}
-  \item Creazione e modifica di eventi con campi: titolo,
-    descrizione, data/ora, luogo, immagine e numero massimo partecipanti.
-  \item Anteprima live durante la creazione (immagine e metadati
-    aggiornati in tempo reale).
-  \item Possibilità di salvare bozze e pubblicare eventi quando pronti.
-  \item Registrazione degli utenti agli eventi e conteggio
-    partecipanti con limite massimo.
-  \item Ricerca e filtri per categoria e data nella pagina principale.
+\begin{itemize} 
+\item \textit{Gestione Eventi:} Creazione e modifica di eventi con campi obbligatori 
+(titolo, descrizione, data, ora, luogo, categoria, capienza partecipanti e una immagine).
+\item \textit{Stati dell'Evento:} Possibilità di salvare gli eventi come bozze (Draft), 
+inviarli in revisione (Waiting) o pubblicarli. 
+\item \textit{Anteprima Dinamica:} Visualizzazione di un'anteprima della card dell'evento durante 
+la fase di creazione, con aggiornamento istantaneo di testi e categorie. 
+\item \textit{Sistema di Iscrizione:} Registrazione degli utenti agli eventi con controllo 
+automatico della disponibilità dei posti. 
+\item \textit{Ricerca Avanzata e Filtri:} Filtraggio degli eventi per categoria e per ricerca 
+testuale.
+\item \textit{Dashboard Storico:} Visualizzazione separata degli eventi passati e di quelli 
+annullati per monitorare l'attività pregressa dell'utente.
 \end{itemize}
 
 \subsection*{Requisiti Non Funzionali}
 \begin{itemize}
-  \item Accessibilità: i componenti interattivi (modali, form) devono
+  \item \textit{Accessibilità:} i componenti interattivi (modali, form) devono
     rispettare le linee guida ARIA e la gestione del focus.
-  \item Usabilità: interfaccia semplice e reattiva;  anteprime
+  \item \textit{Usabilità:} interfaccia semplice e reattiva;  anteprime
     immediate \newline per feedback all'utente.
-  \item Portabilità e responsive design: funzionamento corretto su
+  \item \textit{Portabilità e responsive design:} funzionamento corretto su
     dispositivi mobile e desktop.
 \end{itemize}
 
@@ -107,13 +111,12 @@ filtrare e iscriversi agli eventi.
   \item \textbf{Creare e pubblicare un evento (Organizzatore)}:
     l'organizzatore apre la modale di creazione, compila i campi,
     trascina un'immagine nella dropzone, verifica l'anteprima e
-    pubblica. L'evento appare nella homepage.
+    pubblica. L'evento appare nella homepage degli utenti che possono iscriversi.
   \item \textbf{Iscriversi a un evento (Studente)}: lo studente
-    filtra per categoria, apre il dettaglio e clicca "Iscriviti";
+    filtra gli eventi in base alle sue necessità e clicca "Iscriviti";
     riceve conferma e il contatore partecipanti si aggiorna.
-  \item \textbf{Moderazione (Admin)}: l'admin individua un evento
-    segnalato, apre il pannello di moderazione e decide di rimuoverlo
-    o segnalarlo come non conforme.
+  \item \textbf{Moderazione (Admin)}: l'admin approva eventi in attesa di essere resi pubblici,
+    oppure decide di rimuoverli perchè non conformi alle linee guida della comunity.
 \end{enumerate}
 
 \appendix
